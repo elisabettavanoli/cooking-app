@@ -49,8 +49,10 @@ export default defineConfig({
       devOptions: { enabled: false },
     }),
   ],
-  server: { host: true, port: 5173 },
-  preview: { host: true, port: 4173 },
+  // `.trycloudflare.com` is allowed so a quick tunnel can be used to test the
+  // installed PWA on a phone (needs HTTPS). Harmless: dev/preview only.
+  server: { host: true, port: 5173, allowedHosts: [".trycloudflare.com"] },
+  preview: { host: true, port: 4173, allowedHosts: [".trycloudflare.com"] },
   build: { outDir: "dist", sourcemap: true },
   test: {
     environment: "jsdom",
