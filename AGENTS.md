@@ -1,6 +1,36 @@
-# Expo HAS CHANGED
+# Pantry — web app (Vite + React + PWA)
 
-This project is on **SDK 54**. Expo Go on the App Store is frozen at SDK 54 (Apple has
-not approved newer builds), so a physical iPhone running App Store Expo Go needs the
-project on 54. Read the exact versioned docs at https://docs.expo.dev/versions/v54.0.0/
-before writing any code.
+This project **was** an Expo / React Native app (SDK 54). It is now a plain
+**web app**: Vite 8 + React 19 (react-dom), TypeScript, installable as a PWA
+via `vite-plugin-pwa`. The goal is "Add to Home Screen" on iOS/Android that
+behaves like a native app; a Capacitor wrapper for the app stores is a planned
+later phase (not set up yet).
+
+## Stack / conventions
+
+- **Build**: Vite. `npm run dev` (5173), `npm run build` (`tsc -b && vite build` → `dist/`),
+  `npm run preview` (4173), `npm run typecheck`, `npm test` (vitest).
+- **No React Native.** Do not add `react-native`, `expo`, or `react-native-web`.
+  UI is plain DOM: `div`/`button`/`input` + **CSS Modules** (`*.module.css`) per
+  component. Icons: `lucide-react`.
+- **Design tokens**: `src/lib/theme.ts` (TS, for JS-side colors) is mirrored by
+  `src/styles/tokens.css` (`:root` custom properties, for CSS Modules). Keep the
+  two in sync by hand.
+- **State**: `src/lib/store.tsx` — React context, persisted to IndexedDB via
+  `src/lib/storage.ts` (idb-keyval). Storage key `pantry-store-v1`. Hydration is
+  async and gated by `hydrated`.
+- **Server stand-ins**: `src/lib/ai.ts` runs deterministic local logic; swap for
+  `fetch()` when a backend exists (keep the signatures).
+- **Sheets**: `BottomSheet` in `src/components/ui.tsx` is a native `<dialog>`.
+- **PWA**: `vite-plugin-pwa` in `vite.config.ts` (generateSW, `registerType: prompt`).
+  Icons in `public/` (regenerate: `npx pwa-assets-generator --preset minimal-2023
+  assets/icon.png`, then move `pwa-*`/`maskable-*`/`apple-touch-icon-*`/`favicon.ico`
+  into `public/`). SW update UI: `src/components/UpdateToast.tsx`.
+- iOS/standalone meta tags live in `index.html`. Safe areas via
+  `env(safe-area-inset-*)` and the `--safe-*` tokens; heights use `dvh`.
+
+## Not yet done
+
+- Capacitor wrapper (`ios/`, `android/`) for the app stores.
+- Real backend / multi-device sync (persistence is local only).
+- iOS `apple-touch-startup-image` splash screens.
