@@ -1,27 +1,37 @@
 {
   "name": "pantry-mobile",
   "version": "1.0.0",
-  "main": "index.ts",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "2.2.0",
-    "expo": "^54.0.37",
-    "expo-status-bar": "~3.0.9",
-    "lucide-react-native": "^1.39.0",
-    "react": "19.1.0",
-    "react-native": "0.81.5",
-    "react-native-gesture-handler": "~2.28.0",
-    "react-native-safe-area-context": "~5.6.0",
-    "react-native-svg": "15.12.1"
+    "idb-keyval": "^6.3.0",
+    "lucide-react": "^1.39.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@types/react": "~19.1.10",
-    "typescript": "~5.9.2"
-  },
-  "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
-  },
-  "private": true
+    "@fontsource/dm-sans": "^5.3.0",
+    "@fontsource/space-grotesk": "^5.3.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.7",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vite-pwa/assets-generator": "^1.0.2",
+    "@vitejs/plugin-react": "^6.1.0",
+    "fake-indexeddb": "^6.2.5",
+    "jsdom": "^26.0.0",
+    "typescript": "~5.9.3",
+    "vite": "^8.2.0",
+    "vite-plugin-pwa": "^1.3.0",
+    "vitest": "^4.1.0"
+  }
 }

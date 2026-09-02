@@ -1,12 +1,11 @@
-import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { Check, Edit3, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react-native";
+import type { ReactNode } from "react";
+import { Check, Edit3, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { BottomSheet } from "./ui";
-import { FoodIcon } from "./FoodIcon";
-import { colors, radius } from "../lib/theme";
+import { colors } from "../lib/theme";
 import { categoryLabel } from "../lib/data";
 import { usePantry } from "../lib/store";
 import type { InventoryItem } from "../lib/types";
+import s from "./ItemActionsSheet.module.css";
 
 export function ItemActionsSheet({
   item,
@@ -25,7 +24,13 @@ export function ItemActionsSheet({
   const step = item.unit === "g" || item.unit === "ml" ? 50 : 1;
   const round = (n: number) => Number(n.toFixed(2));
 
-  const actions = [
+  const actions: {
+    key: string;
+    label: string;
+    icon: ReactNode;
+    danger?: boolean;
+    onPress: () => void;
+  }[] = [
     {
       key: "list",
       label: "Add to list",
@@ -73,72 +78,51 @@ export function ItemActionsSheet({
   ];
 
   return (
-    <BottomSheet open={open} onClose={onClose} title={item.displayName} subtitle={categoryLabel(item.category)} heightPct={0.6}>
-      <View style={s.qtyRow}>
-        <Pressable
-          style={s.qtyBtn}
-          onPress={() =>
+    <BottomSheet
+      open={open}
+      onClose={onClose}
+      title={item.displayName}
+      subtitle={categoryLabel(item.category)}
+      heightPct={0.6}
+    >
+      <div className={s.qtyRow}>
+        <button
+          type="button"
+          className={s.qtyBtn}
+          onClick={() =>
             updateInventoryItem(item.id, { quantity: Math.max(0, round(item.quantity - step)) })
           }
+          aria-label="Decrease quantity"
         >
           <Minus size={18} color={colors.foreground} />
-        </Pressable>
-        <View style={{ alignItems: "center" }}>
-          <Text style={s.qtyValue}>{item.quantity}</Text>
-          <Text style={s.qtyUnit}>{item.unit}</Text>
-        </View>
-        <Pressable
-          style={s.qtyBtn}
-          onPress={() => updateInventoryItem(item.id, { quantity: round(item.quantity + step) })}
+        </button>
+        <div className={s.qtyValueWrap}>
+          <span className={s.qtyValue}>{item.quantity}</span>
+          <span className={s.qtyUnit}>{item.unit}</span>
+        </div>
+        <button
+          type="button"
+          className={s.qtyBtn}
+          onClick={() => updateInventoryItem(item.id, { quantity: round(item.quantity + step) })}
+          aria-label="Increase quantity"
         >
           <Plus size={18} color={colors.foreground} />
-        </Pressable>
-      </View>
+        </button>
+      </div>
 
-      <View style={s.grid}>
+      <div className={s.grid}>
         {actions.map((a) => (
-          <Pressable key={a.key} style={s.actionBtn} onPress={a.onPress}>
+          <button
+            key={a.key}
+            type="button"
+            className={["resetButton", s.actionBtn, a.danger ? s.actionDanger : ""].join(" ")}
+            onClick={a.onPress}
+          >
             {a.icon}
-            <Text style={[s.actionLabel, a.danger && { color: colors.destructive }]}>{a.label}</Text>
-          </Pressable>
+            <span>{a.label}</span>
+          </button>
         ))}
-      </View>
+      </div>
     </BottomSheet>
   );
 }
-
-const s = StyleSheet.create({
-  qtyRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: colors.muted,
-    borderRadius: radius["2xl"],
-    padding: 8,
-    marginBottom: 16,
-  },
-  qtyBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: radius.md,
-    backgroundColor: colors.card,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  qtyValue: { fontSize: 24, fontWeight: "700", color: colors.foreground },
-  qtyUnit: { fontSize: 12, color: colors.mutedForeground },
-  grid: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
-  actionBtn: {
-    width: "48%",
-    flexGrow: 1,
-    minHeight: 48,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    paddingHorizontal: 12,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  actionLabel: { fontSize: 14, fontWeight: "600", color: colors.foreground },
-});

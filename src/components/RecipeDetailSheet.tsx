@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import { Check, ShoppingCart, Users } from "lucide-react-native";
-import { BottomSheet } from "./ui";
+import { useState, type ReactNode } from "react";
+import { Check, ShoppingCart, Users } from "lucide-react";
+import { BottomSheet, uiStyles } from "./ui";
 import { FoodIcon } from "./FoodIcon";
-import { colors, radius } from "../lib/theme";
+import { colors } from "../lib/theme";
 import { findConceptById } from "../lib/data";
 import { useActiveInventory, usePantry } from "../lib/store";
 import { matchRecipe } from "../lib/recipes";
 import type { Recipe, RecipeIngredient } from "../lib/types";
+import s from "./RecipeDetailSheet.module.css";
 
 export function RecipeDetailSheet({
   recipe,
@@ -37,119 +37,106 @@ export function RecipeDetailSheet({
 
   return (
     <BottomSheet open={open} onClose={onClose} title={recipe.name} subtitle={recipe.description}>
-      <ScrollView contentContainerStyle={{ gap: 18, paddingBottom: 8 }}>
-        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
+      <div className={uiStyles.sheetScroll} style={{ gap: 18 }}>
+        <div className={s.tagRow}>
           {recipe.tags.map((t) => (
-            <View key={t} style={s.tag}>
-              <Text style={s.tagText}>{t}</Text>
-            </View>
+            <span key={t} className={s.tag}>
+              <span className={s.tagText}>{t}</span>
+            </span>
           ))}
-        </View>
+        </div>
 
-        <View style={{ flexDirection: "row", gap: 16 }}>
-          <Text style={s.meta}>{recipe.timeMinutes} min</Text>
-          <Text style={s.meta}>{recipe.servings} servings</Text>
-          <Text style={[s.meta, { color: match.missingCount === 0 ? colors.fresh : colors.warn, fontWeight: "700" }]}>
+        <div className={s.metaRow}>
+          <span className={s.meta}>{recipe.timeMinutes} min</span>
+          <span className={s.meta}>{recipe.servings} servings</span>
+          <span
+            className={[s.meta, s.metaStrong].join(" ")}
+            style={{ color: match.missingCount === 0 ? colors.fresh : colors.warn }}
+          >
             {match.missingCount === 0 ? "Ready to cook" : `${match.missingCount} missing`}
-          </Text>
-        </View>
+          </span>
+        </div>
 
         <Section title={`You have (${match.have.length})`}>
           {match.have.map((ing) => (
-            <View key={ing.conceptId} style={[s.ingRow, { backgroundColor: colors.muted }]}>
+            <div key={ing.conceptId} className={[s.ingRow, s.ingRowHave].join(" ")}>
               <FoodIcon
                 iconKey={ing.conceptId}
                 category={active.find((i) => i.conceptId === ing.conceptId)?.category ?? "other"}
                 size={36}
               />
-              <View style={{ flex: 1 }}>
-                <Text style={s.ingName}>{ing.displayName}</Text>
-                <Text style={s.ingQty}>
+              <div className={s.ingText}>
+                <div className={s.ingName}>{ing.displayName}</div>
+                <div className={s.ingQty}>
                   {ing.quantity} {ing.unit}
-                </Text>
-              </View>
+                </div>
+              </div>
               <Check size={18} color={colors.fresh} />
-            </View>
+            </div>
           ))}
-          {match.have.length === 0 && <Text style={s.empty}>Nothing from this recipe yet.</Text>}
+          {match.have.length === 0 && <p className={s.empty}>Nothing from this recipe yet.</p>}
         </Section>
 
         <Section title={`Missing (${match.missing.length})`}>
           {match.missing.map((ing) => {
             const added = addedIds.has(ing.conceptId);
             return (
-              <View key={ing.conceptId} style={[s.ingRow, s.ingRowBorder]}>
+              <div key={ing.conceptId} className={[s.ingRow, s.ingRowMissing].join(" ")}>
                 <FoodIcon
                   iconKey={ing.conceptId}
                   category={findConceptById(ing.conceptId)?.category ?? "other"}
                   size={36}
                 />
-                <View style={{ flex: 1 }}>
-                  <Text style={s.ingName}>{ing.displayName}</Text>
-                  <Text style={s.ingQty}>
+                <div className={s.ingText}>
+                  <div className={s.ingName}>{ing.displayName}</div>
+                  <div className={s.ingQty}>
                     {ing.quantity} {ing.unit}
-                  </Text>
-                </View>
-                <Pressable style={s.iconBtn} onPress={() => addMissing(ing)} disabled={added}>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className={["resetButton", s.iconBtn].join(" ")}
+                  onClick={() => addMissing(ing)}
+                  disabled={added}
+                  aria-label={added ? "Added to list" : "Add to shopping list"}
+                >
                   {added ? (
                     <Check size={16} color={colors.fresh} />
                   ) : (
                     <ShoppingCart size={16} color={colors.foreground} />
                   )}
-                </Pressable>
-                <Pressable style={s.iconBtn}>
+                </button>
+                <span className={s.iconBtn}>
                   <Users size={16} color={colors.mutedForeground} />
-                </Pressable>
-              </View>
+                </span>
+              </div>
             );
           })}
-          {match.missing.length === 0 && <Text style={s.empty}>You have everything you need.</Text>}
+          {match.missing.length === 0 && (
+            <p className={s.empty}>You have everything you need.</p>
+          )}
         </Section>
 
         <Section title="Instructions">
           {recipe.instructions.map((step, idx) => (
-            <View key={idx} style={s.stepRow}>
-              <View style={s.stepNum}>
-                <Text style={s.stepNumText}>{idx + 1}</Text>
-              </View>
-              <Text style={s.stepText}>{step}</Text>
-            </View>
+            <div key={idx} className={s.stepRow}>
+              <div className={s.stepNum}>
+                <span className={s.stepNumText}>{idx + 1}</span>
+              </div>
+              <p className={s.stepText}>{step}</p>
+            </div>
           ))}
         </Section>
-      </ScrollView>
+      </div>
     </BottomSheet>
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <View style={{ gap: 8 }}>
-      <Text style={s.sectionTitle}>{title.toUpperCase()}</Text>
-      <View style={{ gap: 8 }}>{children}</View>
-    </View>
+    <div className={s.section}>
+      <div className={s.sectionTitle}>{title.toUpperCase()}</div>
+      <div className={s.sectionList}>{children}</div>
+    </div>
   );
 }
-
-const s = StyleSheet.create({
-  tag: { backgroundColor: colors.muted, borderRadius: radius.full, paddingHorizontal: 10, paddingVertical: 4 },
-  tagText: { fontSize: 12, color: colors.mutedForeground, fontWeight: "600" },
-  meta: { fontSize: 13, color: colors.mutedForeground },
-  sectionTitle: { fontSize: 11, fontWeight: "700", letterSpacing: 1, color: colors.mutedForeground },
-  ingRow: { flexDirection: "row", alignItems: "center", gap: 12, borderRadius: radius.md, padding: 8 },
-  ingRowBorder: { borderWidth: 1, borderColor: colors.border, backgroundColor: colors.card },
-  ingName: { fontSize: 15, fontWeight: "600", color: colors.foreground },
-  ingQty: { fontSize: 12, color: colors.mutedForeground },
-  iconBtn: { width: 32, height: 32, alignItems: "center", justifyContent: "center" },
-  empty: { fontSize: 13, color: colors.mutedForeground, fontStyle: "italic" },
-  stepRow: { flexDirection: "row", gap: 12 },
-  stepNum: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: colors.muted,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  stepNumText: { fontSize: 12, fontWeight: "700", color: colors.foreground },
-  stepText: { flex: 1, fontSize: 14, lineHeight: 20, color: colors.foreground },
-});

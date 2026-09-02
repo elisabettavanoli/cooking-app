@@ -1,0 +1,35 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.note {
+  background: var(--muted);
+  border-radius: var(--r-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.noteText {
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+.clear {
+  font-size: 13px;
+  color: var(--primary);
+  font-weight: 600;
+  align-self: flex-start;
+}
+.localBadge {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: flex-start;
+}
+.localText {
+  flex: 1;
+  font-size: 12px;
+  color: var(--muted-foreground);
+  line-height: 17px;
+}

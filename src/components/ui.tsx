@@ -1,17 +1,12 @@
-import React from "react";
 import {
-  Modal,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TextInputProps,
-  View,
-  ViewStyle,
-} from "react-native";
-import { X } from "lucide-react-native";
-import { colors, radius } from "../lib/theme";
+  useEffect,
+  useRef,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
+import { X } from "lucide-react";
+import { colors } from "../lib/theme";
+import styles from "./ui.module.css";
 
 type ButtonVariant = "primary" | "outline" | "ghost" | "destructive" | "secondary";
 
@@ -23,59 +18,77 @@ export function Button({
   icon,
   style,
   small,
+  type = "button",
 }: {
   label?: string;
   onPress?: () => void;
   variant?: ButtonVariant;
   disabled?: boolean;
-  icon?: React.ReactNode;
-  style?: ViewStyle;
+  icon?: ReactNode;
+  style?: CSSProperties;
   small?: boolean;
+  type?: "button" | "submit";
 }) {
-  const v = buttonStyles[variant];
   return (
-    <Pressable
-      onPress={onPress}
+    <button
+      type={type}
+      onClick={onPress}
       disabled={disabled}
-      style={({ pressed }) => [
-        styles.btnBase,
-        small && styles.btnSmall,
-        v.container,
-        (disabled || pressed) && { opacity: disabled ? 0.4 : 0.85 },
-        style,
-      ]}
+      style={style}
+      className={[styles.btn, small ? styles.btnSmall : "", styles[variant]].join(" ")}
     >
       {icon}
-      {label ? <Text style={[styles.btnText, v.text]}>{label}</Text> : null}
-    </Pressable>
+      {label ? <span>{label}</span> : null}
+    </button>
   );
 }
 
-const buttonStyles: Record<ButtonVariant, { container: ViewStyle; text: { color: string } }> = {
-  primary: { container: { backgroundColor: colors.primary }, text: { color: colors.primaryForeground } },
-  secondary: { container: { backgroundColor: colors.secondary }, text: { color: colors.secondaryForeground } },
-  outline: {
-    container: { backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border },
-    text: { color: colors.foreground },
-  },
-  ghost: { container: { backgroundColor: "transparent" }, text: { color: colors.foreground } },
-  destructive: { container: { backgroundColor: colors.destructive }, text: { color: colors.destructiveForeground } },
-};
-
 export function Field({
   label,
+  value,
+  onChangeText,
+  onBlur,
+  placeholder,
+  multiline,
+  inputMode,
+  autoCapitalize,
   style,
-  ...props
-}: TextInputProps & { label?: string; style?: ViewStyle }) {
+}: {
+  label?: string;
+  value: string;
+  onChangeText: (v: string) => void;
+  onBlur?: () => void;
+  placeholder?: string;
+  multiline?: boolean;
+  inputMode?: "text" | "decimal" | "numeric" | "email" | "search";
+  autoCapitalize?: "none" | "sentences" | "words" | "characters";
+  style?: CSSProperties;
+}) {
   return (
-    <View style={style}>
-      {label ? <Text style={styles.label}>{label}</Text> : null}
-      <TextInput
-        placeholderTextColor={colors.mutedForeground}
-        style={styles.input}
-        {...props}
-      />
-    </View>
+    <div className={styles.field} style={style}>
+      {label ? <label className={styles.label}>{label}</label> : null}
+      {multiline ? (
+        <textarea
+          className={styles.input}
+          value={value}
+          placeholder={placeholder}
+          onChange={(e) => onChangeText(e.currentTarget.value)}
+          onBlur={onBlur}
+          rows={3}
+        />
+      ) : (
+        <input
+          className={styles.input}
+          type="text"
+          value={value}
+          placeholder={placeholder}
+          inputMode={inputMode}
+          autoCapitalize={autoCapitalize}
+          onChange={(e) => onChangeText(e.currentTarget.value)}
+          onBlur={onBlur}
+        />
+      )}
+    </div>
   );
 }
 
@@ -89,26 +102,26 @@ export function Segmented<T extends string>({
   onChange: (v: T) => void;
 }) {
   return (
-    <View style={styles.segmented}>
-      {options.map((o) => {
-        const active = o.value === value;
-        return (
-          <Pressable
-            key={o.value}
-            onPress={() => onChange(o.value)}
-            style={[styles.segmentedItem, active && styles.segmentedItemActive]}
-          >
-            <Text style={[styles.segmentedText, active && styles.segmentedTextActive]}>
-              {o.label}
-            </Text>
-          </Pressable>
-        );
-      })}
-    </View>
+    <div className={styles.segmented}>
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          onClick={() => onChange(o.value)}
+          className={[
+            "resetButton",
+            styles.segmentedItem,
+            o.value === value ? styles.segmentedItemActive : "",
+          ].join(" ")}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
   );
 }
 
-/** Simple wheel-free select: a horizontally scrolling row of chips. */
+/** Horizontally scrolling row of selectable chips. */
 export function ChipSelect<T extends string>({
   options,
   value,
@@ -119,20 +132,22 @@ export function ChipSelect<T extends string>({
   onChange: (v: T) => void;
 }) {
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
-      {options.map((o) => {
-        const active = o.value === value;
-        return (
-          <Pressable
-            key={o.value}
-            onPress={() => onChange(o.value)}
-            style={[styles.chip, active && styles.chipActive]}
-          >
-            <Text style={[styles.chipText, active && styles.chipTextActive]}>{o.label}</Text>
-          </Pressable>
-        );
-      })}
-    </ScrollView>
+    <div className={styles.chipRow}>
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          onClick={() => onChange(o.value)}
+          className={[
+            "resetButton",
+            styles.chip,
+            o.value === value ? styles.chipActive : "",
+          ].join(" ")}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
   );
 }
 
@@ -148,101 +163,71 @@ export function BottomSheet({
   onClose: () => void;
   title: string;
   subtitle?: string;
-  children: React.ReactNode;
+  children: ReactNode;
   heightPct?: number;
 }) {
+  const ref = useRef<HTMLDialogElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const d = ref.current;
+    if (!d) return;
+    if (open && !d.open) {
+      if (typeof d.showModal === "function") d.showModal();
+      else d.setAttribute("open", "");
+      // Focus the header, not the first field, so the mobile keyboard stays down.
+      headerRef.current?.focus();
+    }
+    if (!open && d.open) {
+      if (typeof d.close === "function") d.close();
+      else d.removeAttribute("open");
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
   return (
-    <Modal visible={open} transparent animationType="slide" onRequestClose={onClose}>
-      <Pressable style={styles.backdrop} onPress={onClose} />
-      <View style={[styles.sheet, { maxHeight: `${Math.round(heightPct * 100)}%` }]}>
-        <View style={styles.sheetHandle} />
-        <View style={styles.sheetHeader}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.sheetTitle}>{title}</Text>
-            {subtitle ? <Text style={styles.sheetSubtitle}>{subtitle}</Text> : null}
-          </View>
-          <Pressable onPress={onClose} hitSlop={10} style={styles.sheetClose}>
+    <dialog
+      ref={ref}
+      className={styles.sheet}
+      style={
+        { "--sheet-max": `${Math.round(heightPct * 100)}dvh` } as CSSProperties
+      }
+      onCancel={(e) => {
+        e.preventDefault();
+        onClose();
+      }}
+      onClick={(e) => {
+        if (e.target === ref.current) onClose();
+      }}
+    >
+      <div className={styles.sheetInner} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.handle} aria-hidden />
+        <header className={styles.sheetHeader} ref={headerRef} tabIndex={-1}>
+          <div className={styles.sheetHeaderTexts}>
+            <h2 className={styles.sheetTitle}>{title}</h2>
+            {subtitle ? <p className={styles.sheetSubtitle}>{subtitle}</p> : null}
+          </div>
+          <button
+            type="button"
+            className={["resetButton", styles.sheetClose].join(" ")}
+            onClick={onClose}
+            aria-label="Close"
+          >
             <X size={20} color={colors.mutedForeground} />
-          </Pressable>
-        </View>
+          </button>
+        </header>
         {children}
-      </View>
-    </Modal>
+      </div>
+    </dialog>
   );
 }
 
-export const styles = StyleSheet.create({
-  btnBase: {
-    minHeight: 44,
-    paddingHorizontal: 16,
-    borderRadius: radius.md,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-  },
-  btnSmall: { minHeight: 34, paddingHorizontal: 10, borderRadius: radius.sm },
-  btnText: { fontSize: 15, fontWeight: "600" },
-  label: { fontSize: 13, fontWeight: "600", color: colors.foreground, marginBottom: 6 },
-  input: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.md,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 15,
-    color: colors.foreground,
-    backgroundColor: colors.card,
-  },
-  segmented: {
-    flexDirection: "row",
-    backgroundColor: colors.muted,
-    borderRadius: radius.md,
-    padding: 4,
-  },
-  segmentedItem: { flex: 1, paddingVertical: 8, borderRadius: radius.sm, alignItems: "center" },
-  segmentedItemActive: { backgroundColor: colors.card },
-  segmentedText: { fontSize: 14, fontWeight: "600", color: colors.mutedForeground },
-  segmentedTextActive: { color: colors.foreground },
-  chip: {
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: radius.full,
-    backgroundColor: colors.muted,
-  },
-  chipActive: { backgroundColor: colors.primary },
-  chipText: { fontSize: 13, fontWeight: "600", color: colors.mutedForeground },
-  chipTextActive: { color: colors.primaryForeground },
-  backdrop: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.35)",
-  },
-  sheet: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: colors.card,
-    borderTopLeftRadius: radius["3xl"],
-    borderTopRightRadius: radius["3xl"],
-    paddingHorizontal: 16,
-    paddingBottom: 28,
-    paddingTop: 8,
-  },
-  sheetHandle: {
-    alignSelf: "center",
-    width: 40,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: colors.border,
-    marginBottom: 10,
-  },
-  sheetHeader: { flexDirection: "row", alignItems: "flex-start", marginBottom: 16, gap: 12 },
-  sheetTitle: { fontSize: 19, fontWeight: "700", color: colors.foreground },
-  sheetSubtitle: { fontSize: 13, color: colors.mutedForeground, marginTop: 2 },
-  sheetClose: { padding: 4 },
-});
+export { styles as uiStyles };

@@ -1,12 +1,12 @@
-import React, { useMemo, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
-import { Check, Plus, Search, ShoppingCart, Trash2, Undo2 } from "lucide-react-native";
+import { useMemo, useState } from "react";
+import { Check, Plus, Search, ShoppingCart, Trash2, Undo2 } from "lucide-react";
 import { FoodIcon } from "../components/FoodIcon";
-import { colors, radius } from "../lib/theme";
+import { colors } from "../lib/theme";
 import { categoryLabel } from "../lib/data";
 import { usePantry } from "../lib/store";
 import { AddItemSheet } from "../components/AddItemSheet";
 import type { Category, ShoppingItem } from "../lib/types";
+import s from "./ListTab.module.css";
 
 function groupByCategory(items: ShoppingItem[]) {
   const map = new Map<Category, ShoppingItem[]>();
@@ -33,153 +33,107 @@ export function ListTab() {
   }, [shoppingList, search]);
 
   return (
-    <View style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={styles.scroll}>
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.title}>Shopping List</Text>
-            <Text style={styles.subtitle}>{active.length} items to buy</Text>
-          </View>
-          <Pressable style={styles.addBtn} onPress={() => setAddOpen(true)}>
+    <div className={s.screen}>
+      <div className={s.scroll}>
+        <div className={s.header}>
+          <div>
+            <h1 className={s.title}>Shopping List</h1>
+            <p className={s.subtitle}>{active.length} items to buy</p>
+          </div>
+          <button
+            type="button"
+            className={s.addBtn}
+            onClick={() => setAddOpen(true)}
+            aria-label="Add item"
+          >
             <Plus size={20} color={colors.primaryForeground} />
-          </Pressable>
-        </View>
+          </button>
+        </div>
 
-        <View style={styles.searchBox}>
+        <div className={s.searchBox}>
           <Search size={16} color={colors.mutedForeground} />
-          <TextInput
+          <input
+            className={s.searchInput}
             value={search}
-            onChangeText={setSearch}
+            onChange={(e) => setSearch(e.currentTarget.value)}
             placeholder="Search list..."
-            placeholderTextColor={colors.mutedForeground}
-            style={styles.searchInput}
           />
-        </View>
+        </div>
 
         {active.length === 0 && purchased.length === 0 && (
-          <View style={styles.emptyState}>
-            <View style={styles.emptyIcon}>
+          <div className={s.emptyState}>
+            <div className={s.emptyIcon}>
               <ShoppingCart size={28} color={colors.mutedForeground} />
-            </View>
-            <Text style={styles.emptyTitle}>Your list is empty</Text>
-            <Text style={styles.emptyText}>Add items manually or from a recipe.</Text>
-          </View>
+            </div>
+            <p className={s.emptyTitle}>Your list is empty</p>
+            <p className={s.emptyText}>Add items manually or from a recipe.</p>
+          </div>
         )}
 
         {groupByCategory(active).map(({ category, items }) => (
-          <View key={category} style={{ marginTop: 18 }}>
-            <Text style={styles.sectionTitle}>{categoryLabel(category).toUpperCase()}</Text>
-            <View style={{ gap: 8, marginTop: 8 }}>
+          <div key={category} className={s.section}>
+            <p className={s.sectionTitle}>{categoryLabel(category).toUpperCase()}</p>
+            <div className={s.rows}>
               {items.map((item) => (
-                <View key={item.id} style={styles.row}>
+                <div key={item.id} className={s.row}>
                   <FoodIcon iconKey={item.conceptId} category={item.category} size={44} />
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.rowName}>{item.displayName}</Text>
-                    <Text style={styles.rowSub}>
+                  <div className={s.rowText}>
+                    <div className={s.rowName}>{item.displayName}</div>
+                    <div className={s.rowSub}>
                       {item.quantity} {item.unit}
-                    </Text>
-                  </View>
-                  <Pressable
-                    style={styles.iconBtn}
-                    onPress={() => removeShoppingItem(item.id)}
-                    hitSlop={6}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className={s.iconBtn}
+                    onClick={() => removeShoppingItem(item.id)}
+                    aria-label="Remove"
                   >
                     <Trash2 size={16} color={colors.destructive} />
-                  </Pressable>
-                  <Pressable
-                    style={[styles.iconBtn, styles.iconBtnPrimary]}
-                    onPress={() => markShoppingItemPurchased(item.id, true)}
-                    hitSlop={6}
+                  </button>
+                  <button
+                    type="button"
+                    className={[s.iconBtn, s.iconBtnPrimary].join(" ")}
+                    onClick={() => markShoppingItemPurchased(item.id, true)}
+                    aria-label="Mark purchased"
                   >
                     <Check size={16} color={colors.primaryForeground} />
-                  </Pressable>
-                </View>
+                  </button>
+                </div>
               ))}
-            </View>
-          </View>
+            </div>
+          </div>
         ))}
 
         {purchased.length > 0 && (
-          <View style={{ marginTop: 20 }}>
-            <Text style={styles.sectionTitle}>PURCHASED</Text>
-            <View style={{ gap: 8, marginTop: 8 }}>
+          <div className={s.sectionPurchased}>
+            <p className={s.sectionTitle}>PURCHASED</p>
+            <div className={s.rows}>
               {purchased.map((item) => (
-                <View key={item.id} style={[styles.row, { backgroundColor: colors.muted, opacity: 0.8 }]}>
+                <div key={item.id} className={[s.row, s.rowPurchased].join(" ")}>
                   <FoodIcon iconKey={item.conceptId} category={item.category} size={44} />
-                  <View style={{ flex: 1 }}>
-                    <Text style={[styles.rowName, { textDecorationLine: "line-through" }]}>
-                      {item.displayName}
-                    </Text>
-                    <Text style={[styles.rowSub, { color: colors.fresh, fontWeight: "600" }]}>
+                  <div className={s.rowText}>
+                    <div className={[s.rowName, s.rowNameStruck].join(" ")}>{item.displayName}</div>
+                    <div className={[s.rowSub, s.rowSubDone].join(" ")}>
                       {item.quantity} {item.unit} · in your kitchen
-                    </Text>
-                  </View>
-                  <Pressable
-                    style={styles.iconBtn}
-                    onPress={() => markShoppingItemPurchased(item.id, false)}
-                    hitSlop={6}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className={s.iconBtn}
+                    onClick={() => markShoppingItemPurchased(item.id, false)}
+                    aria-label="Undo"
                   >
                     <Undo2 size={16} color={colors.foreground} />
-                  </Pressable>
-                </View>
+                  </button>
+                </div>
               ))}
-            </View>
-          </View>
+            </div>
+          </div>
         )}
-      </ScrollView>
+      </div>
 
       <AddItemSheet open={addOpen} onClose={() => setAddOpen(false)} defaultMode="list" />
-    </View>
+    </div>
   );
 }
-
-const styles = StyleSheet.create({
-  scroll: { padding: 16, paddingBottom: 40 },
-  header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 14 },
-  title: { fontSize: 24, fontWeight: "800", color: colors.foreground },
-  subtitle: { fontSize: 13, color: colors.mutedForeground, marginTop: 2 },
-  addBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.primary,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  searchBox: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    backgroundColor: colors.muted,
-    borderRadius: radius.md,
-    paddingHorizontal: 12,
-  },
-  searchInput: { flex: 1, paddingVertical: 10, fontSize: 15, color: colors.foreground },
-  sectionTitle: { fontSize: 11, fontWeight: "700", letterSpacing: 1, color: colors.mutedForeground },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    padding: 12,
-    borderRadius: radius["2xl"],
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.card,
-  },
-  rowName: { fontSize: 15, fontWeight: "600", color: colors.foreground },
-  rowSub: { fontSize: 13, color: colors.mutedForeground },
-  iconBtn: { width: 32, height: 32, borderRadius: 16, alignItems: "center", justifyContent: "center" },
-  iconBtnPrimary: { backgroundColor: colors.primary },
-  emptyState: { alignItems: "center", paddingVertical: 60, gap: 6 },
-  emptyIcon: {
-    width: 64,
-    height: 64,
-    borderRadius: radius["2xl"],
-    backgroundColor: colors.muted,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 6,
-  },
-  emptyTitle: { fontSize: 15, fontWeight: "700", color: colors.foreground },
-  emptyText: { fontSize: 13, color: colors.mutedForeground },
-});

@@ -1,15 +1,15 @@
-import React, { useMemo, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
-import { Check, Plus, Search, UtensilsCrossed, X } from "lucide-react-native";
+import { useMemo, useRef, useState, type MouseEvent } from "react";
+import { Check, Plus, Search, UtensilsCrossed, X } from "lucide-react";
 import { FoodIcon } from "../components/FoodIcon";
 import { Button } from "../components/ui";
-import { colors, radius } from "../lib/theme";
+import { colors } from "../lib/theme";
 import { categoryLabel } from "../lib/data";
 import { useActiveInventory, usePantry } from "../lib/store";
 import { AddItemSheet } from "../components/AddItemSheet";
 import { EditItemSheet } from "../components/EditItemSheet";
 import { ItemActionsSheet } from "../components/ItemActionsSheet";
 import type { InventoryItem } from "../lib/types";
+import s from "./KitchenTab.module.css";
 
 function daysUntil(date: string) {
   return Math.ceil((new Date(date).getTime() - Date.now()) / 86_400_000);
@@ -25,6 +25,84 @@ function tileBadge(item: InventoryItem): { text: string; color: string; bg: stri
     return { text: "last", color: colors.low, bg: colors.lowSoft };
   }
   return null;
+}
+
+/** Long-press (touch) / right-click (desktop) → actions, else a plain tap. */
+function useLongPress(onLongPress: () => void, onTap: () => void, ms = 500) {
+  const timer = useRef<number | undefined>(undefined);
+  const fired = useRef(false);
+  const clear = () => {
+    if (timer.current) window.clearTimeout(timer.current);
+    timer.current = undefined;
+  };
+  return {
+    onPointerDown: () => {
+      fired.current = false;
+      clear();
+      timer.current = window.setTimeout(() => {
+        fired.current = true;
+        onLongPress();
+      }, ms);
+    },
+    onPointerUp: clear,
+    onPointerLeave: clear,
+    onPointerMove: clear,
+    onContextMenu: (e: MouseEvent) => {
+      e.preventDefault();
+      clear();
+      fired.current = true;
+      onLongPress();
+    },
+    onClick: () => {
+      if (fired.current) {
+        fired.current = false;
+        return;
+      }
+      onTap();
+    },
+  };
+}
+
+function Tile({
+  item,
+  selected,
+  onTap,
+  onLongPress,
+}: {
+  item: InventoryItem;
+  selected: boolean;
+  onTap: () => void;
+  onLongPress: () => void;
+}) {
+  const badge = tileBadge(item);
+  const handlers = useLongPress(onLongPress, onTap);
+  return (
+    <button
+      type="button"
+      className={["resetButton", s.tile, selected ? s.tileSelected : ""].join(" ")}
+      {...handlers}
+    >
+      {badge && (
+        <span className={s.badge} style={{ backgroundColor: badge.bg }}>
+          <span className={s.badgeText} style={{ color: badge.color }}>
+            {badge.text}
+          </span>
+        </span>
+      )}
+      {selected && (
+        <span className={s.tileCheck}>
+          <Check size={10} color={colors.primaryForeground} strokeWidth={3} />
+        </span>
+      )}
+      <FoodIcon iconKey={item.conceptId} category={item.category} size={30} variant="bare" />
+      <span className={s.tileTexts}>
+        <span className={s.tileName}>{item.displayName}</span>
+        <span className={s.tileQty}>
+          {item.quantity} {item.unit}
+        </span>
+      </span>
+    </button>
+  );
 }
 
 export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
@@ -60,122 +138,107 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.title}>My Kitchen</Text>
-            <Text style={styles.subtitle}>
+    <div className={s.screen}>
+      <div className={s.header}>
+        <div className={s.headerTop}>
+          <div className={s.headerTexts}>
+            <h1 className={s.title}>My Kitchen</h1>
+            <p className={s.subtitle}>
               {activeInventory.length} items tracked
               {expiringCount > 0 ? (
-                <Text style={{ color: colors.warn }}> · {expiringCount} to use soon</Text>
+                <span className={s.subtitleWarn}> · {expiringCount} to use soon</span>
               ) : null}
-            </Text>
-          </View>
-          <Pressable style={styles.addBtn} onPress={() => setAddOpen(true)}>
+            </p>
+          </div>
+          <button
+            type="button"
+            className={s.addBtn}
+            onClick={() => setAddOpen(true)}
+            aria-label="Add ingredient"
+          >
             <Plus size={22} color={colors.primaryForeground} strokeWidth={2.5} />
-          </Pressable>
-        </View>
+          </button>
+        </div>
 
-        <View style={styles.searchRow}>
-          <View style={styles.searchBox}>
+        <div className={s.searchRow}>
+          <div className={s.searchBox}>
             <Search size={16} color={colors.mutedForeground} />
-            <TextInput
+            <input
+              className={s.searchInput}
               value={search}
-              onChangeText={setSearch}
+              onChange={(e) => setSearch(e.currentTarget.value)}
               placeholder="Search inventory..."
-              placeholderTextColor={colors.mutedForeground}
-              style={styles.searchInput}
             />
-          </View>
-          <Pressable
-            style={[styles.selectBtn, selectionMode && { backgroundColor: colors.primary }]}
-            onPress={() => {
+          </div>
+          <button
+            type="button"
+            className={[s.selectBtn, selectionMode ? s.selectBtnActive : ""].join(" ")}
+            onClick={() => {
               setSelectionMode((v) => !v);
               clearSelectedConcepts();
             }}
+            aria-label={selectionMode ? "Exit selection mode" : "Select items to cook with"}
           >
             {selectionMode ? (
               <X size={18} color={colors.primaryForeground} />
             ) : (
               <UtensilsCrossed size={18} color={colors.foreground} />
             )}
-          </Pressable>
-        </View>
-        <Text style={styles.hint}>
+          </button>
+        </div>
+        <p className={s.hint}>
           {selectionMode ? "Tap items to cook with" : "Long-press an item for actions"}
-        </Text>
-      </View>
+        </p>
+      </div>
 
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <div className={s.scroll}>
         {grouped.length === 0 && (
-          <View style={styles.emptyState}>
-            <View style={styles.emptyIcon}>
+          <div className={s.emptyState}>
+            <div className={s.emptyIcon}>
               <UtensilsCrossed size={28} color={colors.mutedForeground} />
-            </View>
-            <Text style={styles.emptyTitle}>
+            </div>
+            <p className={s.emptyTitle}>
               {search ? "Nothing matches that" : "Your kitchen is empty"}
-            </Text>
-            <Text style={styles.emptyText}>
+            </p>
+            <p className={s.emptyText}>
               {search ? "Try another name." : "Tap + to add your first ingredient."}
-            </Text>
-          </View>
+            </p>
+          </div>
         )}
 
         {grouped.map(({ category, items }) => (
-          <View key={category} style={{ marginBottom: 22 }}>
-            <View style={styles.sectionHead}>
-              <Text style={styles.sectionTitle}>{categoryLabel(category as never)}</Text>
-              <Text style={styles.sectionCount}>{items.length}</Text>
-            </View>
-            <View style={styles.grid}>
-              {items.map((item) => {
-                const selected = selectedConcepts.includes(item.conceptId);
-                const badge = tileBadge(item);
-                return (
-                  <Pressable
-                    key={item.id}
-                    onPress={() => handleTap(item)}
-                    onLongPress={() => setActionsItemId(item.id)}
-                    style={[styles.tile, selected && styles.tileSelected]}
-                  >
-                    {badge && (
-                      <View style={[styles.badge, { backgroundColor: badge.bg }]}>
-                        <Text style={[styles.badgeText, { color: badge.color }]}>{badge.text}</Text>
-                      </View>
-                    )}
-                    {selected && (
-                      <View style={styles.tileCheck}>
-                        <Check size={10} color={colors.primaryForeground} strokeWidth={3} />
-                      </View>
-                    )}
-                    <FoodIcon iconKey={item.conceptId} category={item.category} size={30} variant="bare" />
-                    <View style={{ alignItems: "center" }}>
-                      <Text numberOfLines={1} style={styles.tileName}>
-                        {item.displayName}
-                      </Text>
-                      <Text style={styles.tileQty}>
-                        {item.quantity} {item.unit}
-                      </Text>
-                    </View>
-                  </Pressable>
-                );
-              })}
-            </View>
-          </View>
+          <div key={category} className={s.group}>
+            <div className={s.sectionHead}>
+              <span className={s.sectionTitle}>{categoryLabel(category as never)}</span>
+              <span className={s.sectionCount}>{items.length}</span>
+            </div>
+            <div className={s.grid}>
+              {items.map((item) => (
+                <Tile
+                  key={item.id}
+                  item={item}
+                  selected={selectedConcepts.includes(item.conceptId)}
+                  onTap={() => handleTap(item)}
+                  onLongPress={() => setActionsItemId(item.id)}
+                />
+              ))}
+            </div>
+          </div>
         ))}
-      </ScrollView>
+      </div>
 
       {selectionMode && selectedConcepts.length > 0 && (
-        <View style={styles.cookCta}>
+        <div className={s.cookCta}>
           <Button
-            label={`Cook with ${selectedConcepts.length} ingredient${selectedConcepts.length > 1 ? "s" : ""}`}
+            label={`Cook with ${selectedConcepts.length} ingredient${
+              selectedConcepts.length > 1 ? "s" : ""
+            }`}
             onPress={() => {
               setSelectionMode(false);
               onSwitchToCook();
             }}
           />
-        </View>
+        </div>
       )}
 
       <AddItemSheet open={addOpen} onClose={() => setAddOpen(false)} defaultMode="inventory" />
@@ -190,97 +253,6 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
       {editItem && (
         <EditItemSheet item={editItem} open={!!editItemId} onClose={() => setEditItemId(null)} />
       )}
-    </View>
+    </div>
   );
 }
-
-const TILE_GAP = 8;
-
-const styles = StyleSheet.create({
-  header: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    backgroundColor: colors.background,
-  },
-  headerTop: { flexDirection: "row", alignItems: "flex-end", gap: 12, marginBottom: 12 },
-  title: { fontSize: 28, fontWeight: "800", color: colors.foreground },
-  subtitle: { fontSize: 13, fontWeight: "600", color: colors.fresh, marginTop: 4 },
-  addBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: colors.primary,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  searchRow: { flexDirection: "row", gap: 8, marginBottom: 8 },
-  searchBox: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    backgroundColor: colors.muted,
-    borderRadius: radius.md,
-    paddingHorizontal: 12,
-  },
-  searchInput: { flex: 1, paddingVertical: 10, fontSize: 15, color: colors.foreground },
-  selectBtn: {
-    width: 42,
-    height: 42,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  hint: { fontSize: 11, fontWeight: "700", letterSpacing: 0.8, color: colors.mutedForeground, textTransform: "uppercase" },
-  scroll: { padding: 16, paddingBottom: 40 },
-  sectionHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 8, paddingHorizontal: 2 },
-  sectionTitle: { fontSize: 16, fontWeight: "700", color: colors.foreground },
-  sectionCount: { fontSize: 11, fontWeight: "700", letterSpacing: 1, color: colors.mutedForeground },
-  grid: { flexDirection: "row", flexWrap: "wrap", gap: TILE_GAP },
-  tile: {
-    width: "23%",
-    aspectRatio: 1,
-    backgroundColor: colors.tile,
-    borderRadius: radius["2xl"],
-    borderWidth: 1,
-    borderColor: colors.border,
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-  },
-  tileSelected: { borderColor: colors.primary, borderWidth: 2 },
-  badge: { position: "absolute", top: 4, right: 4, borderRadius: 4, paddingHorizontal: 4, paddingVertical: 1 },
-  badgeText: { fontSize: 9, fontWeight: "700", textTransform: "uppercase" },
-  tileCheck: {
-    position: "absolute",
-    top: 4,
-    left: 4,
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: colors.primary,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  tileName: { fontSize: 10, fontWeight: "700", color: colors.foreground },
-  tileQty: { fontSize: 9, color: colors.mutedForeground },
-  emptyState: { alignItems: "center", paddingVertical: 60, gap: 6 },
-  emptyIcon: {
-    width: 64,
-    height: 64,
-    borderRadius: radius["2xl"],
-    backgroundColor: colors.muted,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 6,
-  },
-  emptyTitle: { fontSize: 15, fontWeight: "700", color: colors.foreground },
-  emptyText: { fontSize: 13, color: colors.mutedForeground },
-  cookCta: { position: "absolute", left: 16, right: 16, bottom: 16 },
-});

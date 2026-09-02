@@ -1,5 +1,3 @@
-import React from "react";
-import { View } from "react-native";
 import {
   Amphora,
   Apple,
@@ -46,8 +44,8 @@ import {
   Vegan,
   Wheat,
   Wine,
-} from "lucide-react-native";
-import type { LucideIcon } from "lucide-react-native";
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { categoryMeta } from "../lib/data";
 import type { Category } from "../lib/types";
 
@@ -202,17 +200,19 @@ export function FoodIcon({
   }
 
   return (
-    <View
+    <span
       style={{
+        display: "inline-flex",
         width: size,
         height: size,
         borderRadius: Math.round(size * 0.28),
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: meta.bg,
+        flexShrink: 0,
       }}
     >
       <Icon size={Math.round(size * 0.5)} strokeWidth={2} color={meta.color} />
-    </View>
+    </span>
   );
 }
