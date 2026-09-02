@@ -1,11 +1,12 @@
 {
   "expo": {
-    "name": "pantry-mobile",
+    "name": "Pantry",
     "slug": "pantry-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "backgroundColor": "#FDFBF6",
     "ios": {
       "supportsTablet": true
     },
