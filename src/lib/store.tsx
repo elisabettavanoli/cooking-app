@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getItem, setItem, requestPersistentStorage } from "./storage";
 import type { InventoryItem, Recipe, ShoppingItem, UserProfile } from "./types";
 import { initialInventorySeed, recipeCatalog, findConceptById } from "./data";
 
@@ -89,7 +89,7 @@ export function PantryProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let cancelled = false;
-    AsyncStorage.getItem(STORAGE_KEY)
+    getItem(STORAGE_KEY)
       .then((raw) => {
         if (cancelled) return;
         if (raw) {
@@ -101,7 +101,10 @@ export function PantryProvider({ children }: { children: React.ReactNode }) {
         }
       })
       .finally(() => {
-        if (!cancelled) setHydrated(true);
+        if (!cancelled) {
+          setHydrated(true);
+          requestPersistentStorage();
+        }
       });
     return () => {
       cancelled = true;
@@ -114,7 +117,7 @@ export function PantryProvider({ children }: { children: React.ReactNode }) {
       skipPersist.current = false;
       return;
     }
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(state)).catch(() => {});
+    setItem(STORAGE_KEY, JSON.stringify(state)).catch(() => {});
   }, [state, hydrated]);
 
   const setInventory = useCallback((fn: (prev: InventoryItem[]) => InventoryItem[]) => {

@@ -44,5 +44,7 @@ export const radius = {
 export const spacing = (n: number) => n * 4;
 
 export const font = {
-  sans: undefined as string | undefined, // system font; Space Grotesk/DM Sans not bundled yet
+  // Mirrors --font-sans in src/styles/tokens.css. Space Grotesk + DM Sans are
+  // self-hosted via @fontsource and imported in src/main.tsx.
+  sans: '"Space Grotesk", "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
 };

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Sparkles, Wand2 } from "lucide-react-native";
+import { useState } from "react";
+import { Sparkles, Wand2 } from "lucide-react";
 import { BottomSheet, Button, Field } from "./ui";
-import { colors, radius } from "../lib/theme";
+import { colors } from "../lib/theme";
 import { useActiveInventory, usePantry } from "../lib/store";
 import { generateRecipe } from "../lib/ai";
 import type { Recipe } from "../lib/types";
+import s from "./AiRecipeSheet.module.css";
 
 export function AiRecipeSheet({
   open,
@@ -36,7 +36,7 @@ export function AiRecipeSheet({
       subtitle={`Based on ${selectedConcepts.length > 0 ? "selected" : "available"} ingredients.`}
       heightPct={0.7}
     >
-      <View style={{ gap: 16 }}>
+      <div className={s.wrap}>
         <Field
           label="What are you in the mood for? (optional)"
           value={mood}
@@ -44,23 +44,28 @@ export function AiRecipeSheet({
           placeholder="e.g. something spicy, quick, breakfast"
         />
 
-        <View style={s.note}>
-          <Text style={s.noteText}>
-            Using {conceptIds.length} ingredient{conceptIds.length !== 1 ? "s" : ""} from your kitchen.
-          </Text>
+        <div className={s.note}>
+          <span className={s.noteText}>
+            Using {conceptIds.length} ingredient{conceptIds.length !== 1 ? "s" : ""} from your
+            kitchen.
+          </span>
           {selectedConcepts.length > 0 && (
-            <Text style={s.clear} onPress={clearSelectedConcepts}>
+            <button
+              type="button"
+              className={["resetButton", s.clear].join(" ")}
+              onClick={clearSelectedConcepts}
+            >
               Clear selection
-            </Text>
+            </button>
           )}
-        </View>
+        </div>
 
-        <View style={s.localBadge}>
+        <div className={s.localBadge}>
           <Sparkles size={13} color={colors.mutedForeground} />
-          <Text style={s.localText}>
+          <span className={s.localText}>
             Offline mode: picks the closest catalog recipe. Real AI generation is wired up later.
-          </Text>
-        </View>
+          </span>
+        </div>
 
         <Button
           label="Generate recipe"
@@ -68,15 +73,7 @@ export function AiRecipeSheet({
           disabled={conceptIds.length === 0}
           icon={<Wand2 size={18} color={colors.primaryForeground} />}
         />
-      </View>
+      </div>
     </BottomSheet>
   );
 }
-
-const s = StyleSheet.create({
-  note: { backgroundColor: colors.muted, borderRadius: radius.md, padding: 12, gap: 4 },
-  noteText: { fontSize: 13, color: colors.mutedForeground },
-  clear: { fontSize: 13, color: colors.primary, fontWeight: "600" },
-  localBadge: { flexDirection: "row", gap: 8, alignItems: "flex-start" },
-  localText: { flex: 1, fontSize: 12, color: colors.mutedForeground, lineHeight: 17 },
-});

@@ -1,14 +1,13 @@
-import React, { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ChefHat, Home, ListTodo, Users } from "lucide-react-native";
-import type { LucideIcon } from "lucide-react-native";
+import { useState } from "react";
+import { ChefHat, Home, ListTodo, Users } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { colors } from "./lib/theme";
 import { usePantry } from "./lib/store";
 import { KitchenTab } from "./screens/KitchenTab";
 import { CookTab } from "./screens/CookTab";
 import { ListTab } from "./screens/ListTab";
 import { NearbyTab } from "./screens/NearbyTab";
+import styles from "./MobileShell.module.css";
 
 type TabId = "kitchen" | "cook" | "list" | "nearby";
 
@@ -20,17 +19,16 @@ const tabs: { id: TabId; label: string; icon: LucideIcon }[] = [
 ];
 
 export function MobileShell() {
-  const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<TabId>("cook");
   const { hydrated } = usePantry();
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top }]}>
-      <View style={styles.content}>
+    <div className={styles.root}>
+      <div className={styles.content}>
         {!hydrated ? (
-          <View style={styles.loading}>
-            <Text style={styles.loadingText}>Loading your kitchen...</Text>
-          </View>
+          <div className={styles.loading}>
+            <p className={styles.loadingText}>Loading your kitchen...</p>
+          </div>
         ) : (
           <>
             {activeTab === "kitchen" && <KitchenTab onSwitchToCook={() => setActiveTab("cook")} />}
@@ -39,42 +37,29 @@ export function MobileShell() {
             {activeTab === "nearby" && <NearbyTab />}
           </>
         )}
-      </View>
+      </div>
 
-      <View style={[styles.tabBar, { paddingBottom: Math.max(insets.bottom, 8) }]}>
+      <nav className={styles.tabBar}>
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const active = activeTab === tab.id;
+          const tint = active ? colors.primary : colors.mutedForeground;
           return (
-            <Pressable key={tab.id} style={styles.tab} onPress={() => setActiveTab(tab.id)}>
-              <Icon
-                size={22}
-                strokeWidth={active ? 2.5 : 2}
-                color={active ? colors.primary : colors.mutedForeground}
-              />
-              <Text style={[styles.tabLabel, { color: active ? colors.primary : colors.mutedForeground }]}>
+            <button
+              key={tab.id}
+              type="button"
+              className={["resetButton", styles.tab].join(" ")}
+              onClick={() => setActiveTab(tab.id)}
+              aria-current={active ? "page" : undefined}
+            >
+              <Icon size={22} strokeWidth={active ? 2.5 : 2} color={tint} />
+              <span className={styles.tabLabel} style={{ color: tint }}>
                 {tab.label}
-              </Text>
-            </Pressable>
+              </span>
+            </button>
           );
         })}
-      </View>
-    </View>
+      </nav>
+    </div>
   );
 }
-
-const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.background },
-  content: { flex: 1 },
-  loading: { flex: 1, alignItems: "center", justifyContent: "center" },
-  loadingText: { fontSize: 14, color: colors.mutedForeground },
-  tabBar: {
-    flexDirection: "row",
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-    backgroundColor: colors.card,
-    paddingTop: 8,
-  },
-  tab: { flex: 1, alignItems: "center", justifyContent: "center", gap: 3, paddingVertical: 4 },
-  tabLabel: { fontSize: 11, fontWeight: "600" },
-});
