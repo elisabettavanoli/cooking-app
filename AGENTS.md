@@ -1,4 +1,9 @@
-# Pantry — web app (Vite + React + PWA)
+# Co-oking — web app (Vite + React + PWA)
+
+Repo / package / Cloudflare project: **`cooking-app`**. User-facing name
+(PWA manifest, `<title>`, login header): **Co-oking**. The lowercase word
+`pantry` that remains in the code is a *food category* ("dry goods"), not the
+old project name — leave it.
 
 This project **was** an Expo / React Native app (SDK 54). It is now a plain
 **web app**: Vite 8 + React 19 (react-dom), TypeScript, installable as a PWA
@@ -17,7 +22,7 @@ later phase (not set up yet).
   `src/styles/tokens.css` (`:root` custom properties, for CSS Modules). Keep the
   two in sync by hand.
 - **State**: `src/lib/store.tsx` — React context, persisted to IndexedDB via
-  `src/lib/storage.ts` (idb-keyval). Storage key `pantry-store-v1`. Hydration is
+  `src/lib/storage.ts` (idb-keyval). Storage key `cooking-store-v1`. Hydration is
   async and gated by `hydrated`.
 - **Server stand-ins**: `src/lib/ai.ts` runs deterministic local logic; swap for
   `fetch()` when a backend exists (keep the signatures).

@@ -16,8 +16,8 @@ export default defineConfig({
       includeAssets: ["favicon.ico", "apple-touch-icon-180x180.png"],
       manifest: {
         id: "/",
-        name: "Pantry",
-        short_name: "Pantry",
+        name: "Co-oking",
+        short_name: "Co-oking",
         description:
           "Track what's in your kitchen, see what you can cook, and share with neighbours.",
         start_url: "/?source=pwa",

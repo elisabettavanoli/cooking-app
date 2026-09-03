@@ -4,7 +4,7 @@ import { FoodIcon } from "../components/FoodIcon";
 import { Button } from "../components/ui";
 import { colors } from "../lib/theme";
 import { categoryLabel } from "../lib/data";
-import { useActiveInventory, usePantry } from "../lib/store";
+import { useActiveInventory, useCooking } from "../lib/store";
 import { AddItemSheet } from "../components/AddItemSheet";
 import { EditItemSheet } from "../components/EditItemSheet";
 import { ItemActionsSheet } from "../components/ItemActionsSheet";
@@ -112,7 +112,7 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
   const [editItemId, setEditItemId] = useState<string | null>(null);
   const [actionsItemId, setActionsItemId] = useState<string | null>(null);
 
-  const { inventory, selectedConcepts, toggleSelectedConcept, clearSelectedConcepts } = usePantry();
+  const { inventory, selectedConcepts, toggleSelectedConcept, clearSelectedConcepts } = useCooking();
   const activeInventory = useActiveInventory();
 
   const grouped = useMemo(() => {

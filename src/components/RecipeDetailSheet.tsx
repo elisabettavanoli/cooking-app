@@ -4,7 +4,7 @@ import { BottomSheet, uiStyles } from "./ui";
 import { FoodIcon } from "./FoodIcon";
 import { colors } from "../lib/theme";
 import { findConceptById } from "../lib/data";
-import { useActiveInventory, usePantry } from "../lib/store";
+import { useActiveInventory, useCooking } from "../lib/store";
 import { matchRecipe } from "../lib/recipes";
 import type { Recipe, RecipeIngredient } from "../lib/types";
 import s from "./RecipeDetailSheet.module.css";
@@ -18,7 +18,7 @@ export function RecipeDetailSheet({
   open: boolean;
   onClose: () => void;
 }) {
-  const { addShoppingItem } = usePantry();
+  const { addShoppingItem } = useCooking();
   const active = useActiveInventory();
   const match = matchRecipe(recipe, active);
   const [addedIds, setAddedIds] = useState<Set<string>>(new Set());

@@ -3,7 +3,7 @@ import { Check, Plus, Search, ShoppingCart, Trash2, Undo2 } from "lucide-react";
 import { FoodIcon } from "../components/FoodIcon";
 import { colors } from "../lib/theme";
 import { categoryLabel } from "../lib/data";
-import { usePantry } from "../lib/store";
+import { useCooking } from "../lib/store";
 import { AddItemSheet } from "../components/AddItemSheet";
 import type { Category, ShoppingItem } from "../lib/types";
 import s from "./ListTab.module.css";
@@ -19,7 +19,7 @@ function groupByCategory(items: ShoppingItem[]) {
 }
 
 export function ListTab() {
-  const { shoppingList, markShoppingItemPurchased, removeShoppingItem } = usePantry();
+  const { shoppingList, markShoppingItemPurchased, removeShoppingItem } = useCooking();
   const [search, setSearch] = useState("");
   const [addOpen, setAddOpen] = useState(false);
 

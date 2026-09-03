@@ -1,5 +1,5 @@
 /**
- * Pantry design tokens, ported from the web app's oklch system to hex so plain
+ * Co-oking design tokens, ported from the web app's oklch system to hex so plain
  * React Native StyleSheet can consume them. Values are close approximations of
  * the original oklch() colors in the web project's styles.css.
  */

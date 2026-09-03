@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ChefHat, Home, ListTodo, Users } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { colors } from "./lib/theme";
-import { usePantry } from "./lib/store";
+import { useCooking } from "./lib/store";
 import { KitchenTab } from "./screens/KitchenTab";
 import { CookTab } from "./screens/CookTab";
 import { ListTab } from "./screens/ListTab";
@@ -20,7 +20,7 @@ const tabs: { id: TabId; label: string; icon: LucideIcon }[] = [
 
 export function MobileShell() {
   const [activeTab, setActiveTab] = useState<TabId>("cook");
-  const { hydrated } = usePantry();
+  const { hydrated } = useCooking();
 
   return (
     <div className={styles.root}>

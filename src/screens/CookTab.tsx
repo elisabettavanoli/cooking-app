@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { ChefHat, Clock, Leaf, Sparkles, Users } from "lucide-react";
 import { Button } from "../components/ui";
 import { colors } from "../lib/theme";
-import { useActiveInventory, usePantry } from "../lib/store";
+import { useActiveInventory, useCooking } from "../lib/store";
 import { recipeMatches } from "../lib/recipes";
 import { RecipeDetailSheet } from "../components/RecipeDetailSheet";
 import { AiRecipeSheet } from "../components/AiRecipeSheet";
@@ -10,7 +10,7 @@ import type { Recipe } from "../lib/types";
 import s from "./CookTab.module.css";
 
 export function CookTab() {
-  const { selectedConcepts, clearSelectedConcepts } = usePantry();
+  const { selectedConcepts, clearSelectedConcepts } = useCooking();
   const activeInventory = useActiveInventory();
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [generatedRecipe, setGeneratedRecipe] = useState<Recipe | null>(null);

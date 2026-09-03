@@ -1,4 +1,4 @@
-# Pantry
+# Co-oking
 
 Track what's in your kitchen, see what you can cook, and share with neighbours.
 A React + Vite web app, installable as a PWA ("Add to Home Screen").
