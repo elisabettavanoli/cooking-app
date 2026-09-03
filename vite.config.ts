@@ -51,6 +51,10 @@ export default defineConfig({
   ],
   // `.trycloudflare.com` is allowed so a quick tunnel can be used to test the
   // installed PWA on a phone (needs HTTPS). Harmless: dev/preview only.
+  // Leaflet's package `main` is the unbundled source; point the bare specifier
+  // at the prebuilt production file so the lazy map chunk stays small. Exact
+  // match only — `leaflet/dist/leaflet.css` must still resolve normally.
+  resolve: { alias: [{ find: /^leaflet$/, replacement: "leaflet/dist/leaflet.js" }] },
   server: { host: true, port: 5173, allowedHosts: [".trycloudflare.com"] },
   preview: { host: true, port: 4173, allowedHosts: [".trycloudflare.com"] },
   build: { outDir: "dist", sourcemap: true },

@@ -82,9 +82,11 @@ function buildDefaultState(): StoreState {
     profile: {
       id: "local",
       displayName: "You",
-      sharingEnabled: false,
+      shareWithCommunities: false,
+      shareOnMap: false,
       requestsEnabled: false,
-      inventoryVisible: false,
+      latitude: null,
+      longitude: null,
     },
   };
 }
@@ -318,9 +320,11 @@ function RemoteCookingProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<UserProfile>(() => ({
     id: userId ?? "local",
     displayName: "You",
-    sharingEnabled: false,
+    shareWithCommunities: false,
+    shareOnMap: false,
     requestsEnabled: false,
-    inventoryVisible: false,
+    latitude: null,
+    longitude: null,
   }));
   const [recipes, setRecipes] = useState<Recipe[]>(() => [...recipeCatalog]);
   const [selectedConcepts, setSelectedConcepts] = useState<string[]>([]);
