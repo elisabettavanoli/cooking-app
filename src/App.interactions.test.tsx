@@ -4,11 +4,9 @@ import userEvent from "@testing-library/user-event";
 import { clear } from "idb-keyval";
 import { App } from "./App";
 
-async function bootToKitchen(user: ReturnType<typeof userEvent.setup>) {
+async function bootToKitchen(_user: ReturnType<typeof userEvent.setup>) {
   const result = render(<App />);
-  await waitFor(() => screen.getByText(/what can i cook\?/i));
-  await user.click(screen.getByRole("button", { name: "Kitchen" }));
-  screen.getByText(/my kitchen/i);
+  await waitFor(() => screen.getByText(/my kitchen/i));
   return result;
 }
 
@@ -45,7 +43,7 @@ describe("App interactions", () => {
   it("toggles a Nearby privacy switch", async () => {
     const user = userEvent.setup();
     render(<App />);
-    await waitFor(() => screen.getByText(/what can i cook\?/i));
+    await waitFor(() => screen.getByText(/my kitchen/i));
     await user.click(screen.getByRole("button", { name: "Nearby" }));
 
     const toggle = screen.getByRole("switch", { name: /enable sharing/i });

@@ -3,6 +3,7 @@ import { Check, Plus, Search, UtensilsCrossed, X } from "lucide-react";
 import { FoodIcon } from "../components/FoodIcon";
 import { Button } from "../components/ui";
 import { colors } from "../lib/theme";
+import { useI18n } from "../lib/i18n";
 import { categoryLabel } from "../lib/data";
 import { useActiveInventory, useCooking } from "../lib/store";
 import { AddItemSheet } from "../components/AddItemSheet";
@@ -112,6 +113,7 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
   const [editItemId, setEditItemId] = useState<string | null>(null);
   const [useItemId, setUseItemId] = useState<string | null>(null);
 
+  const { t } = useI18n();
   const { inventory, selectedConcepts, toggleSelectedConcept, clearSelectedConcepts } = useCooking();
   const activeInventory = useActiveInventory();
 
@@ -142,11 +144,11 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
       <div className={s.header}>
         <div className={s.headerTop}>
           <div className={s.headerTexts}>
-            <h1 className={s.title}>My Kitchen</h1>
+            <h1 className={s.title}>{t("kitchen.title")}</h1>
             <p className={s.subtitle}>
-              {activeInventory.length} items tracked
+              {t("kitchen.itemsTracked", { n: activeInventory.length })}
               {expiringCount > 0 ? (
-                <span className={s.subtitleWarn}> · {expiringCount} to use soon</span>
+                <span className={s.subtitleWarn}> · {t("kitchen.toUseSoon", { n: expiringCount })}</span>
               ) : null}
             </p>
           </div>
@@ -154,7 +156,7 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
             type="button"
             className={s.addBtn}
             onClick={() => setAddOpen(true)}
-            aria-label="Add ingredient"
+            aria-label={t("kitchen.addIngredient")}
           >
             <Plus size={22} color={colors.primaryForeground} strokeWidth={2.5} />
           </button>
@@ -167,7 +169,7 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
               className={s.searchInput}
               value={search}
               onChange={(e) => setSearch(e.currentTarget.value)}
-              placeholder="Search inventory..."
+              placeholder={t("kitchen.searchPlaceholder")}
             />
           </div>
           <button
@@ -177,7 +179,7 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
               setSelectionMode((v) => !v);
               clearSelectedConcepts();
             }}
-            aria-label={selectionMode ? "Exit selection mode" : "Select items to cook with"}
+            aria-label={selectionMode ? t("kitchen.exitSelect") : t("kitchen.enterSelect")}
           >
             {selectionMode ? (
               <X size={18} color={colors.primaryForeground} />
@@ -187,9 +189,7 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
           </button>
         </div>
         <p className={s.hint}>
-          {selectionMode
-            ? "Tap items to cook with"
-            : "Tap to update quantity · long-press for details"}
+          {selectionMode ? t("kitchen.hintSelect") : t("kitchen.hintDefault")}
         </p>
       </div>
 
@@ -200,10 +200,10 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
               <UtensilsCrossed size={28} color={colors.mutedForeground} />
             </div>
             <p className={s.emptyTitle}>
-              {search ? "Nothing matches that" : "Your kitchen is empty"}
+              {search ? t("kitchen.noMatchTitle") : t("kitchen.emptyTitle")}
             </p>
             <p className={s.emptyText}>
-              {search ? "Try another name." : "Tap + to add your first ingredient."}
+              {search ? t("kitchen.noMatchText") : t("kitchen.emptyText")}
             </p>
           </div>
         )}
@@ -232,9 +232,7 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
       {selectionMode && selectedConcepts.length > 0 && (
         <div className={s.cookCta}>
           <Button
-            label={`Cook with ${selectedConcepts.length} ingredient${
-              selectedConcepts.length > 1 ? "s" : ""
-            }`}
+            label={t("kitchen.cookWith", { n: selectedConcepts.length })}
             onPress={() => {
               setSelectionMode(false);
               onSwitchToCook();

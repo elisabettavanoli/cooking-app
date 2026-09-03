@@ -36,8 +36,10 @@ and per-language stopwords, then applies light singularisation. It normalises
 readable terms like `"succo d'arancia"`.
 
 Language is taken from `opts.lang`, else a short-text heuristic, else
-`navigator.language`. Lookup falls back across every language's lexicon anyway,
-so a wrong guess mostly just affects stopword stripping.
+`getAppLang()` — the language the user picked in the app (persisted under
+`LANG_STORAGE_KEY` by `src/lib/i18n.tsx`), falling back to `navigator.language`.
+Lookup falls back across every language's lexicon anyway, so a wrong guess mostly
+just affects stopword stripping.
 
 ## Editing the data
 

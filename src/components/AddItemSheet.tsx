@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import { BottomSheet, Button, ChipSelect, Field, Segmented, uiStyles } from "./ui";
 import { colors } from "../lib/theme";
+import { useI18n } from "../lib/i18n";
 import { categories, units } from "../lib/data";
 import { useCooking } from "../lib/store";
 import { categorizeIngredientAsync } from "../lib/ai";
@@ -19,6 +20,7 @@ export function AddItemSheet({
   onClose: () => void;
   defaultMode?: AddMode;
 }) {
+  const { t } = useI18n();
   const { addInventoryItem, addShoppingItem } = useCooking();
   const [mode, setMode] = useState<AddMode>(defaultMode);
   const [rawName, setRawName] = useState("");
@@ -75,46 +77,46 @@ export function AddItemSheet({
     <BottomSheet
       open={open}
       onClose={onClose}
-      title={mode === "inventory" ? "Add to kitchen" : "Add to shopping list"}
-      subtitle="Enter an ingredient, the category is filled in for you."
+      title={mode === "inventory" ? t("sheet.addToKitchen") : t("sheet.addToList")}
+      subtitle={t("sheet.addSubtitle")}
     >
       <div className={uiStyles.sheetScroll}>
         <Segmented
           value={mode}
           onChange={setMode}
           options={[
-            { value: "inventory", label: "Kitchen" },
-            { value: "list", label: "Shopping list" },
+            { value: "inventory", label: t("sheet.modeKitchen") },
+            { value: "list", label: t("sheet.modeList") },
           ]}
         />
 
         <Field
-          label="Ingredient name"
+          label={t("sheet.ingredientName")}
           value={rawName}
           onChangeText={setRawName}
           onBlur={() => {
             void resolveName(rawName);
           }}
-          placeholder="e.g. 3 red tomatoes"
+          placeholder={t("sheet.ingredientPlaceholder")}
         />
 
         <Field
-          label="Display name"
+          label={t("sheet.displayName")}
           value={displayName}
           onChangeText={setDisplayName}
-          placeholder="Name as shown in the app"
+          placeholder={t("sheet.displayNamePlaceholder")}
         />
 
         <div className={s.row}>
           <Field
-            label="Quantity"
+            label={t("sheet.quantity")}
             value={quantity}
             onChangeText={setQuantity}
             inputMode="decimal"
             style={{ flex: 1 }}
           />
           <div className={s.grow2}>
-            <div className={s.label}>Unit</div>
+            <div className={s.label}>{t("sheet.unit")}</div>
             <ChipSelect
               value={unit}
               onChange={setUnit}
@@ -124,7 +126,7 @@ export function AddItemSheet({
         </div>
 
         <div>
-          <div className={s.label}>Category</div>
+          <div className={s.label}>{t("sheet.category")}</div>
           <ChipSelect
             value={category}
             onChange={(v) => {
@@ -136,17 +138,17 @@ export function AddItemSheet({
         </div>
 
         <Field
-          label="Notes (optional)"
+          label={t("sheet.notesOptional")}
           value={notes}
           onChangeText={setNotes}
-          placeholder="Brand, storage tip, etc."
+          placeholder={t("sheet.notesPlaceholder")}
           multiline
         />
 
         <div className={s.rowActions}>
-          <Button label="Cancel" variant="outline" onPress={onClose} style={{ flex: 1 }} />
+          <Button label={t("common.cancel")} variant="outline" onPress={onClose} style={{ flex: 1 }} />
           <Button
-            label={`Add to ${mode === "inventory" ? "kitchen" : "list"}`}
+            label={mode === "inventory" ? t("sheet.addToKitchenBtn") : t("sheet.addToListBtn")}
             onPress={() => {
               void handleSubmit();
             }}

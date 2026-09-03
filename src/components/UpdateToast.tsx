@@ -1,6 +1,7 @@
 import { useRegisterSW } from "virtual:pwa-register/react";
 import { X } from "lucide-react";
 import { isNative } from "../platform";
+import { useI18n } from "../lib/i18n";
 import styles from "./UpdateToast.module.css";
 
 /**
@@ -9,6 +10,7 @@ import styles from "./UpdateToast.module.css";
  * waiting). Not rendered inside a Capacitor shell — see App.tsx.
  */
 export function UpdateToast() {
+  const { t } = useI18n();
   const {
     offlineReady: [offlineReady, setOfflineReady],
     needRefresh: [needRefresh, setNeedRefresh],
@@ -30,7 +32,7 @@ export function UpdateToast() {
   return (
     <div className={styles.toast} role="status" aria-live="polite">
       <span className={styles.msg}>
-        {needRefresh ? "A new version is available." : "Ready to work offline."}
+        {needRefresh ? t("update.available") : t("update.offlineReady")}
       </span>
       {needRefresh && (
         <button
@@ -38,10 +40,10 @@ export function UpdateToast() {
           className={styles.action}
           onClick={() => void updateServiceWorker(true)}
         >
-          Reload
+          {t("update.reload")}
         </button>
       )}
-      <button type="button" className={styles.dismiss} onClick={close} aria-label="Dismiss">
+      <button type="button" className={styles.dismiss} onClick={close} aria-label={t("update.dismiss")}>
         <X size={16} />
       </button>
     </div>

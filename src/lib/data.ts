@@ -441,20 +441,8 @@ export const recipeCatalog: Recipe[] = [
   },
 ];
 
-export const initialInventorySeed = [
-  { conceptId: "pasta", quantity: 1, unit: "pack" as Unit },
-  { conceptId: "tomato-sauce", quantity: 1, unit: "bottle" as Unit },
-  { conceptId: "eggs", quantity: 6, unit: "piece" as Unit },
-  { conceptId: "milk", quantity: 1, unit: "l" as Unit },
-  { conceptId: "bread", quantity: 1, unit: "pack" as Unit },
-  { conceptId: "onion", quantity: 3, unit: "piece" as Unit },
-  { conceptId: "garlic", quantity: 1, unit: "bunch" as Unit },
-  { conceptId: "olive-oil", quantity: 1, unit: "bottle" as Unit },
-  { conceptId: "rice", quantity: 500, unit: "g" as Unit },
-  { conceptId: "soy-sauce", quantity: 1, unit: "bottle" as Unit },
-  { conceptId: "chicken", quantity: 400, unit: "g" as Unit },
-  { conceptId: "tomato", quantity: 4, unit: "piece" as Unit },
-  { conceptId: "basil", quantity: 1, unit: "bunch" as Unit },
-  { conceptId: "parmesan", quantity: 100, unit: "g" as Unit },
-  { conceptId: "butter", quantity: 250, unit: "g" as Unit },
-];
+/**
+ * New accounts / fresh installs start with an empty kitchen — no demo items.
+ * Kept as an (empty) export so callers and tests have a stable shape to import.
+ */
+export const initialInventorySeed: { conceptId: string; quantity: number; unit: Unit }[] = [];

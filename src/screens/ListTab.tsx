@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Check, Plus, Search, ShoppingCart, Trash2, Undo2 } from "lucide-react";
 import { FoodIcon } from "../components/FoodIcon";
 import { colors } from "../lib/theme";
+import { useI18n } from "../lib/i18n";
 import { categoryLabel } from "../lib/data";
 import { categorizeIngredientAsync } from "../lib/ai";
 import { useCooking } from "../lib/store";
@@ -19,6 +20,7 @@ function groupByCategory(items: ShoppingItem[]) {
 }
 
 export function ListTab() {
+  const { t } = useI18n();
   const { shoppingList, addShoppingItem, markShoppingItemPurchased, removeShoppingItem } =
     useCooking();
   const [search, setSearch] = useState("");
@@ -53,8 +55,8 @@ export function ListTab() {
       <div className={s.scroll}>
         <div className={s.header}>
           <div>
-            <h1 className={s.title}>Shopping List</h1>
-            <p className={s.subtitle}>{active.length} items to buy</p>
+            <h1 className={s.title}>{t("list.title")}</h1>
+            <p className={s.subtitle}>{t("list.toBuy", { n: active.length })}</p>
           </div>
         </div>
 
@@ -64,7 +66,7 @@ export function ListTab() {
             className={s.searchInput}
             value={search}
             onChange={(e) => setSearch(e.currentTarget.value)}
-            placeholder="Search list..."
+            placeholder={t("list.searchPlaceholder")}
           />
         </div>
 
@@ -73,8 +75,8 @@ export function ListTab() {
             <div className={s.emptyIcon}>
               <ShoppingCart size={28} color={colors.mutedForeground} />
             </div>
-            <p className={s.emptyTitle}>Your list is empty</p>
-            <p className={s.emptyText}>Add items manually or from a recipe.</p>
+            <p className={s.emptyTitle}>{t("list.emptyTitle")}</p>
+            <p className={s.emptyText}>{t("list.emptyText")}</p>
           </div>
         )}
 
@@ -95,7 +97,7 @@ export function ListTab() {
                     type="button"
                     className={s.iconBtn}
                     onClick={() => removeShoppingItem(item.id)}
-                    aria-label="Remove"
+                    aria-label={t("common.remove")}
                   >
                     <Trash2 size={16} color={colors.destructive} />
                   </button>
@@ -103,7 +105,7 @@ export function ListTab() {
                     type="button"
                     className={[s.iconBtn, s.iconBtnPrimary].join(" ")}
                     onClick={() => markShoppingItemPurchased(item.id, true)}
-                    aria-label="Mark purchased"
+                    aria-label={t("list.purchased")}
                   >
                     <Check size={16} color={colors.primaryForeground} />
                   </button>
@@ -115,7 +117,7 @@ export function ListTab() {
 
         {purchased.length > 0 && (
           <div className={s.sectionPurchased}>
-            <p className={s.sectionTitle}>PURCHASED</p>
+            <p className={s.sectionTitle}>{t("list.purchased").toUpperCase()}</p>
             <div className={s.rows}>
               {purchased.map((item) => (
                 <div key={item.id} className={[s.row, s.rowPurchased].join(" ")}>
@@ -123,14 +125,14 @@ export function ListTab() {
                   <div className={s.rowText}>
                     <div className={[s.rowName, s.rowNameStruck].join(" ")}>{item.displayName}</div>
                     <div className={[s.rowSub, s.rowSubDone].join(" ")}>
-                      {item.quantity} {item.unit} · in your kitchen
+                      {item.quantity} {item.unit} · {t("list.inYourKitchen")}
                     </div>
                   </div>
                   <button
                     type="button"
                     className={s.iconBtn}
                     onClick={() => markShoppingItemPurchased(item.id, false)}
-                    aria-label="Undo"
+                    aria-label={t("common.undo")}
                   >
                     <Undo2 size={16} color={colors.foreground} />
                   </button>
@@ -152,8 +154,8 @@ export function ListTab() {
           className={s.composerInput}
           value={draft}
           onChange={(e) => setDraft(e.currentTarget.value)}
-          placeholder="Add an item…"
-          aria-label="Add an item"
+          placeholder={t("list.addPlaceholder")}
+          aria-label={t("list.addPlaceholder")}
           autoComplete="off"
           enterKeyHint="done"
         />
@@ -161,7 +163,7 @@ export function ListTab() {
           type="submit"
           className={s.composerBtn}
           disabled={!draft.trim()}
-          aria-label="Add"
+          aria-label={t("list.add")}
         >
           <Plus size={20} color={colors.primaryForeground} />
         </button>

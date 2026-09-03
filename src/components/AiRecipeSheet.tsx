@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Sparkles, Wand2 } from "lucide-react";
 import { BottomSheet, Button, Field } from "./ui";
 import { colors } from "../lib/theme";
+import { useI18n } from "../lib/i18n";
 import { useActiveInventory, useCooking } from "../lib/store";
 import { generateRecipe } from "../lib/ai";
 import type { Recipe } from "../lib/types";
@@ -16,6 +17,7 @@ export function AiRecipeSheet({
   onClose: () => void;
   onGenerated: (recipe: Recipe) => void;
 }) {
+  const { t } = useI18n();
   const { selectedConcepts, clearSelectedConcepts } = useCooking();
   const active = useActiveInventory();
   const [mood, setMood] = useState("");
@@ -32,43 +34,38 @@ export function AiRecipeSheet({
     <BottomSheet
       open={open}
       onClose={onClose}
-      title="AI recipe"
-      subtitle={`Based on ${selectedConcepts.length > 0 ? "selected" : "available"} ingredients.`}
+      title={t("cook.aiRecipe")}
+      subtitle={selectedConcepts.length > 0 ? t("sheet.aiSubtitleSelected") : t("sheet.aiSubtitleAvailable")}
       heightPct={0.7}
     >
       <div className={s.wrap}>
         <Field
-          label="What are you in the mood for? (optional)"
+          label={t("sheet.aiMood")}
           value={mood}
           onChangeText={setMood}
-          placeholder="e.g. something spicy, quick, breakfast"
+          placeholder={t("sheet.aiMoodPlaceholder")}
         />
 
         <div className={s.note}>
-          <span className={s.noteText}>
-            Using {conceptIds.length} ingredient{conceptIds.length !== 1 ? "s" : ""} from your
-            kitchen.
-          </span>
+          <span className={s.noteText}>{t("sheet.aiUsing", { n: conceptIds.length })}</span>
           {selectedConcepts.length > 0 && (
             <button
               type="button"
               className={["resetButton", s.clear].join(" ")}
               onClick={clearSelectedConcepts}
             >
-              Clear selection
+              {t("sheet.aiClearSelection")}
             </button>
           )}
         </div>
 
         <div className={s.localBadge}>
           <Sparkles size={13} color={colors.mutedForeground} />
-          <span className={s.localText}>
-            Offline mode: picks the closest catalog recipe. Real AI generation is wired up later.
-          </span>
+          <span className={s.localText}>{t("sheet.aiOffline")}</span>
         </div>
 
         <Button
-          label="Generate recipe"
+          label={t("sheet.aiGenerate")}
           onPress={handleGenerate}
           disabled={conceptIds.length === 0}
           icon={<Wand2 size={18} color={colors.primaryForeground} />}
