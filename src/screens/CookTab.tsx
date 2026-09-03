@@ -69,12 +69,6 @@ export function CookTab() {
             onPress={() => setShowAi(true)}
             icon={<Sparkles size={16} color={colors.foreground} />}
           />
-          <Button
-            label={t("cook.community")}
-            variant="outline"
-            style={{ flex: 1 }}
-            icon={<Users size={16} color={colors.foreground} />}
-          />
         </div>
 
         <p className={s.sectionTitle}>{t("cook.suggested").toUpperCase()}</p>
