@@ -59,5 +59,8 @@ export default defineConfig({
     globals: true,
     setupFiles: ["src/test/setup.ts"],
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
+    // Tests run the app in local-only mode — never against a real Supabase
+    // project, even when .env.local is present.
+    env: { VITE_SUPABASE_URL: "", VITE_SUPABASE_ANON_KEY: "" },
   },
 });

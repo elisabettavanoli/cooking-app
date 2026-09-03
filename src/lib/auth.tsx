@@ -1,5 +1,9 @@
 /**
- * Auth context — thin wrapper over Supabase Auth (email magic link).
+ * Auth context — thin wrapper over Supabase Auth (passwordless email).
+ *
+ * `sendCode` emails a 6-digit code (and a magic link); `verifyCode` exchanges
+ * the code for a session in *this* browser — no redirect, so it works inside an
+ * installed PWA. The magic link still works too, for in-browser use.
  *
  * When Supabase isn't configured this still mounts and reports
  * `configured: false`; `AuthGate` uses that to skip the login screen so the
@@ -22,8 +26,10 @@ interface AuthValue {
   configured: boolean;
   session: Session | null;
   user: User | null;
-  /** Send a magic-link email. Resolves with a message on failure. */
-  signInWithEmail: (email: string) => Promise<{ error: string | null }>;
+  /** Email a 6-digit code + magic link. Resolves with a message on failure. */
+  sendCode: (email: string) => Promise<{ error: string | null }>;
+  /** Verify the 6-digit code and open a session here. */
+  verifyCode: (email: string, token: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
 }
 
@@ -59,11 +65,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       configured: supabaseConfigured,
       session,
       user: session?.user ?? null,
-      async signInWithEmail(email) {
+      async sendCode(email) {
         if (!supabase) return { error: "Backend non configurato." };
         const { error } = await supabase.auth.signInWithOtp({
           email: email.trim(),
-          options: { emailRedirectTo: window.location.origin },
+          options: {
+            emailRedirectTo: window.location.origin,
+            shouldCreateUser: true,
+          },
+        });
+        return { error: error?.message ?? null };
+      },
+      async verifyCode(email, token) {
+        if (!supabase) return { error: "Backend non configurato." };
+        const { error } = await supabase.auth.verifyOtp({
+          email: email.trim(),
+          token: token.trim(),
+          type: "email",
         });
         return { error: error?.message ?? null };
       },
