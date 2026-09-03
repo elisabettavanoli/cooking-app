@@ -2,7 +2,7 @@ import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { BottomSheet, Button } from "./ui";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
-import { categoryLabel } from "../lib/data";
+import { foodName } from "../lib/foodNames";
 import { useCooking } from "../lib/store";
 import type { InventoryItem } from "../lib/types";
 import s from "./UseItemSheet.module.css";
@@ -21,7 +21,7 @@ export function UseItemSheet({
   open: boolean;
   onClose: () => void;
 }) {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { updateInventoryItem, addShoppingItem } = useCooking();
 
   const step = item.unit === "g" || item.unit === "ml" ? 50 : 1;
@@ -39,8 +39,8 @@ export function UseItemSheet({
     <BottomSheet
       open={open}
       onClose={onClose}
-      title={item.displayName}
-      subtitle={categoryLabel(item.category)}
+      title={foodName(item.conceptId, lang, item.displayName)}
+      subtitle={t(`category.${item.category}`)}
       heightPct={0.55}
     >
       <p className={s.intro}>{t("sheet.useIntro")}</p>

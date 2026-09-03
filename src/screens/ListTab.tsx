@@ -3,7 +3,7 @@ import { Check, Plus, Search, ShoppingCart, Trash2, Undo2 } from "lucide-react";
 import { FoodIcon } from "../components/FoodIcon";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
-import { categoryLabel } from "../lib/data";
+import { foodName } from "../lib/foodNames";
 import { categorizeIngredientAsync } from "../lib/ai";
 import { useCooking } from "../lib/store";
 import type { Category, ShoppingItem } from "../lib/types";
@@ -20,7 +20,7 @@ function groupByCategory(items: ShoppingItem[]) {
 }
 
 export function ListTab() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { shoppingList, addShoppingItem, markShoppingItemPurchased, removeShoppingItem } =
     useCooking();
   const [search, setSearch] = useState("");
@@ -44,12 +44,16 @@ export function ListTab() {
 
   const { active, purchased } = useMemo(() => {
     const q = search.trim().toLowerCase();
-    const filtered = shoppingList.filter((i) => i.displayName.toLowerCase().includes(q));
+    const filtered = shoppingList.filter(
+      (i) =>
+        i.displayName.toLowerCase().includes(q) ||
+        foodName(i.conceptId, lang, i.displayName).toLowerCase().includes(q),
+    );
     return {
       active: filtered.filter((i) => !i.purchased),
       purchased: filtered.filter((i) => i.purchased),
     };
-  }, [shoppingList, search]);
+  }, [shoppingList, search, lang]);
 
   return (
     <div className={s.screen}>
@@ -83,13 +87,13 @@ export function ListTab() {
 
         {groupByCategory(active).map(({ category, items }) => (
           <div key={category} className={s.section}>
-            <p className={s.sectionTitle}>{categoryLabel(category).toUpperCase()}</p>
+            <p className={s.sectionTitle}>{t(`category.${category}`).toUpperCase()}</p>
             <div className={s.rows}>
               {items.map((item) => (
                 <div key={item.id} className={s.row}>
                   <FoodIcon iconKey={item.conceptId} category={item.category} size={44} />
                   <div className={s.rowText}>
-                    <div className={s.rowName}>{item.displayName}</div>
+                    <div className={s.rowName}>{foodName(item.conceptId, lang, item.displayName)}</div>
                     <div className={s.rowSub}>
                       {item.quantity} {item.unit}
                     </div>
@@ -124,7 +128,9 @@ export function ListTab() {
                 <div key={item.id} className={[s.row, s.rowPurchased].join(" ")}>
                   <FoodIcon iconKey={item.conceptId} category={item.category} size={44} />
                   <div className={s.rowText}>
-                    <div className={[s.rowName, s.rowNameStruck].join(" ")}>{item.displayName}</div>
+                    <div className={[s.rowName, s.rowNameStruck].join(" ")}>
+                      {foodName(item.conceptId, lang, item.displayName)}
+                    </div>
                     <div className={[s.rowSub, s.rowSubDone].join(" ")}>
                       {item.quantity} {item.unit} · {t("list.inYourKitchen")}
                     </div>

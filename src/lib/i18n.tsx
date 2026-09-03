@@ -30,8 +30,13 @@ export const LANGUAGE_LABELS: Record<LangCode, string> = {
   es: "Español",
 };
 
-/** Order shown in the language picker. */
-export const LANGUAGE_ORDER: LangCode[] = ["en", "it", "de", "fr", "es"];
+/**
+ * Languages offered in the picker. Only `en`/`it` are content-complete, so the
+ * others are hidden for now — the `de`/`fr`/`es` string tables and the
+ * `src/lib/category` lexicons stay in place, and a stored `de`/`fr`/`es` choice
+ * still works; add them back here when their translations are finished.
+ */
+export const LANGUAGE_ORDER: LangCode[] = ["en", "it"];
 
 // ─────────────────────────────────────────────────────────────
 // English — the source of truth and the fallback for every key.
@@ -51,6 +56,19 @@ const en: Dict = {
   "nav.list": "List",
   "nav.cook": "Cook",
   "nav.nearby": "Nearby",
+
+  "category.fruit": "Fruit",
+  "category.vegetables": "Vegetables",
+  "category.dairy": "Dairy",
+  "category.meat-fish": "Meat & Fish",
+  "category.pantry": "Pantry",
+  "category.sauces-condiments": "Sauces & Condiments",
+  "category.spices-herbs": "Spices & Herbs",
+  "category.baking": "Baking",
+  "category.drinks": "Drinks",
+  "category.breakfast-snacks": "Breakfast & Treats",
+  "category.snacks": "Savoury Snacks",
+  "category.other": "Other",
 
   "kitchen.title": "My Kitchen",
   "kitchen.itemsTracked": { one: "{n} item tracked", other: "{n} items tracked" },
@@ -191,6 +209,19 @@ const it: Dict = {
   "nav.list": "Lista",
   "nav.cook": "Cucinare",
   "nav.nearby": "Vicino",
+
+  "category.fruit": "Frutta",
+  "category.vegetables": "Verdura",
+  "category.dairy": "Latticini",
+  "category.meat-fish": "Carne e pesce",
+  "category.pantry": "Dispensa",
+  "category.sauces-condiments": "Salse e condimenti",
+  "category.spices-herbs": "Spezie ed erbe",
+  "category.baking": "Prodotti da forno",
+  "category.drinks": "Bevande",
+  "category.breakfast-snacks": "Colazione e dolci",
+  "category.snacks": "Snack salati",
+  "category.other": "Altro",
 
   "kitchen.title": "La mia cucina",
   "kitchen.itemsTracked": { one: "{n} prodotto in dispensa", other: "{n} prodotti in dispensa" },
