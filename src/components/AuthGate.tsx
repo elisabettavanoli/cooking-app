@@ -5,6 +5,7 @@
  */
 import { useState, type ReactNode } from "react";
 import { useAuth } from "../lib/auth";
+import { useI18n } from "../lib/i18n";
 import { Button, Field } from "./ui";
 import styles from "./AuthGate.module.css";
 
@@ -12,6 +13,7 @@ type Mode = "signin" | "signup";
 
 export function AuthGate({ children }: { children: ReactNode }) {
   const { ready, configured, session, signIn, signUp } = useAuth();
+  const { t } = useI18n();
   const [mode, setMode] = useState<Mode>("signin");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -45,9 +47,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
       <div className={styles.card}>
         <h1 className={styles.title}>Co-oking</h1>
         <p className={styles.hint}>
-          {mode === "signin"
-            ? "Accedi con email e password."
-            : "Crea un account per condividere la dispensa."}
+          {mode === "signin" ? t("auth.signinHint") : t("auth.signupHint")}
         </p>
 
         <form
@@ -58,26 +58,26 @@ export function AuthGate({ children }: { children: ReactNode }) {
         >
           {mode === "signup" ? (
             <Field
-              label="Nome"
+              label={t("auth.name")}
               value={name}
               onChangeText={setName}
-              placeholder="Come ti chiamano"
+              placeholder={t("auth.namePlaceholder")}
               autoCapitalize="words"
             />
           ) : null}
           <Field
-            label="Email"
+            label={t("auth.email")}
             value={email}
             onChangeText={setEmail}
-            placeholder="tu@esempio.it"
+            placeholder={t("auth.emailPlaceholder")}
             inputMode="email"
             autoCapitalize="none"
           />
           <Field
-            label="Password"
+            label={t("auth.password")}
             value={password}
             onChangeText={setPassword}
-            placeholder="almeno 6 caratteri"
+            placeholder={t("auth.passwordPlaceholder")}
             type="password"
             autoCapitalize="none"
           />
@@ -86,10 +86,10 @@ export function AuthGate({ children }: { children: ReactNode }) {
             type="submit"
             label={
               busy
-                ? "Attendi…"
+                ? t("auth.wait")
                 : mode === "signin"
-                  ? "Entra"
-                  : "Crea account"
+                  ? t("auth.signin")
+                  : t("auth.signup")
             }
             disabled={busy || !canSubmit}
             style={{ width: "100%", marginTop: 8 }}
@@ -104,9 +104,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
             setError(null);
           }}
         >
-          {mode === "signin"
-            ? "Non hai un account? Registrati"
-            : "Hai già un account? Accedi"}
+          {mode === "signin" ? t("auth.toSignup") : t("auth.toSignin")}
         </button>
       </div>
     </div>

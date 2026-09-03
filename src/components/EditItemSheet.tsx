@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Save, Trash2 } from "lucide-react";
 import { BottomSheet, Button, ChipSelect, Field, uiStyles } from "./ui";
 import { colors } from "../lib/theme";
+import { useI18n } from "../lib/i18n";
 import { categories, units } from "../lib/data";
 import { useCooking } from "../lib/store";
 import type { Category, InventoryItem, Unit } from "../lib/types";
@@ -16,6 +17,7 @@ export function EditItemSheet({
   open: boolean;
   onClose: () => void;
 }) {
+  const { t } = useI18n();
   const { updateInventoryItem, removeInventoryItem } = useCooking();
   const [displayName, setDisplayName] = useState(item.displayName);
   const [category, setCategory] = useState<Category>(item.category);
@@ -38,23 +40,23 @@ export function EditItemSheet({
     <BottomSheet
       open={open}
       onClose={onClose}
-      title="Edit ingredient"
-      subtitle="Adjust name, quantity, or category."
+      title={t("sheet.editTitle")}
+      subtitle={t("sheet.editSubtitle")}
       heightPct={0.85}
     >
       <div className={uiStyles.sheetScroll}>
-        <Field label="Name" value={displayName} onChangeText={setDisplayName} />
+        <Field label={t("sheet.name")} value={displayName} onChangeText={setDisplayName} />
 
         <div className={s.row}>
           <Field
-            label="Quantity"
+            label={t("sheet.quantity")}
             value={quantity}
             onChangeText={setQuantity}
             inputMode="decimal"
             style={{ flex: 1 }}
           />
           <div className={s.grow2}>
-            <div className={s.label}>Unit</div>
+            <div className={s.label}>{t("sheet.unit")}</div>
             <ChipSelect
               value={unit}
               onChange={setUnit}
@@ -64,7 +66,7 @@ export function EditItemSheet({
         </div>
 
         <div>
-          <div className={s.label}>Category</div>
+          <div className={s.label}>{t("sheet.category")}</div>
           <ChipSelect
             value={category}
             onChange={setCategory}
@@ -72,11 +74,11 @@ export function EditItemSheet({
           />
         </div>
 
-        <Field label="Notes" value={notes} onChangeText={setNotes} multiline />
+        <Field label={t("sheet.notes")} value={notes} onChangeText={setNotes} multiline />
 
         <div className={s.rowActions}>
           <Button
-            label="Delete"
+            label={t("common.delete")}
             variant="destructive"
             icon={<Trash2 size={18} color={colors.destructiveForeground} />}
             onPress={() => {
@@ -85,7 +87,7 @@ export function EditItemSheet({
             }}
           />
           <Button
-            label="Save"
+            label={t("common.save")}
             onPress={handleSave}
             icon={<Save size={18} color={colors.primaryForeground} />}
             style={{ flex: 1 }}

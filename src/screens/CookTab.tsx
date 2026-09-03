@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { ChefHat, Clock, Leaf, Sparkles, Users } from "lucide-react";
 import { Button } from "../components/ui";
 import { colors } from "../lib/theme";
+import { useI18n } from "../lib/i18n";
 import { useActiveInventory, useCooking } from "../lib/store";
 import { recipeMatches } from "../lib/recipes";
 import { RecipeDetailSheet } from "../components/RecipeDetailSheet";
@@ -10,6 +11,7 @@ import type { Recipe } from "../lib/types";
 import s from "./CookTab.module.css";
 
 export function CookTab() {
+  const { t } = useI18n();
   const { selectedConcepts, clearSelectedConcepts } = useCooking();
   const activeInventory = useActiveInventory();
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
@@ -30,32 +32,30 @@ export function CookTab() {
     <div className={s.screen}>
       <div className={s.scroll}>
         <h1 className={s.title}>
-          {selectedConcepts.length > 0 ? "Cook with selected" : "What can I cook?"}
+          {selectedConcepts.length > 0 ? t("cook.titleSelected") : t("cook.titleDefault")}
         </h1>
         <p className={s.subtitle}>
           {selectedConcepts.length > 0
-            ? `${selectedConcepts.length} ingredient${
-                selectedConcepts.length > 1 ? "s" : ""
-              } selected`
-            : `${activeInventory.length} items in your kitchen`}
+            ? t("cook.subtitleSelected", { n: selectedConcepts.length })
+            : t("cook.subtitleItems", { n: activeInventory.length })}
         </p>
 
         {selectedConcepts.length > 0 && (
           <div className={s.selectedBar}>
-            <span className={s.selectedText}>Using selected ingredients</span>
+            <span className={s.selectedText}>{t("cook.usingSelected")}</span>
             <button
               type="button"
               className={["resetButton", s.clear].join(" ")}
               onClick={clearSelectedConcepts}
             >
-              Clear
+              {t("common.clear")}
             </button>
           </div>
         )}
 
         <div className={s.actionsRow}>
           <Button
-            label="AI recipe"
+            label={t("cook.aiRecipe")}
             variant="outline"
             style={{ flex: 1 }}
             disabled={activeInventory.length === 0}
@@ -63,20 +63,20 @@ export function CookTab() {
             icon={<Sparkles size={16} color={colors.foreground} />}
           />
           <Button
-            label="Community"
+            label={t("cook.community")}
             variant="outline"
             style={{ flex: 1 }}
             icon={<Users size={16} color={colors.foreground} />}
           />
         </div>
 
-        <p className={s.sectionTitle}>SUGGESTED RECIPES</p>
+        <p className={s.sectionTitle}>{t("cook.suggested").toUpperCase()}</p>
 
         {topMatches.length === 0 && (
           <div className={s.emptyCard}>
             <ChefHat size={32} color={colors.mutedForeground} />
-            <p className={s.emptyTitle}>No catalog matches yet</p>
-            <p className={s.emptyText}>Add more ingredients or try an AI recipe.</p>
+            <p className={s.emptyTitle}>{t("cook.noMatchTitle")}</p>
+            <p className={s.emptyText}>{t("cook.noMatchText")}</p>
           </div>
         )}
 
@@ -104,7 +104,7 @@ export function CookTab() {
                       className={s.pillText}
                       style={{ color: missing === 0 ? colors.fresh : colors.warn }}
                     >
-                      {missing === 0 ? "Ready" : `${missing} missing`}
+                      {missing === 0 ? t("cook.ready") : t("cook.missing", { n: missing })}
                     </span>
                   </span>
                 </span>
@@ -112,15 +112,15 @@ export function CookTab() {
                 <span className={s.cardMeta}>
                   <span className={s.metaItem}>
                     <Clock size={12} color={colors.mutedForeground} />
-                    <span className={s.metaText}>{r.timeMinutes} min</span>
+                    <span className={s.metaText}>{t("cook.minutes", { n: r.timeMinutes })}</span>
                   </span>
                   <span className={s.metaItem}>
                     <Leaf size={12} color={colors.mutedForeground} />
-                    <span className={s.metaText}>{match.have.length} have</span>
+                    <span className={s.metaText}>{t("cook.have", { n: match.have.length })}</span>
                   </span>
                   <span className={s.metaItem}>
                     <Users size={12} color={colors.mutedForeground} />
-                    <span className={s.metaText}>{r.servings} servings</span>
+                    <span className={s.metaText}>{t("cook.servings", { n: r.servings })}</span>
                   </span>
                 </span>
               </span>

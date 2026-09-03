@@ -3,6 +3,7 @@ import { Check, ShoppingCart, Users } from "lucide-react";
 import { BottomSheet, uiStyles } from "./ui";
 import { FoodIcon } from "./FoodIcon";
 import { colors } from "../lib/theme";
+import { useI18n } from "../lib/i18n";
 import { findConceptById } from "../lib/data";
 import { useActiveInventory, useCooking } from "../lib/store";
 import { matchRecipe } from "../lib/recipes";
@@ -18,6 +19,7 @@ export function RecipeDetailSheet({
   open: boolean;
   onClose: () => void;
 }) {
+  const { t } = useI18n();
   const { addShoppingItem } = useCooking();
   const active = useActiveInventory();
   const match = matchRecipe(recipe, active);
@@ -47,17 +49,19 @@ export function RecipeDetailSheet({
         </div>
 
         <div className={s.metaRow}>
-          <span className={s.meta}>{recipe.timeMinutes} min</span>
-          <span className={s.meta}>{recipe.servings} servings</span>
+          <span className={s.meta}>{t("cook.minutes", { n: recipe.timeMinutes })}</span>
+          <span className={s.meta}>{t("cook.servings", { n: recipe.servings })}</span>
           <span
             className={[s.meta, s.metaStrong].join(" ")}
             style={{ color: match.missingCount === 0 ? colors.fresh : colors.warn }}
           >
-            {match.missingCount === 0 ? "Ready to cook" : `${match.missingCount} missing`}
+            {match.missingCount === 0
+              ? t("sheet.readyToCook")
+              : t("cook.missing", { n: match.missingCount })}
           </span>
         </div>
 
-        <Section title={`You have (${match.have.length})`}>
+        <Section title={t("sheet.youHave", { n: match.have.length })}>
           {match.have.map((ing) => (
             <div key={ing.conceptId} className={[s.ingRow, s.ingRowHave].join(" ")}>
               <FoodIcon
@@ -74,10 +78,10 @@ export function RecipeDetailSheet({
               <Check size={18} color={colors.fresh} />
             </div>
           ))}
-          {match.have.length === 0 && <p className={s.empty}>Nothing from this recipe yet.</p>}
+          {match.have.length === 0 && <p className={s.empty}>{t("sheet.nothingYet")}</p>}
         </Section>
 
-        <Section title={`Missing (${match.missing.length})`}>
+        <Section title={t("sheet.missingCount", { n: match.missing.length })}>
           {match.missing.map((ing) => {
             const added = addedIds.has(ing.conceptId);
             return (
@@ -98,7 +102,7 @@ export function RecipeDetailSheet({
                   className={["resetButton", s.iconBtn].join(" ")}
                   onClick={() => addMissing(ing)}
                   disabled={added}
-                  aria-label={added ? "Added to list" : "Add to shopping list"}
+                  aria-label={added ? t("sheet.addedToList") : t("sheet.addToShoppingList")}
                 >
                   {added ? (
                     <Check size={16} color={colors.fresh} />
@@ -113,11 +117,11 @@ export function RecipeDetailSheet({
             );
           })}
           {match.missing.length === 0 && (
-            <p className={s.empty}>You have everything you need.</p>
+            <p className={s.empty}>{t("sheet.haveEverything")}</p>
           )}
         </Section>
 
-        <Section title="Instructions">
+        <Section title={t("sheet.instructions")}>
           {recipe.instructions.map((step, idx) => (
             <div key={idx} className={s.stepRow}>
               <div className={s.stepNum}>

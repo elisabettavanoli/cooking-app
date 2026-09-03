@@ -26,6 +26,13 @@ later phase (not set up yet).
   async and gated by `hydrated`.
 - **Server stand-ins**: `src/lib/ai.ts` runs deterministic local logic; swap for
   `fetch()` when a backend exists (keep the signatures).
+- **i18n**: `src/lib/i18n.tsx` — `<I18nProvider>` + `useI18n()` → `{ lang, setLang, t }`.
+  String tables live in that file (`en`/`it` complete; `de`/`fr`/`es` cover the
+  shell and fall back to English). `t("some.key", { n })` interpolates `{n}` and
+  picks plural forms. Chosen language persists in `localStorage` under
+  `cooking-lang`; `src/lib/category/locales.ts` `getAppLang()` reads the same key.
+  Language picker is in the Community tab (`NearbyTab`). Category labels
+  (`categoryMeta` in `data.ts`) are not translated yet.
 - **Sheets**: `BottomSheet` in `src/components/ui.tsx` is a native `<dialog>`.
 - **PWA**: `vite-plugin-pwa` in `vite.config.ts` (generateSW, `registerType: prompt`).
   Icons in `public/` (regenerate: `npx pwa-assets-generator --preset minimal-2023

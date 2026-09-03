@@ -1,6 +1,7 @@
 import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { BottomSheet, Button } from "./ui";
 import { colors } from "../lib/theme";
+import { useI18n } from "../lib/i18n";
 import { categoryLabel } from "../lib/data";
 import { useCooking } from "../lib/store";
 import type { InventoryItem } from "../lib/types";
@@ -20,6 +21,7 @@ export function UseItemSheet({
   open: boolean;
   onClose: () => void;
 }) {
+  const { t } = useI18n();
   const { updateInventoryItem, addShoppingItem } = useCooking();
 
   const step = item.unit === "g" || item.unit === "ml" ? 50 : 1;
@@ -41,15 +43,15 @@ export function UseItemSheet({
       subtitle={categoryLabel(item.category)}
       heightPct={0.55}
     >
-      <p className={s.intro}>Lower the amount as you use it — reaching zero clears it from your kitchen.</p>
+      <p className={s.intro}>{t("sheet.useIntro")}</p>
 
-      <div className={s.sectionLabel}>Quantity</div>
+      <div className={s.sectionLabel}>{t("sheet.quantity")}</div>
       <div className={s.qtyRow}>
         <button
           type="button"
           className={s.qtyBtn}
           onClick={() => setQuantity(item.quantity - step)}
-          aria-label="Decrease quantity"
+          aria-label={t("sheet.decrease")}
         >
           <Minus size={18} color={colors.foreground} />
         </button>
@@ -61,14 +63,14 @@ export function UseItemSheet({
           type="button"
           className={s.qtyBtn}
           onClick={() => setQuantity(item.quantity + step)}
-          aria-label="Increase quantity"
+          aria-label={t("sheet.increase")}
         >
           <Plus size={18} color={colors.foreground} />
         </button>
       </div>
 
       <Button
-        label="Add to shopping list"
+        label={t("sheet.addToShoppingList")}
         variant="outline"
         icon={<ShoppingCart size={18} color={colors.foreground} />}
         style={{ width: "100%" }}

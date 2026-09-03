@@ -92,12 +92,24 @@ export const LOCALE_RULES: Record<LangCode, LocaleRule> = {
 export const SUPPORTED_LANGS = Object.keys(LOCALE_RULES) as LangCode[];
 export const DEFAULT_LANG: LangCode = "en";
 
+/** localStorage key the i18n layer (src/lib/i18n.tsx) writes the chosen UI language to. */
+export const LANG_STORAGE_KEY = "cooking-lang";
+
 export function isSupportedLang(code: string): code is LangCode {
   return (SUPPORTED_LANGS as string[]).includes(code);
 }
 
-/** The app has no i18n layer yet, so we take the browser locale as the hint. */
+/**
+ * The active language: the one the user picked in the app (persisted by the
+ * i18n layer), falling back to the browser locale, then English.
+ */
 export function getAppLang(): LangCode {
+  try {
+    const picked = typeof localStorage !== "undefined" ? localStorage.getItem(LANG_STORAGE_KEY) : null;
+    if (picked && isSupportedLang(picked)) return picked;
+  } catch {
+    // localStorage unavailable — fall through to the browser locale
+  }
   const nav = typeof navigator !== "undefined" ? navigator.language : "";
   const base = (nav || "").slice(0, 2).toLowerCase();
   return isSupportedLang(base) ? base : DEFAULT_LANG;
