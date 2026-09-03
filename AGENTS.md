@@ -31,7 +31,7 @@ later phase (not set up yet).
   shell and fall back to English). `t("some.key", { n })` interpolates `{n}` and
   picks plural forms. Chosen language persists in `localStorage` under
   `cooking-lang`; `src/lib/category/locales.ts` `getAppLang()` reads the same key.
-  Language picker is in the Community tab (`NearbyTab`); it currently offers only
+  Language picker is in the Profile tab (`ProfileTab`); it currently offers only
   `en`/`it` (`LANGUAGE_ORDER` in `i18n.tsx`) since the others aren't
   content-complete — the `de`/`fr`/`es` tables and lexicons stay in place. Category labels are
   translated under the `category.<key>` keys (English mirrors `categoryMeta` in
@@ -58,6 +58,23 @@ later phase (not set up yet).
   → `.env.local`. Next: Postgres schema (`households`, `household_members`,
   `pantry_items`, …) + RLS, then move `store.tsx` persistence off the single
   IndexedDB blob onto per-entity Supabase queries + realtime.
+- **Community discovery**: `src/lib/community.ts` (pure Supabase fns, like
+  `remote.ts`) + `src/lib/community-store.tsx` (`CommunityProvider` /
+  `useCommunity()`, mounted under `CookingProvider` in `App.tsx`). Remote-only:
+  `enabled` is false in local mode / tests and every action is an inert no-op.
+  Drives the `nearby` tab (cross-community ingredient search, join/create/leave)
+  and the Leaflet map of `share_on_map` kitchens. Schema: `communities`,
+  `community_members`, and the `co_*` RPCs in `supabase/schema.sql`.
+- **Profile tab** (`src/screens/ProfileTab.tsx`): display name, language picker,
+  the two kitchen-sharing switches (`shareWithCommunities` / `shareOnMap` on
+  `UserProfile`) + `requestsEnabled`, logout.
+- **Map**: `src/components/NearbyMap.tsx` uses Leaflet + OSM tiles (tiles are
+  online-only, not precached). Leaflet + its CSS load via dynamic `import()`
+  inside the effect → own lazy chunk, never in the local-only/test bundle
+  (`NearbyMap` mounts only when `useCommunity().enabled`). `vite.config.ts`
+  aliases the bare `leaflet` specifier to `leaflet/dist/leaflet.js` (its `main`
+  is unbundled source). Coarse location via `src/lib/geo.ts` `getCoarsePosition`
+  (rounds to ~2 dp; resolves `null`, never throws).
 
 ## Not yet done
 

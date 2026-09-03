@@ -40,13 +40,13 @@ describe("App interactions", () => {
     expect(screen.getByText("Sardines")).toBeDefined();
   });
 
-  it("toggles a Nearby privacy switch", async () => {
+  it("toggles a kitchen-sharing switch on the Profile tab", async () => {
     const user = userEvent.setup();
     render(<App />);
     await waitFor(() => screen.getByText(/my kitchen/i));
-    await user.click(screen.getByRole("button", { name: "Nearby" }));
+    await user.click(screen.getByRole("button", { name: "Profile" }));
 
-    const toggle = screen.getByRole("switch", { name: /enable sharing/i });
+    const toggle = screen.getByRole("switch", { name: /share with my communities/i });
     expect(toggle.getAttribute("aria-checked")).toBe("false");
     await user.click(toggle);
     expect(toggle.getAttribute("aria-checked")).toBe("true");
