@@ -33,9 +33,18 @@ later phase (not set up yet).
   into `public/`). SW update UI: `src/components/UpdateToast.tsx`.
 - iOS/standalone meta tags live in `index.html`. Safe areas via
   `env(safe-area-inset-*)` and the `--safe-*` tokens; heights use `dvh`.
+- **Hosting**: Cloudflare Pages (`wrangler.toml`, output `dist/`, SPA fallback
+  `public/_redirects`). `npx wrangler pages deploy dist` or git integration.
+- **Backend (in progress)**: Supabase. Client in `src/lib/supabase.ts` (null
+  when `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` are unset — app then runs
+  local-only). Auth context `src/lib/auth.tsx` (email magic link), login screen
+  `src/components/AuthGate.tsx` wraps the shell in `App.tsx`. Env: `.env.example`
+  → `.env.local`. Next: Postgres schema (`households`, `household_members`,
+  `pantry_items`, …) + RLS, then move `store.tsx` persistence off the single
+  IndexedDB blob onto per-entity Supabase queries + realtime.
 
 ## Not yet done
 
 - Capacitor wrapper (`ios/`, `android/`) for the app stores.
-- Real backend / multi-device sync (persistence is local only).
+- Supabase schema + RLS; `store.tsx` still persists one local blob (see above).
 - iOS `apple-touch-startup-image` splash screens.

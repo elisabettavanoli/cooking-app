@@ -1,0 +1,6 @@
+# Cloudflare Pages config. Lets `npx wrangler pages deploy` (and CI) publish the
+# built site without dashboard clicks. `pages_build_output_dir` is what marks
+# this as a Pages project rather than a Worker.
+name = "cooking-app"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-09-03"
