@@ -14,6 +14,11 @@ import "./styles/tokens.css";
 import "./styles/global.css";
 
 import { App } from "./App";
+import { primeCache } from "./lib/category";
+
+// Load the learned product→category cache so the Add sheet can fill the category
+// synchronously on the first keystroke.
+void primeCache();
 
 const container = document.getElementById("root");
 if (!container) throw new Error("Root container #root not found");

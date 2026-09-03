@@ -4,32 +4,19 @@
   color: var(--foreground);
   margin-bottom: 6px;
 }
-.hint {
-  font-size: 12px;
-  color: var(--muted-foreground);
-}
-.shareRow {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  padding: 12px;
-}
 .row {
   display: flex;
   flex-direction: row;
   gap: 12px;
+  align-items: flex-start;
 }
 .rowActions {
   display: flex;
   flex-direction: row;
   gap: 8px;
 }
-.grow {
-  flex: 1;
-}
 .grow2 {
   flex: 2;
+  /* Let the unit chip row scroll horizontally rather than widen the sheet. */
+  min-width: 0;
 }

@@ -7,7 +7,7 @@ import { categoryLabel } from "../lib/data";
 import { useActiveInventory, useCooking } from "../lib/store";
 import { AddItemSheet } from "../components/AddItemSheet";
 import { EditItemSheet } from "../components/EditItemSheet";
-import { ItemActionsSheet } from "../components/ItemActionsSheet";
+import { UseItemSheet } from "../components/UseItemSheet";
 import type { InventoryItem } from "../lib/types";
 import s from "./KitchenTab.module.css";
 
@@ -110,7 +110,7 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
   const [selectionMode, setSelectionMode] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [editItemId, setEditItemId] = useState<string | null>(null);
-  const [actionsItemId, setActionsItemId] = useState<string | null>(null);
+  const [useItemId, setUseItemId] = useState<string | null>(null);
 
   const { inventory, selectedConcepts, toggleSelectedConcept, clearSelectedConcepts } = useCooking();
   const activeInventory = useActiveInventory();
@@ -130,11 +130,11 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
   const expiringCount = activeInventory.filter((i) => i.expiry && daysUntil(i.expiry) <= 3).length;
 
   const editItem = inventory.find((i) => i.id === editItemId) ?? null;
-  const actionsItem = inventory.find((i) => i.id === actionsItemId) ?? null;
+  const useItem = inventory.find((i) => i.id === useItemId) ?? null;
 
   const handleTap = (item: InventoryItem) => {
     if (selectionMode) toggleSelectedConcept(item.conceptId);
-    else setActionsItemId(item.id);
+    else setUseItemId(item.id);
   };
 
   return (
@@ -187,7 +187,9 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
           </button>
         </div>
         <p className={s.hint}>
-          {selectionMode ? "Tap items to cook with" : "Long-press an item for actions"}
+          {selectionMode
+            ? "Tap items to cook with"
+            : "Tap to update quantity · long-press for details"}
         </p>
       </div>
 
@@ -219,7 +221,7 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
                   item={item}
                   selected={selectedConcepts.includes(item.conceptId)}
                   onTap={() => handleTap(item)}
-                  onLongPress={() => setActionsItemId(item.id)}
+                  onLongPress={() => setEditItemId(item.id)}
                 />
               ))}
             </div>
@@ -242,16 +244,11 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
       )}
 
       <AddItemSheet open={addOpen} onClose={() => setAddOpen(false)} defaultMode="inventory" />
-      {actionsItem && (
-        <ItemActionsSheet
-          item={actionsItem}
-          open={!!actionsItemId}
-          onClose={() => setActionsItemId(null)}
-          onEdit={() => setEditItemId(actionsItem.id)}
-        />
-      )}
       {editItem && (
         <EditItemSheet item={editItem} open={!!editItemId} onClose={() => setEditItemId(null)} />
+      )}
+      {useItem && (
+        <UseItemSheet item={useItem} open={!!useItemId} onClose={() => setUseItemId(null)} />
       )}
     </div>
   );

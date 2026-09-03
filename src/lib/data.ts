@@ -4,15 +4,17 @@ export const categoryMeta: Record<
   Category,
   { label: string; color: string; bg: string }
 > = {
-  produce: { label: "Produce", color: "#4A7C3F", bg: "#DDEFD0" },
+  fruit: { label: "Fruit", color: "#B5583F", bg: "#F3E1DA" },
+  vegetables: { label: "Vegetables", color: "#4A7C3F", bg: "#DDEFD0" },
   dairy: { label: "Dairy", color: "#4A73A0", bg: "#D9E6F0" },
-  "meat-fish": { label: "Meat & Fish", color: "#B5583F", bg: "#F3E1DA" },
+  "meat-fish": { label: "Meat & Fish", color: "#9E4A4A", bg: "#EFDCDC" },
   pantry: { label: "Pantry", color: "#927A3E", bg: "#EFE6D2" },
   "sauces-condiments": { label: "Sauces & Condiments", color: "#A6863F", bg: "#F2EAD3" },
   "spices-herbs": { label: "Spices & Herbs", color: "#4A7C4F", bg: "#DBEEDD" },
-  baking: { label: "Baking", color: "#927A3E", bg: "#EFE6D2" },
+  baking: { label: "Baking", color: "#8A6D46", bg: "#EBE0D0" },
   drinks: { label: "Drinks", color: "#4273AC", bg: "#D9E6F2" },
-  frozen: { label: "Frozen", color: "#3F8A94", bg: "#D5EEF0" },
+  "breakfast-snacks": { label: "Breakfast & Treats", color: "#8A5A3C", bg: "#EEE0D5" },
+  snacks: { label: "Savoury Snacks", color: "#3F8A94", bg: "#D5EEF0" },
   other: { label: "Other", color: "#6B7280", bg: "#E7E9ED" },
 };
 
@@ -48,36 +50,40 @@ const c = (
 });
 
 export const concepts: IngredientConcept[] = [
-  // Produce
-  c("tomato", "Tomato", "produce", "tomato", ["tomatoes", "cherry tomato", "roma tomato"]),
-  c("onion", "Onion", "produce", "onion", ["onions", "yellow onion", "red onion"]),
-  c("garlic", "Garlic", "produce", "garlic", ["garlic cloves"]),
-  c("carrot", "Carrot", "produce", "carrot", ["carrots"]),
-  c("potato", "Potato", "produce", "potato", ["potatoes"]),
-  c("bell-pepper", "Bell Pepper", "produce", "bell-pepper", ["pepper", "capsicum"]),
-  c("spinach", "Spinach", "produce", "spinach", ["baby spinach"]),
-  c("mushroom", "Mushroom", "produce", "mushroom", ["mushrooms"]),
-  c("broccoli", "Broccoli", "produce", "broccoli", ["broccoli florets"]),
-  c("cauliflower", "Cauliflower", "produce", "cauliflower", ["cauliflower florets"]),
-  c("lettuce", "Lettuce", "produce", "lettuce", ["romaine", "mixed greens"]),
-  c("cucumber", "Cucumber", "produce", "cucumber", ["cucumbers"]),
-  c("zucchini", "Zucchini", "produce", "zucchini", ["courgette"]),
-  c("eggplant", "Eggplant", "produce", "eggplant", ["aubergine"]),
-  c("lemon", "Lemon", "produce", "lemon", ["lemons"]),
-  c("lime", "Lime", "produce", "lime", ["limes"]),
-  c("avocado", "Avocado", "produce", "avocado", ["avocados"]),
-  c("apple", "Apple", "produce", "apple", ["apples"]),
-  c("banana", "Banana", "produce", "banana", ["bananas"]),
-  c("orange", "Orange", "produce", "orange", ["oranges"]),
-  c("berries", "Berries", "produce", "berries", ["strawberries", "blueberries", "raspberries"]),
-  c("celery", "Celery", "produce", "celery"),
-  c("peas", "Peas", "produce", "peas", ["green peas", "frozen peas"]),
-  c("ginger", "Ginger", "produce", "ginger", ["fresh ginger"]),
-  c("chili", "Chili", "produce", "chili", ["chilli", "chili pepper", "red chili"]),
-  c("parsley", "Parsley", "produce", "parsley", ["fresh parsley"]),
-  c("cilantro", "Cilantro", "produce", "cilantro", ["coriander", "fresh coriander"]),
-  c("basil", "Basil", "produce", "basil", ["fresh basil"]),
-  c("thyme", "Thyme", "produce", "thyme", ["fresh thyme"]),
+  // Fruit
+  c("lemon", "Lemon", "fruit", "lemon", ["lemons"]),
+  c("lime", "Lime", "fruit", "lime", ["limes"]),
+  c("avocado", "Avocado", "fruit", "avocado", ["avocados"]),
+  c("apple", "Apple", "fruit", "apple", ["apples"]),
+  c("banana", "Banana", "fruit", "banana", ["bananas"]),
+  c("orange", "Orange", "fruit", "orange", ["oranges"]),
+  c("berries", "Berries", "fruit", "berries", ["strawberries", "blueberries", "raspberries"]),
+
+  // Vegetables
+  c("tomato", "Tomato", "vegetables", "tomato", ["tomatoes", "cherry tomato", "roma tomato"]),
+  c("onion", "Onion", "vegetables", "onion", ["onions", "yellow onion", "red onion"]),
+  c("garlic", "Garlic", "vegetables", "garlic", ["garlic cloves"]),
+  c("carrot", "Carrot", "vegetables", "carrot", ["carrots"]),
+  c("potato", "Potato", "vegetables", "potato", ["potatoes"]),
+  c("bell-pepper", "Bell Pepper", "vegetables", "bell-pepper", ["pepper", "capsicum"]),
+  c("spinach", "Spinach", "vegetables", "spinach", ["baby spinach"]),
+  c("mushroom", "Mushroom", "vegetables", "mushroom", ["mushrooms"]),
+  c("broccoli", "Broccoli", "vegetables", "broccoli", ["broccoli florets"]),
+  c("cauliflower", "Cauliflower", "vegetables", "cauliflower", ["cauliflower florets"]),
+  c("lettuce", "Lettuce", "vegetables", "lettuce", ["romaine", "mixed greens"]),
+  c("cucumber", "Cucumber", "vegetables", "cucumber", ["cucumbers"]),
+  c("zucchini", "Zucchini", "vegetables", "zucchini", ["courgette"]),
+  c("eggplant", "Eggplant", "vegetables", "eggplant", ["aubergine"]),
+  c("celery", "Celery", "vegetables", "celery"),
+  c("peas", "Peas", "vegetables", "peas", ["green peas", "frozen peas"]),
+  c("ginger", "Ginger", "vegetables", "ginger", ["fresh ginger"]),
+  c("chili", "Chili", "vegetables", "chili", ["chilli", "chili pepper", "red chili"]),
+
+  // Fresh & dried herbs
+  c("parsley", "Parsley", "spices-herbs", "parsley", ["fresh parsley"]),
+  c("cilantro", "Cilantro", "spices-herbs", "cilantro", ["coriander", "fresh coriander"]),
+  c("basil", "Basil", "spices-herbs", "basil", ["fresh basil"]),
+  c("thyme", "Thyme", "spices-herbs", "thyme", ["fresh thyme"]),
   c("oregano", "Oregano", "spices-herbs", "oregano", ["fresh oregano"]),
   c("rosemary", "Rosemary", "spices-herbs", "rosemary", ["fresh rosemary"]),
   c("mint", "Mint", "spices-herbs", "mint", ["fresh mint"]),
@@ -118,7 +124,6 @@ export const concepts: IngredientConcept[] = [
   c("canned-tomatoes", "Canned Tomatoes", "pantry", "canned-tomatoes", ["tomato can"]),
   c("olives", "Olives", "pantry", "olives"),
   c("oats", "Oats", "pantry", "oats", ["rolled oats"]),
-  c("cereal", "Cereal", "pantry", "cereal"),
   c("nuts", "Nuts", "pantry", "nuts", ["almonds", "walnuts"]),
 
   // Sauces & Condiments
@@ -175,13 +180,22 @@ export const concepts: IngredientConcept[] = [
   c("beer", "Beer", "drinks", "beer"),
   c("soda", "Soda", "drinks", "soda", ["soft drink"]),
 
-  // Frozen
-  c("ice-cream", "Ice Cream", "frozen", "ice-cream"),
-  c("frozen-vegetables", "Frozen Vegetables", "frozen", "frozen-vegetables"),
-  c("frozen-berries", "Frozen Berries", "frozen", "frozen-berries"),
-  c("pizza", "Pizza", "frozen", "pizza"),
-  c("frozen-meat", "Frozen Meat", "frozen", "frozen-meat"),
-  c("frozen-fish", "Frozen Fish", "frozen", "frozen-fish"),
+  // Breakfast & treats
+  c("cereal", "Cereal", "breakfast-snacks", "cereal", ["breakfast cereal", "corn flakes"]),
+  c("biscuits", "Biscuits", "breakfast-snacks", "biscuits", ["cookies", "digestives"]),
+  c("chocolate-bar", "Chocolate Bar", "breakfast-snacks", "chocolate-bar", ["milk chocolate bar", "candy bar"]),
+  c("ice-cream", "Ice Cream", "breakfast-snacks", "ice-cream", ["gelato"]),
+  c("chocolate-spread", "Chocolate Spread", "breakfast-snacks", "chocolate-spread", ["nutella", "hazelnut spread"]),
+  c("sweets", "Sweets", "breakfast-snacks", "sweets", ["candy", "gummies"]),
+
+  // Savoury snacks
+  c("crisps", "Crisps", "snacks", "crisps", ["potato chips", "chips"]),
+  c("crackers", "Crackers", "snacks", "crackers", ["savoury crackers"]),
+  c("popcorn", "Popcorn", "snacks", "popcorn"),
+  c("pretzels", "Pretzels", "snacks", "pretzels"),
+
+  // Pizza & ready meals
+  c("pizza", "Pizza", "pantry", "pizza", ["frozen pizza"]),
 
   // Other
   c("ice", "Ice", "other", "ice"),
@@ -193,11 +207,19 @@ export function findConceptById(id: string): IngredientConcept | undefined {
   return conceptsById.get(id);
 }
 
-export function findConceptByName(name: string): IngredientConcept | undefined {
+/** Exact match on display name or an alias — no substring fuzz. Safe in any language. */
+export function findConceptByNameExact(name: string): IngredientConcept | undefined {
   const normalized = name.trim().toLowerCase();
   return (
     concepts.find((x) => x.displayName.toLowerCase() === normalized) ??
-    concepts.find((x) => x.aliases.includes(normalized)) ??
+    concepts.find((x) => x.aliases.includes(normalized))
+  );
+}
+
+export function findConceptByName(name: string): IngredientConcept | undefined {
+  const normalized = name.trim().toLowerCase();
+  return (
+    findConceptByNameExact(name) ??
     concepts.find((x) =>
       x.aliases.some((a) => a.includes(normalized) || normalized.includes(a)),
     )
@@ -420,19 +442,19 @@ export const recipeCatalog: Recipe[] = [
 ];
 
 export const initialInventorySeed = [
-  { conceptId: "pasta", quantity: 1, unit: "pack" as Unit, isShareable: false },
-  { conceptId: "tomato-sauce", quantity: 1, unit: "bottle" as Unit, isShareable: false },
-  { conceptId: "eggs", quantity: 6, unit: "piece" as Unit, isShareable: false },
-  { conceptId: "milk", quantity: 1, unit: "l" as Unit, isShareable: false },
-  { conceptId: "bread", quantity: 1, unit: "pack" as Unit, isShareable: false },
-  { conceptId: "onion", quantity: 3, unit: "piece" as Unit, isShareable: false },
-  { conceptId: "garlic", quantity: 1, unit: "bunch" as Unit, isShareable: false },
-  { conceptId: "olive-oil", quantity: 1, unit: "bottle" as Unit, isShareable: false },
-  { conceptId: "rice", quantity: 500, unit: "g" as Unit, isShareable: false },
-  { conceptId: "soy-sauce", quantity: 1, unit: "bottle" as Unit, isShareable: false },
-  { conceptId: "chicken", quantity: 400, unit: "g" as Unit, isShareable: false },
-  { conceptId: "tomato", quantity: 4, unit: "piece" as Unit, isShareable: false },
-  { conceptId: "basil", quantity: 1, unit: "bunch" as Unit, isShareable: false },
-  { conceptId: "parmesan", quantity: 100, unit: "g" as Unit, isShareable: false },
-  { conceptId: "butter", quantity: 250, unit: "g" as Unit, isShareable: false },
+  { conceptId: "pasta", quantity: 1, unit: "pack" as Unit },
+  { conceptId: "tomato-sauce", quantity: 1, unit: "bottle" as Unit },
+  { conceptId: "eggs", quantity: 6, unit: "piece" as Unit },
+  { conceptId: "milk", quantity: 1, unit: "l" as Unit },
+  { conceptId: "bread", quantity: 1, unit: "pack" as Unit },
+  { conceptId: "onion", quantity: 3, unit: "piece" as Unit },
+  { conceptId: "garlic", quantity: 1, unit: "bunch" as Unit },
+  { conceptId: "olive-oil", quantity: 1, unit: "bottle" as Unit },
+  { conceptId: "rice", quantity: 500, unit: "g" as Unit },
+  { conceptId: "soy-sauce", quantity: 1, unit: "bottle" as Unit },
+  { conceptId: "chicken", quantity: 400, unit: "g" as Unit },
+  { conceptId: "tomato", quantity: 4, unit: "piece" as Unit },
+  { conceptId: "basil", quantity: 1, unit: "bunch" as Unit },
+  { conceptId: "parmesan", quantity: 100, unit: "g" as Unit },
+  { conceptId: "butter", quantity: 250, unit: "g" as Unit },
 ];

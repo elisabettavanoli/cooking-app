@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
 import { BottomSheet, Button, ChipSelect, Field, Segmented, uiStyles } from "./ui";
-import { Switch } from "./Switch";
 import { colors } from "../lib/theme";
 import { categories, units } from "../lib/data";
 import { useCooking } from "../lib/store";
-import { categorizeIngredient } from "../lib/ai";
+import { categorizeIngredientAsync } from "../lib/ai";
 import type { Category, Unit } from "../lib/types";
 import s from "./AddItemSheet.module.css";
 
@@ -29,7 +28,6 @@ export function AddItemSheet({
   const [quantity, setQuantity] = useState("1");
   const [unit, setUnit] = useState<Unit>("piece");
   const [notes, setNotes] = useState("");
-  const [isShareable, setIsShareable] = useState(false);
   const [, setResolved] = useState<{ name: string; conceptId: string } | null>(null);
 
   const reset = () => {
@@ -40,14 +38,13 @@ export function AddItemSheet({
     setQuantity("1");
     setUnit("piece");
     setNotes("");
-    setIsShareable(false);
     setResolved(null);
   };
 
-  const resolveName = (name: string) => {
+  const resolveName = async (name: string) => {
     const trimmed = name.trim();
     if (!trimmed) return null;
-    const result = categorizeIngredient(trimmed);
+    const result = await categorizeIngredientAsync(trimmed);
     setDisplayName((cur) => cur || result.displayName);
     if (!categoryTouched) setCategory(result.category);
     const next = { name: trimmed, conceptId: result.conceptId };
@@ -55,18 +52,18 @@ export function AddItemSheet({
     return { ...next, ...result };
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const typed = rawName.trim();
     const qty = parseFloat(quantity) || 0;
     if (!typed || qty <= 0) return;
-    const match = resolveName(typed);
+    const match = await resolveName(typed);
     const name = (displayName || match?.displayName || typed).trim();
     const conceptId = match?.conceptId ?? typed.toLowerCase().replace(/\s+/g, "-");
     const finalCategory: Category = categoryTouched ? category : match?.category ?? category;
 
     const base = { conceptId, displayName: name, category: finalCategory, quantity: qty, unit, notes };
     if (mode === "inventory") {
-      addInventoryItem({ ...base, isShareable });
+      addInventoryItem(base);
     } else {
       addShoppingItem({ ...base, source: "manual" });
     }
@@ -95,7 +92,9 @@ export function AddItemSheet({
           label="Ingredient name"
           value={rawName}
           onChangeText={setRawName}
-          onBlur={() => resolveName(rawName)}
+          onBlur={() => {
+            void resolveName(rawName);
+          }}
           placeholder="e.g. 3 red tomatoes"
         />
 
@@ -136,16 +135,6 @@ export function AddItemSheet({
           />
         </div>
 
-        {mode === "inventory" && (
-          <div className={s.shareRow}>
-            <div className={s.grow}>
-              <div className={s.label}>Share with community</div>
-              <div className={s.hint}>Let neighbors see you have this</div>
-            </div>
-            <Switch value={isShareable} onValueChange={setIsShareable} label="Share with community" />
-          </div>
-        )}
-
         <Field
           label="Notes (optional)"
           value={notes}
@@ -158,7 +147,9 @@ export function AddItemSheet({
           <Button label="Cancel" variant="outline" onPress={onClose} style={{ flex: 1 }} />
           <Button
             label={`Add to ${mode === "inventory" ? "kitchen" : "list"}`}
-            onPress={handleSubmit}
+            onPress={() => {
+              void handleSubmit();
+            }}
             icon={<Plus size={18} color={colors.primaryForeground} />}
             style={{ flex: 1 }}
           />

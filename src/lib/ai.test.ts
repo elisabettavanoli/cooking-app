@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { categorizeIngredient, generateRecipe } from "./ai";
+import { categorizeIngredient, categorizeIngredientAsync, generateRecipe } from "./ai";
 import { recipeCatalog, findConceptByName } from "./data";
+import { __resetCache } from "./category/cache";
 
 describe("categorizeIngredient", () => {
   it("resolves a known ingredient to its concept with high confidence", () => {
@@ -22,6 +23,26 @@ describe("categorizeIngredient", () => {
   it("does not crash on empty input", () => {
     const res = categorizeIngredient("   ");
     expect(res.displayName).toBeTruthy();
+  });
+
+  it("resolves an unlisted product deterministically via the lexicon", () => {
+    const res = categorizeIngredient("succo di mela", { lang: "it" });
+    expect(res.category).toBe("drinks");
+    expect(res.confidence).toBeGreaterThan(0.5);
+  });
+});
+
+describe("categorizeIngredientAsync", () => {
+  it("keeps the deterministic result when no backend answers", async () => {
+    __resetCache();
+    const res = await categorizeIngredientAsync("piselli surgelati", { lang: "it" });
+    expect(res.category).toBe("vegetables");
+  });
+
+  it("returns 'other' for a genuinely unknown item (AI stub returns null)", async () => {
+    __resetCache();
+    const res = await categorizeIngredientAsync("Zibblewump Snarf");
+    expect(res.category).toBe("other");
   });
 });
 

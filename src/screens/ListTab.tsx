@@ -3,8 +3,8 @@ import { Check, Plus, Search, ShoppingCart, Trash2, Undo2 } from "lucide-react";
 import { FoodIcon } from "../components/FoodIcon";
 import { colors } from "../lib/theme";
 import { categoryLabel } from "../lib/data";
+import { categorizeIngredientAsync } from "../lib/ai";
 import { useCooking } from "../lib/store";
-import { AddItemSheet } from "../components/AddItemSheet";
 import type { Category, ShoppingItem } from "../lib/types";
 import s from "./ListTab.module.css";
 
@@ -19,9 +19,25 @@ function groupByCategory(items: ShoppingItem[]) {
 }
 
 export function ListTab() {
-  const { shoppingList, markShoppingItemPurchased, removeShoppingItem } = useCooking();
+  const { shoppingList, addShoppingItem, markShoppingItemPurchased, removeShoppingItem } =
+    useCooking();
   const [search, setSearch] = useState("");
-  const [addOpen, setAddOpen] = useState(false);
+  const [draft, setDraft] = useState("");
+
+  const commitDraft = async () => {
+    const name = draft.trim();
+    if (!name) return;
+    const resolved = await categorizeIngredientAsync(name);
+    addShoppingItem({
+      conceptId: resolved.conceptId,
+      displayName: resolved.displayName,
+      quantity: 1,
+      unit: "piece",
+      category: resolved.category,
+      source: "manual",
+    });
+    setDraft("");
+  };
 
   const { active, purchased } = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -40,14 +56,6 @@ export function ListTab() {
             <h1 className={s.title}>Shopping List</h1>
             <p className={s.subtitle}>{active.length} items to buy</p>
           </div>
-          <button
-            type="button"
-            className={s.addBtn}
-            onClick={() => setAddOpen(true)}
-            aria-label="Add item"
-          >
-            <Plus size={20} color={colors.primaryForeground} />
-          </button>
         </div>
 
         <div className={s.searchBox}>
@@ -133,7 +141,31 @@ export function ListTab() {
         )}
       </div>
 
-      <AddItemSheet open={addOpen} onClose={() => setAddOpen(false)} defaultMode="list" />
+      <form
+        className={s.composer}
+        onSubmit={(e) => {
+          e.preventDefault();
+          void commitDraft();
+        }}
+      >
+        <input
+          className={s.composerInput}
+          value={draft}
+          onChange={(e) => setDraft(e.currentTarget.value)}
+          placeholder="Add an item…"
+          aria-label="Add an item"
+          autoComplete="off"
+          enterKeyHint="done"
+        />
+        <button
+          type="submit"
+          className={s.composerBtn}
+          disabled={!draft.trim()}
+          aria-label="Add"
+        >
+          <Plus size={20} color={colors.primaryForeground} />
+        </button>
+      </form>
     </div>
   );
 }

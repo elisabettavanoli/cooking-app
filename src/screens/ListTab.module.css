@@ -29,7 +29,31 @@
   color: var(--muted-foreground);
   margin-top: 2px;
 }
-.addBtn {
+.composer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--card);
+  flex-shrink: 0;
+}
+.composerInput {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-full);
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 15px;
+}
+.composerInput:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+}
+.composerBtn {
   width: 40px;
   height: 40px;
   border-radius: var(--r-full);
@@ -40,6 +64,10 @@
   flex-shrink: 0;
   border: 0;
   cursor: pointer;
+}
+.composerBtn:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 .searchBox {
   display: flex;

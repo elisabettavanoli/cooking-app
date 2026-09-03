@@ -55,6 +55,9 @@
 .field {
   display: flex;
   flex-direction: column;
+  /* Allow the field to shrink inside a flex row so a sibling chip row can
+     scroll horizontally instead of stretching the sheet. */
+  min-width: 0;
 }
 .label {
   font-size: 13px;
@@ -232,11 +235,14 @@ textarea.input {
   color: var(--muted-foreground);
 }
 
-/* Scrollable body region inside a sheet (replaces RN <ScrollView>). */
+/* Scrollable body region inside a sheet (replaces RN <ScrollView>).
+   Vertical scroll only — the panel must never pan sideways; horizontal
+   scrolling belongs to the chip rows inside it. */
 .sheetScroll {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
