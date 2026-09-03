@@ -41,6 +41,9 @@ yarn-error.*
 # local env files
 .env*.local
 
+# design canvas mockups (not app code)
+/design-explorations/
+
 # category lexicon source datasets (large, separately licensed — see scripts/sources/README.md)
 /scripts/sources/*
 !/scripts/sources/README.md
