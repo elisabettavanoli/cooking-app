@@ -42,9 +42,11 @@ export function recipeMatches(
 
   const matches = recipeCatalog.map((recipe) => matchRecipe(recipe, base));
 
+  // Fewest missing ingredients first (what you can almost cook), then best
+  // coverage, then name for a stable order.
   return matches.sort((a, b) => {
-    if (b.coverage !== a.coverage) return b.coverage - a.coverage;
     if (a.missingCount !== b.missingCount) return a.missingCount - b.missingCount;
+    if (b.coverage !== a.coverage) return b.coverage - a.coverage;
     return a.recipe.name.localeCompare(b.recipe.name);
   });
 }

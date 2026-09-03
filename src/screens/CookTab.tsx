@@ -10,6 +10,9 @@ import { AiRecipeSheet } from "../components/AiRecipeSheet";
 import type { Recipe } from "../lib/types";
 import s from "./CookTab.module.css";
 
+/** Below this many ingredients in play, recipe suggestions aren't useful. */
+const MIN_INGREDIENTS = 3;
+
 export function CookTab() {
   const { t } = useI18n();
   const { selectedConcepts, clearSelectedConcepts } = useCooking();
@@ -17,6 +20,10 @@ export function CookTab() {
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [generatedRecipe, setGeneratedRecipe] = useState<Recipe | null>(null);
   const [showAi, setShowAi] = useState(false);
+
+  const ingredientsInPlay =
+    selectedConcepts.length > 0 ? selectedConcepts.length : activeInventory.length;
+  const enoughIngredients = ingredientsInPlay >= MIN_INGREDIENTS;
 
   const matches = useMemo(
     () =>
@@ -26,7 +33,7 @@ export function CookTab() {
       ),
     [selectedConcepts, activeInventory],
   );
-  const topMatches = matches.slice(0, 10);
+  const topMatches = enoughIngredients ? matches.slice(0, 10) : [];
 
   return (
     <div className={s.screen}>
@@ -72,7 +79,17 @@ export function CookTab() {
 
         <p className={s.sectionTitle}>{t("cook.suggested").toUpperCase()}</p>
 
-        {topMatches.length === 0 && (
+        {!enoughIngredients && (
+          <div className={s.emptyCard}>
+            <ChefHat size={32} color={colors.mutedForeground} />
+            <p className={s.emptyTitle}>{t("cook.minIngredientsTitle")}</p>
+            <p className={s.emptyText}>
+              {t("cook.minIngredientsText", { min: MIN_INGREDIENTS })}
+            </p>
+          </div>
+        )}
+
+        {enoughIngredients && topMatches.length === 0 && (
           <div className={s.emptyCard}>
             <ChefHat size={32} color={colors.mutedForeground} />
             <p className={s.emptyTitle}>{t("cook.noMatchTitle")}</p>
