@@ -2,6 +2,7 @@ import { useMemo, useRef, useState, type MouseEvent } from "react";
 import { Check, Plus, Search, UtensilsCrossed, X } from "lucide-react";
 import { FoodIcon } from "../components/FoodIcon";
 import { Button } from "../components/ui";
+import { categoryMeta } from "../lib/data";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
 import { foodName } from "../lib/foodNames";
@@ -82,6 +83,7 @@ function Tile({
     <button
       type="button"
       className={["resetButton", s.tile, selected ? s.tileSelected : ""].join(" ")}
+      style={{ backgroundColor: categoryMeta[item.category].bg }}
       {...handlers}
     >
       {badge && (
@@ -96,7 +98,7 @@ function Tile({
           <Check size={10} color={colors.primaryForeground} strokeWidth={3} />
         </span>
       )}
-      <FoodIcon iconKey={item.conceptId} category={item.category} size={44} />
+      <FoodIcon iconKey={item.conceptId} category={item.category} size={30} variant="bare" />
       <span className={s.tileTexts}>
         <span className={s.tileName}>{foodName(item.conceptId, lang, item.displayName)}</span>
         <span className={s.tileQty}>
