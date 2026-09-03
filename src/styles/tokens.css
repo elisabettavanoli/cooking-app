@@ -5,30 +5,32 @@
  * computed badge/pill colors).
  */
 :root {
-  --background: #fdfbf6;
-  --foreground: #302a21;
+  /* Palette: "Citrus Pop" — white ground, coral-red lead, marigold accent,
+     lime supporting note. */
+  --background: #ffffff;
+  --foreground: #241a1c;
   --card: #ffffff;
-  --card-foreground: #302a21;
-  --primary: #4a7b5b;
-  --primary-foreground: #f7fbf7;
-  --secondary: #f0e8d8;
-  --secondary-foreground: #3d3323;
-  --muted: #f1eee7;
-  --muted-foreground: #897f70;
-  --accent: #cc7c42;
-  --accent-foreground: #fff7f0;
-  --destructive: #c0442f;
-  --destructive-foreground: #fdf5f3;
-  --border: #e3ddd2;
-  --ring: #4a7b5b;
+  --card-foreground: #241a1c;
+  --primary: #f0384b;
+  --primary-foreground: #ffffff;
+  --secondary: #ffe7de;
+  --secondary-foreground: #9e2a38;
+  --muted: #fbf2ee;
+  --muted-foreground: #8a7a74;
+  --accent: #ffb020;
+  --accent-foreground: #3d2a05;
+  --destructive: #d61f3c;
+  --destructive-foreground: #ffffff;
+  --border: #f1e7e2;
+  --ring: #f0384b;
 
   --tile: #ffffff;
-  --fresh: #3d8a62;
-  --fresh-soft: #e0f1e6;
-  --warn: #c2792f;
-  --warn-soft: #f6e7d5;
-  --low: #c4a23c;
-  --low-soft: #f7edcf;
+  --fresh: #4fa300;
+  --fresh-soft: #e7f4d4;
+  --warn: #e8590c;
+  --warn-soft: #fce7d3;
+  --low: #c98a00;
+  --low-soft: #fbefc9;
 
   --r-sm: 8px;
   --r-md: 12px;

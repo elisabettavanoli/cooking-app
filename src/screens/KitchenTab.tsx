@@ -19,7 +19,7 @@ function daysUntil(date: string) {
 function tileBadge(item: InventoryItem): { text: string; color: string; bg: string } | null {
   if (item.expiry) {
     const d = daysUntil(item.expiry);
-    if (d < 0) return { text: "old", color: colors.destructive, bg: "#F6E1DC" };
+    if (d < 0) return { text: "old", color: colors.destructive, bg: "#FCE0E4" };
     if (d <= 3) return { text: d === 0 ? "today" : `${d}d`, color: colors.warn, bg: colors.warnSoft };
   }
   if (item.unit === "piece" && item.quantity <= 1) {

@@ -99,7 +99,7 @@
   width: 48px;
   height: 48px;
   border-radius: var(--r-md);
-  background: #e7f0ea;
+  background: var(--fresh-soft);
   display: flex;
   align-items: center;
   justify-content: center;
