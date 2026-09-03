@@ -52,6 +52,7 @@ export function Field({
   multiline,
   inputMode,
   autoCapitalize,
+  type = "text",
   style,
 }: {
   label?: string;
@@ -62,6 +63,7 @@ export function Field({
   multiline?: boolean;
   inputMode?: "text" | "decimal" | "numeric" | "email" | "search";
   autoCapitalize?: "none" | "sentences" | "words" | "characters";
+  type?: "text" | "password";
   style?: CSSProperties;
 }) {
   return (
@@ -79,7 +81,7 @@ export function Field({
       ) : (
         <input
           className={styles.input}
-          type="text"
+          type={type}
           value={value}
           placeholder={placeholder}
           inputMode={inputMode}
