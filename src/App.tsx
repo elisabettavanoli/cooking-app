@@ -1,12 +1,18 @@
+import { AuthProvider } from "./lib/auth";
+import { AuthGate } from "./components/AuthGate";
 import { CookingProvider } from "./lib/store";
 import { MobileShell } from "./MobileShell";
 import { UpdateToast } from "./components/UpdateToast";
 
 export function App() {
   return (
-    <CookingProvider>
-      <MobileShell />
-      <UpdateToast />
-    </CookingProvider>
+    <AuthProvider>
+      <AuthGate>
+        <CookingProvider>
+          <MobileShell />
+          <UpdateToast />
+        </CookingProvider>
+      </AuthGate>
+    </AuthProvider>
   );
 }

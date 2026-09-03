@@ -1,0 +1,3 @@
+# SPA fallback for Cloudflare Pages / Netlify: every path serves the app shell
+# so deep links and a hard refresh don't 404. Copied verbatim into dist/ by Vite.
+/*    /index.html    200
