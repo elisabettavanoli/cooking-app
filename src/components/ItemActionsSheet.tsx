@@ -3,7 +3,7 @@ import { Check, Edit3, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { BottomSheet } from "./ui";
 import { colors } from "../lib/theme";
 import { categoryLabel } from "../lib/data";
-import { usePantry } from "../lib/store";
+import { useCooking } from "../lib/store";
 import type { InventoryItem } from "../lib/types";
 import s from "./ItemActionsSheet.module.css";
 
@@ -19,7 +19,7 @@ export function ItemActionsSheet({
   onEdit: () => void;
 }) {
   const { updateInventoryItem, removeInventoryItem, markInventoryItemConsumed, addShoppingItem } =
-    usePantry();
+    useCooking();
 
   const step = item.unit === "g" || item.unit === "ml" ? 50 : 1;
   const round = (n: number) => Number(n.toFixed(2));

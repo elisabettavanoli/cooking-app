@@ -32,7 +32,7 @@ describe("App interactions", () => {
     // idb-keyval write is debounced through an effect; give it a tick then remount.
     await waitFor(async () => {
       const { get } = await import("idb-keyval");
-      const raw = (await get<string>("pantry-store-v1")) ?? "";
+      const raw = (await get<string>("cooking-store-v1")) ?? "";
       expect(raw).toContain("Sardines");
     });
 

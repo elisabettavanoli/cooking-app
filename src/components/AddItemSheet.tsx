@@ -4,7 +4,7 @@ import { BottomSheet, Button, ChipSelect, Field, Segmented, uiStyles } from "./u
 import { Switch } from "./Switch";
 import { colors } from "../lib/theme";
 import { categories, units } from "../lib/data";
-import { usePantry } from "../lib/store";
+import { useCooking } from "../lib/store";
 import { categorizeIngredient } from "../lib/ai";
 import type { Category, Unit } from "../lib/types";
 import s from "./AddItemSheet.module.css";
@@ -20,7 +20,7 @@ export function AddItemSheet({
   onClose: () => void;
   defaultMode?: AddMode;
 }) {
-  const { addInventoryItem, addShoppingItem } = usePantry();
+  const { addInventoryItem, addShoppingItem } = useCooking();
   const [mode, setMode] = useState<AddMode>(defaultMode);
   const [rawName, setRawName] = useState("");
   const [displayName, setDisplayName] = useState("");

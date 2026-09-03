@@ -28,11 +28,11 @@ interface StoreActions {
   resetData: () => void;
 }
 
-type PantryValue = StoreState & StoreActions & { hydrated: boolean };
+type CookingValue = StoreState & StoreActions & { hydrated: boolean };
 
-const PantryContext = createContext<PantryValue | null>(null);
+const CookingContext = createContext<CookingValue | null>(null);
 
-const STORAGE_KEY = "pantry-store-v1";
+const STORAGE_KEY = "cooking-store-v1";
 
 let idCounter = 0;
 function makeId(): string {
@@ -82,7 +82,7 @@ function mergeState(parsed: Partial<StoreState>): StoreState {
   };
 }
 
-export function PantryProvider({ children }: { children: React.ReactNode }) {
+export function CookingProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<StoreState>(buildDefaultState);
   const [hydrated, setHydrated] = useState(false);
   const skipPersist = useRef(true);
@@ -268,7 +268,7 @@ export function PantryProvider({ children }: { children: React.ReactNode }) {
     setState(buildDefaultState());
   }, []);
 
-  const value: PantryValue = {
+  const value: CookingValue = {
     ...state,
     hydrated,
     addInventoryItem,
@@ -287,16 +287,16 @@ export function PantryProvider({ children }: { children: React.ReactNode }) {
     resetData,
   };
 
-  return <PantryContext.Provider value={value}>{children}</PantryContext.Provider>;
+  return <CookingContext.Provider value={value}>{children}</CookingContext.Provider>;
 }
 
-export function usePantry() {
-  const ctx = useContext(PantryContext);
-  if (!ctx) throw new Error("usePantry must be used within a PantryProvider");
+export function useCooking() {
+  const ctx = useContext(CookingContext);
+  if (!ctx) throw new Error("useCooking must be used within a CookingProvider");
   return ctx;
 }
 
 export function useActiveInventory(): InventoryItem[] {
-  const { inventory } = usePantry();
+  const { inventory } = useCooking();
   return inventory.filter((i) => i.status === "active");
 }

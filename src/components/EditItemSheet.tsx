@@ -4,7 +4,7 @@ import { BottomSheet, Button, ChipSelect, Field, uiStyles } from "./ui";
 import { Switch } from "./Switch";
 import { colors } from "../lib/theme";
 import { categories, units } from "../lib/data";
-import { usePantry } from "../lib/store";
+import { useCooking } from "../lib/store";
 import type { Category, InventoryItem, Unit } from "../lib/types";
 import s from "./EditItemSheet.module.css";
 
@@ -17,7 +17,7 @@ export function EditItemSheet({
   open: boolean;
   onClose: () => void;
 }) {
-  const { updateInventoryItem, removeInventoryItem } = usePantry();
+  const { updateInventoryItem, removeInventoryItem } = useCooking();
   const [displayName, setDisplayName] = useState(item.displayName);
   const [category, setCategory] = useState<Category>(item.category);
   const [quantity, setQuantity] = useState(String(item.quantity));

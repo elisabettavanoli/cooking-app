@@ -3,7 +3,7 @@ import { MapPin } from "lucide-react";
 import { Button } from "../components/ui";
 import { Switch } from "../components/Switch";
 import { colors } from "../lib/theme";
-import { usePantry } from "../lib/store";
+import { useCooking } from "../lib/store";
 import type { UserProfile } from "../lib/types";
 import s from "./NearbyTab.module.css";
 
@@ -16,7 +16,7 @@ const rows: { key: ToggleKey; label: string; hint: string }[] = [
 ];
 
 export function NearbyTab() {
-  const { profile, updateProfile } = usePantry();
+  const { profile, updateProfile } = useCooking();
   const [code, setCode] = useState("");
 
   const setFlag = (key: ToggleKey, value: boolean) => {

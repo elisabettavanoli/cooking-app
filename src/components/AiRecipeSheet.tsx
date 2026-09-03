@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Sparkles, Wand2 } from "lucide-react";
 import { BottomSheet, Button, Field } from "./ui";
 import { colors } from "../lib/theme";
-import { useActiveInventory, usePantry } from "../lib/store";
+import { useActiveInventory, useCooking } from "../lib/store";
 import { generateRecipe } from "../lib/ai";
 import type { Recipe } from "../lib/types";
 import s from "./AiRecipeSheet.module.css";
@@ -16,7 +16,7 @@ export function AiRecipeSheet({
   onClose: () => void;
   onGenerated: (recipe: Recipe) => void;
 }) {
-  const { selectedConcepts, clearSelectedConcepts } = usePantry();
+  const { selectedConcepts, clearSelectedConcepts } = useCooking();
   const active = useActiveInventory();
   const [mood, setMood] = useState("");
 
