@@ -37,9 +37,11 @@ interface ShoppingRow {
 interface ProfileRow {
   id: string;
   display_name: string;
-  sharing_enabled: boolean;
+  share_with_communities: boolean;
+  share_on_map: boolean;
   requests_enabled: boolean;
-  inventory_visible: boolean;
+  latitude: number | null;
+  longitude: number | null;
 }
 
 // ── row → app ──────────────────────────────────────────────
@@ -71,17 +73,21 @@ const toShopping = (r: ShoppingRow): ShoppingItem => ({
 const toProfile = (r: ProfileRow): UserProfile => ({
   id: r.id,
   displayName: r.display_name,
-  sharingEnabled: r.sharing_enabled,
+  shareWithCommunities: r.share_with_communities,
+  shareOnMap: r.share_on_map,
   requestsEnabled: r.requests_enabled,
-  inventoryVisible: r.inventory_visible,
+  latitude: r.latitude ?? null,
+  longitude: r.longitude ?? null,
 });
 
 const defaultProfile = (userId: string): UserProfile => ({
   id: userId,
   displayName: "You",
-  sharingEnabled: false,
+  shareWithCommunities: false,
+  shareOnMap: false,
   requestsEnabled: false,
-  inventoryVisible: false,
+  latitude: null,
+  longitude: null,
 });
 
 // ── app → row (partial patch) ─────────────────────────────
@@ -113,9 +119,11 @@ function shoppingPatch(p: Partial<ShoppingItem>): Record<string, unknown> {
 function profilePatch(p: Partial<UserProfile>): Record<string, unknown> {
   const out: Record<string, unknown> = {};
   if (p.displayName !== undefined) out.display_name = p.displayName;
-  if (p.sharingEnabled !== undefined) out.sharing_enabled = p.sharingEnabled;
+  if (p.shareWithCommunities !== undefined) out.share_with_communities = p.shareWithCommunities;
+  if (p.shareOnMap !== undefined) out.share_on_map = p.shareOnMap;
   if (p.requestsEnabled !== undefined) out.requests_enabled = p.requestsEnabled;
-  if (p.inventoryVisible !== undefined) out.inventory_visible = p.inventoryVisible;
+  if (p.latitude !== undefined) out.latitude = p.latitude ?? null;
+  if (p.longitude !== undefined) out.longitude = p.longitude ?? null;
   return out;
 }
 

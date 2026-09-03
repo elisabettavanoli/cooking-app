@@ -39,32 +39,126 @@
   letter-spacing: 1px;
   color: var(--muted-foreground);
 }
-.switchRow {
+.rowHint {
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+
+/* search */
+.searchBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  background: var(--muted);
+  border-radius: var(--r-md);
+  padding-inline: 12px;
+  margin-bottom: 12px;
+}
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  padding-block: 10px;
+  border: 0;
+  background: transparent;
+  color: var(--foreground);
+}
+.searchInput:focus-visible {
+  outline: none;
+}
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.resultRow {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 12px;
-  cursor: pointer;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-2xl);
+  background: var(--card);
 }
-.switchRowText {
+.resultText {
   flex: 1;
   min-width: 0;
 }
-.rowLabel {
+.resultName {
   font-size: 14px;
   font-weight: 600;
   color: var(--foreground);
 }
-.rowHint {
+.resultMeta {
   font-size: 12px;
   color: var(--muted-foreground);
   margin-top: 2px;
 }
+.hintBlock {
+  font-size: 13px;
+  color: var(--muted-foreground);
+  padding: 8px 2px 16px;
+}
+
+/* communities */
+.communityRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+.communityText {
+  flex: 1;
+  min-width: 0;
+}
+.communityName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--foreground);
+}
+.communitySub {
+  font-size: 12px;
+  color: var(--muted-foreground);
+  margin-top: 2px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.codeChip {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--foreground);
+  background: var(--muted);
+  border: 0;
+  border-radius: var(--r-sm, 6px);
+  padding: 2px 6px;
+  cursor: pointer;
+}
+.leaveBtn {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--destructive);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.divider {
+  height: 1px;
+  background: var(--border);
+}
+
+/* join / create */
 .joinRow {
   display: flex;
   flex-direction: row;
   gap: 8px;
-  margin-top: 12px;
 }
 .input {
   flex: 1;
@@ -79,14 +173,12 @@
 .input::placeholder {
   text-transform: none;
 }
-.dashed {
-  border: 1px dashed var(--border);
-  border-radius: var(--r-2xl);
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  background: var(--muted);
-  text-align: center;
+.errorText {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--destructive);
+}
+.emptyState {
+  font-size: 13px;
+  color: var(--muted-foreground);
 }

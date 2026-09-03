@@ -1,0 +1,31 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 4px 2px 8px;
+}
+.intro {
+  font-size: 14px;
+  color: var(--foreground);
+}
+.code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-align: center;
+  color: var(--foreground);
+  background: var(--muted);
+  border-radius: var(--r-md);
+  padding: 16px;
+}
+.actions {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+.error {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--destructive);
+}

@@ -1,0 +1,66 @@
+.wrap {
+  position: relative;
+  border-radius: var(--r-2xl);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.map {
+  width: 100%;
+  height: min(45dvh, 340px);
+  background: var(--muted);
+}
+/* Leaflet sets touch-action on the container; keep panning working under the
+   app-wide `touch-action: manipulation`. */
+.map :global(.leaflet-container) {
+  touch-action: none;
+  font: inherit;
+}
+.pin {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--r-full);
+  background: var(--primary);
+  border: 3px solid var(--background);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  text-align: center;
+  background: color-mix(in srgb, var(--background) 82%, transparent);
+}
+.hint {
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+.btn {
+  border: 0;
+  border-radius: var(--r-full);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+.empty {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 500;
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 12px;
+  text-align: center;
+  color: var(--muted-foreground);
+  background: color-mix(in srgb, var(--background) 88%, transparent);
+}
