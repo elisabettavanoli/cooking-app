@@ -81,15 +81,45 @@ export interface Recipe {
 export interface UserProfile {
   id: string;
   displayName: string;
-  sharingEnabled: boolean;
+  /** Expose your active pantry to co-members of the communities you joined. */
+  shareWithCommunities: boolean;
+  /** Put your kitchen on the public map (coarse location) for any signed-in user. */
+  shareOnMap: boolean;
+  /** Others may raise a request to borrow one of your items. */
   requestsEnabled: boolean;
-  inventoryVisible: boolean;
+  /** Coarse latitude (~2 dp), set only while shareOnMap is on. */
+  latitude: number | null;
+  longitude: number | null;
 }
 
 export interface Community {
   id: string;
   name: string;
   code: string;
+  memberCount?: number;
+  createdBy?: string | null;
+}
+
+/** A pantry item a co-member shares, as returned by the cross-community search. */
+export interface CommunityItemHit {
+  ownerId: string;
+  ownerName: string;
+  communityId: string;
+  communityName: string;
+  conceptId: string;
+  displayName: string;
+  category: Category;
+  quantity: number;
+  unit: Unit;
+}
+
+/** A public kitchen shown as a pin on the nearby map. */
+export interface NearbyKitchen {
+  ownerId: string;
+  ownerName: string;
+  latitude: number;
+  longitude: number;
+  itemCount: number;
 }
 
 export interface ShareRequest {

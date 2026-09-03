@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChefHat, Home, ListTodo, Users } from "lucide-react";
+import { ChefHat, Home, ListTodo, User, Users } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { colors } from "./lib/theme";
 import { useI18n } from "./lib/i18n";
@@ -8,15 +8,17 @@ import { KitchenTab } from "./screens/KitchenTab";
 import { CookTab } from "./screens/CookTab";
 import { ListTab } from "./screens/ListTab";
 import { NearbyTab } from "./screens/NearbyTab";
+import { ProfileTab } from "./screens/ProfileTab";
 import styles from "./MobileShell.module.css";
 
-type TabId = "kitchen" | "cook" | "list" | "nearby";
+type TabId = "kitchen" | "cook" | "list" | "nearby" | "profile";
 
 const tabs: { id: TabId; labelKey: string; icon: LucideIcon }[] = [
   { id: "kitchen", labelKey: "nav.kitchen", icon: Home },
   { id: "list", labelKey: "nav.list", icon: ListTodo },
   { id: "cook", labelKey: "nav.cook", icon: ChefHat },
   { id: "nearby", labelKey: "nav.nearby", icon: Users },
+  { id: "profile", labelKey: "nav.profile", icon: User },
 ];
 
 export function MobileShell() {
@@ -37,6 +39,7 @@ export function MobileShell() {
             {activeTab === "cook" && <CookTab />}
             {activeTab === "list" && <ListTab />}
             {activeTab === "nearby" && <NearbyTab />}
+            {activeTab === "profile" && <ProfileTab />}
           </>
         )}
       </div>
