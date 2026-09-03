@@ -4,18 +4,20 @@ export const categoryMeta: Record<
   Category,
   { label: string; color: string; bg: string }
 > = {
-  fruit: { label: "Fruit", color: "#B5583F", bg: "#F3E1DA" },
-  vegetables: { label: "Vegetables", color: "#4A7C3F", bg: "#DDEFD0" },
-  dairy: { label: "Dairy", color: "#4A73A0", bg: "#D9E6F0" },
-  "meat-fish": { label: "Meat & Fish", color: "#9E4A4A", bg: "#EFDCDC" },
-  pantry: { label: "Pantry", color: "#927A3E", bg: "#EFE6D2" },
-  "sauces-condiments": { label: "Sauces & Condiments", color: "#A6863F", bg: "#F2EAD3" },
-  "spices-herbs": { label: "Spices & Herbs", color: "#4A7C4F", bg: "#DBEEDD" },
-  baking: { label: "Baking", color: "#8A6D46", bg: "#EBE0D0" },
-  drinks: { label: "Drinks", color: "#4273AC", bg: "#D9E6F2" },
-  "breakfast-snacks": { label: "Breakfast & Treats", color: "#8A5A3C", bg: "#EEE0D5" },
-  snacks: { label: "Savoury Snacks", color: "#3F8A94", bg: "#D5EEF0" },
-  other: { label: "Other", color: "#6B7280", bg: "#E7E9ED" },
+  // "Citrus Pop" palette — vivid category colours, each a distinct hue, on a
+  // soft tint of the same colour.
+  fruit: { label: "Fruit", color: "#F0384B", bg: "#FCDEE1" },
+  vegetables: { label: "Vegetables", color: "#4FA300", bg: "#E7F4D4" },
+  dairy: { label: "Dairy", color: "#2E7FD1", bg: "#DCEBFB" },
+  "meat-fish": { label: "Meat & Fish", color: "#C2410C", bg: "#F8E3D5" },
+  pantry: { label: "Pantry", color: "#C08A12", bg: "#F8EFCF" },
+  "sauces-condiments": { label: "Sauces & Condiments", color: "#E0930C", bg: "#FBEBCC" },
+  "spices-herbs": { label: "Spices & Herbs", color: "#1F9E55", bg: "#D8F3E1" },
+  baking: { label: "Baking", color: "#A9663A", bg: "#F1E4D6" },
+  drinks: { label: "Drinks", color: "#0E9AA8", bg: "#D2F0F3" },
+  "breakfast-snacks": { label: "Breakfast & Treats", color: "#D6409F", bg: "#FBE1F1" },
+  snacks: { label: "Savoury Snacks", color: "#7A5AF0", bg: "#E7E0FD" },
+  other: { label: "Other", color: "#64748B", bg: "#E8EBEF" },
 };
 
 export const categories: Category[] = Object.keys(categoryMeta) as Category[];
