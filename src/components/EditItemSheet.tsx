@@ -70,7 +70,7 @@ export function EditItemSheet({
           <ChipSelect
             value={category}
             onChange={setCategory}
-            options={categories.map((x) => ({ value: x, label: x }))}
+            options={categories.map((x) => ({ value: x, label: t(`category.${x}`) }))}
           />
         </div>
 

@@ -31,8 +31,15 @@ later phase (not set up yet).
   shell and fall back to English). `t("some.key", { n })` interpolates `{n}` and
   picks plural forms. Chosen language persists in `localStorage` under
   `cooking-lang`; `src/lib/category/locales.ts` `getAppLang()` reads the same key.
-  Language picker is in the Community tab (`NearbyTab`). Category labels
-  (`categoryMeta` in `data.ts`) are not translated yet.
+  Language picker is in the Community tab (`NearbyTab`); it currently offers only
+  `en`/`it` (`LANGUAGE_ORDER` in `i18n.tsx`) since the others aren't
+  content-complete — the `de`/`fr`/`es` tables and lexicons stay in place. Category labels are
+  translated under the `category.<key>` keys (English mirrors `categoryMeta` in
+  `data.ts`; keep in sync by hand). Curated ingredient names are translated in
+  `src/lib/foodNames.ts` (keyed by concept id, `it` only — other languages fall
+  back to the concept's English `displayName`); render them with
+  `foodName(conceptId, lang, item.displayName)`. Recipe-catalog ingredient names
+  (`src/lib/recipes.ts`) are still English-only.
 - **Sheets**: `BottomSheet` in `src/components/ui.tsx` is a native `<dialog>`.
 - **PWA**: `vite-plugin-pwa` in `vite.config.ts` (generateSW, `registerType: prompt`).
   Icons in `public/` (regenerate: `npx pwa-assets-generator --preset minimal-2023

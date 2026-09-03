@@ -4,7 +4,7 @@ import { FoodIcon } from "../components/FoodIcon";
 import { Button } from "../components/ui";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
-import { categoryLabel } from "../lib/data";
+import { foodName } from "../lib/foodNames";
 import { useActiveInventory, useCooking } from "../lib/store";
 import { AddItemSheet } from "../components/AddItemSheet";
 import { EditItemSheet } from "../components/EditItemSheet";
@@ -75,6 +75,7 @@ function Tile({
   onTap: () => void;
   onLongPress: () => void;
 }) {
+  const { lang } = useI18n();
   const badge = tileBadge(item);
   const handlers = useLongPress(onLongPress, onTap);
   return (
@@ -97,7 +98,7 @@ function Tile({
       )}
       <FoodIcon iconKey={item.conceptId} category={item.category} size={30} variant="bare" />
       <span className={s.tileTexts}>
-        <span className={s.tileName}>{item.displayName}</span>
+        <span className={s.tileName}>{foodName(item.conceptId, lang, item.displayName)}</span>
         <span className={s.tileQty}>
           {item.quantity} {item.unit}
         </span>
@@ -113,13 +114,17 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
   const [editItemId, setEditItemId] = useState<string | null>(null);
   const [useItemId, setUseItemId] = useState<string | null>(null);
 
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const { inventory, selectedConcepts, toggleSelectedConcept, clearSelectedConcepts } = useCooking();
   const activeInventory = useActiveInventory();
 
   const grouped = useMemo(() => {
     const q = search.trim().toLowerCase();
-    const filtered = activeInventory.filter((i) => i.displayName.toLowerCase().includes(q));
+    const filtered = activeInventory.filter(
+      (i) =>
+        i.displayName.toLowerCase().includes(q) ||
+        foodName(i.conceptId, lang, i.displayName).toLowerCase().includes(q),
+    );
     const map = new Map<string, InventoryItem[]>();
     for (const item of filtered) {
       const list = map.get(item.category) ?? [];
@@ -127,7 +132,7 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
       map.set(item.category, list);
     }
     return Array.from(map.entries()).map(([category, items]) => ({ category, items }));
-  }, [activeInventory, search]);
+  }, [activeInventory, search, lang]);
 
   const expiringCount = activeInventory.filter((i) => i.expiry && daysUntil(i.expiry) <= 3).length;
 
@@ -203,7 +208,7 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
         {grouped.map(({ category, items }) => (
           <div key={category} className={s.group}>
             <div className={s.sectionHead}>
-              <span className={s.sectionTitle}>{categoryLabel(category as never)}</span>
+              <span className={s.sectionTitle}>{t(`category.${category}`)}</span>
               <span className={s.sectionCount}>{items.length}</span>
             </div>
             <div className={s.grid}>

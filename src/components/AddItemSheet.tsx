@@ -133,7 +133,7 @@ export function AddItemSheet({
               setCategory(v);
               setCategoryTouched(true);
             }}
-            options={categories.map((x) => ({ value: x, label: x }))}
+            options={categories.map((x) => ({ value: x, label: t(`category.${x}`) }))}
           />
         </div>
 
