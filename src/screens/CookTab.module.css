@@ -56,15 +56,22 @@
   margin-top: 20px;
   margin-bottom: 10px;
 }
-.emptyCard {
+.emptyState {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-block: 60px;
   gap: 6px;
-  padding: 24px;
+}
+.emptyIcon {
+  width: 64px;
+  height: 64px;
   border-radius: var(--r-2xl);
-  border: 1px solid var(--border);
-  background: var(--card);
+  background: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
 }
 .emptyTitle {
   font-size: 15px;
