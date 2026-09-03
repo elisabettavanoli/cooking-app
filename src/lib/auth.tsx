@@ -1,9 +1,9 @@
 /**
- * Auth context — thin wrapper over Supabase Auth (passwordless email).
+ * Auth context — thin wrapper over Supabase Auth (email + password).
  *
- * `sendCode` emails a 6-digit code (and a magic link); `verifyCode` exchanges
- * the code for a session in *this* browser — no redirect, so it works inside an
- * installed PWA. The magic link still works too, for in-browser use.
+ * With "Confirm email" turned OFF in the Supabase dashboard, `signUp` returns a
+ * session immediately — no email round-trip, no redirect, works inside an
+ * installed PWA.
  *
  * When Supabase isn't configured this still mounts and reports
  * `configured: false`; `AuthGate` uses that to skip the login screen so the
@@ -26,10 +26,12 @@ interface AuthValue {
   configured: boolean;
   session: Session | null;
   user: User | null;
-  /** Email a 6-digit code + magic link. Resolves with a message on failure. */
-  sendCode: (email: string) => Promise<{ error: string | null }>;
-  /** Verify the 6-digit code and open a session here. */
-  verifyCode: (email: string, token: string) => Promise<{ error: string | null }>;
+  signUp: (
+    email: string,
+    password: string,
+    displayName: string,
+  ) => Promise<{ error: string | null }>;
+  signIn: (email: string, password: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
 }
 
@@ -65,23 +67,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       configured: supabaseConfigured,
       session,
       user: session?.user ?? null,
-      async sendCode(email) {
+      async signUp(email, password, displayName) {
         if (!supabase) return { error: "Backend non configurato." };
-        const { error } = await supabase.auth.signInWithOtp({
-          email: email.trim(),
+        const clean = email.trim();
+        const { error } = await supabase.auth.signUp({
+          email: clean,
+          password,
           options: {
-            emailRedirectTo: window.location.origin,
-            shouldCreateUser: true,
+            data: { display_name: displayName.trim() || clean.split("@")[0] },
           },
         });
         return { error: error?.message ?? null };
       },
-      async verifyCode(email, token) {
+      async signIn(email, password) {
         if (!supabase) return { error: "Backend non configurato." };
-        const { error } = await supabase.auth.verifyOtp({
+        const { error } = await supabase.auth.signInWithPassword({
           email: email.trim(),
-          token: token.trim(),
-          type: "email",
+          password,
         });
         return { error: error?.message ?? null };
       },

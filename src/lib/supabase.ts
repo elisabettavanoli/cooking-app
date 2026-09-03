@@ -19,13 +19,8 @@ export const supabase: SupabaseClient | null = supabaseConfigured
       auth: {
         persistSession: true,
         autoRefreshToken: true,
-        // Implicit flow (token in the URL hash) so a magic link opened in a
-        // *different* browser than the one that requested it still logs in —
-        // PKCE would need the code verifier from the original browser's storage.
-        // The primary path is the 6-digit OTP code though (see AuthGate), which
-        // needs no redirect at all — the right fit for an installed PWA.
-        detectSessionInUrl: true,
-        flowType: "implicit",
+        // Email + password only — no redirect/magic-link flow to parse.
+        detectSessionInUrl: false,
       },
     })
   : null;
