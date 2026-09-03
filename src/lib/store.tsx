@@ -51,7 +51,6 @@ function buildDefaultState(): StoreState {
       quantity: seed.quantity,
       unit: seed.unit,
       category: concept.category,
-      isShareable: seed.isShareable,
       status: "active" as const,
       addedAt: now,
     };
@@ -213,7 +212,6 @@ export function CookingProvider({ children }: { children: React.ReactNode }) {
                 quantity: item.quantity,
                 unit: item.unit,
                 category,
-                isShareable: false,
                 status: "active" as const,
                 addedAt: now,
               },

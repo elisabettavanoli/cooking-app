@@ -10,7 +10,7 @@ import s from "./NearbyTab.module.css";
 type ToggleKey = "sharingEnabled" | "requestsEnabled" | "inventoryVisible";
 
 const rows: { key: ToggleKey; label: string; hint: string }[] = [
-  { key: "sharingEnabled", label: "Enable sharing", hint: "Let others see items you mark shareable" },
+  { key: "sharingEnabled", label: "Enable sharing", hint: "Share your whole kitchen with your community" },
   { key: "requestsEnabled", label: "Allow requests", hint: "Neighbors can ask to borrow your items" },
   { key: "inventoryVisible", label: "Show inventory", hint: "Community sees your available items" },
 ];

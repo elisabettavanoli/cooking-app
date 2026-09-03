@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Save, Trash2 } from "lucide-react";
 import { BottomSheet, Button, ChipSelect, Field, uiStyles } from "./ui";
-import { Switch } from "./Switch";
 import { colors } from "../lib/theme";
 import { categories, units } from "../lib/data";
 import { useCooking } from "../lib/store";
@@ -23,7 +22,6 @@ export function EditItemSheet({
   const [quantity, setQuantity] = useState(String(item.quantity));
   const [unit, setUnit] = useState<Unit>(item.unit);
   const [notes, setNotes] = useState(item.notes ?? "");
-  const [isShareable, setIsShareable] = useState(item.isShareable);
 
   const handleSave = () => {
     updateInventoryItem(item.id, {
@@ -32,7 +30,6 @@ export function EditItemSheet({
       quantity: parseFloat(quantity) || 0,
       unit,
       notes,
-      isShareable,
     });
     onClose();
   };
@@ -42,7 +39,7 @@ export function EditItemSheet({
       open={open}
       onClose={onClose}
       title="Edit ingredient"
-      subtitle="Adjust quantity, category, or sharing."
+      subtitle="Adjust name, quantity, or category."
       heightPct={0.85}
     >
       <div className={uiStyles.sheetScroll}>
@@ -73,14 +70,6 @@ export function EditItemSheet({
             onChange={setCategory}
             options={categories.map((x) => ({ value: x, label: x }))}
           />
-        </div>
-
-        <div className={s.shareRow}>
-          <div className={s.grow}>
-            <div className={s.label}>Share with community</div>
-            <div className={s.hint}>Let neighbors see you have this</div>
-          </div>
-          <Switch value={isShareable} onValueChange={setIsShareable} label="Share with community" />
         </div>
 
         <Field label="Notes" value={notes} onChangeText={setNotes} multiline />

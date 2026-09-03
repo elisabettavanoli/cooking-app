@@ -13,8 +13,8 @@ type TabId = "kitchen" | "cook" | "list" | "nearby";
 
 const tabs: { id: TabId; label: string; icon: LucideIcon }[] = [
   { id: "kitchen", label: "Kitchen", icon: Home },
-  { id: "cook", label: "Cook", icon: ChefHat },
   { id: "list", label: "List", icon: ListTodo },
+  { id: "cook", label: "Cook", icon: ChefHat },
   { id: "nearby", label: "Nearby", icon: Users },
 ];
 

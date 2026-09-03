@@ -11,7 +11,6 @@ function inv(conceptId: string, quantity = 99): InventoryItem {
     quantity,
     unit: "piece",
     category: "other",
-    isShareable: false,
     status: "active",
     addedAt: new Date().toISOString(),
   };

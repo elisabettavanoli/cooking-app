@@ -13,6 +13,8 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* App feel: no double-tap zoom, no 300ms tap delay. */
+  touch-action: manipulation;
 }
 
 html,
@@ -31,6 +33,18 @@ body {
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior: none;
   text-rendering: optimizeLegibility;
+  /* App feel: don't let the chrome treat UI text as selectable web content. */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ...but real text entry stays selectable. */
+input,
+textarea,
+[contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 #root {

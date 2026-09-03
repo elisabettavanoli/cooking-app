@@ -1,5 +1,6 @@
 export type Category =
-  | "produce"
+  | "fruit"
+  | "vegetables"
   | "dairy"
   | "meat-fish"
   | "pantry"
@@ -7,7 +8,8 @@ export type Category =
   | "spices-herbs"
   | "baking"
   | "drinks"
-  | "frozen"
+  | "breakfast-snacks"
+  | "snacks"
   | "other";
 
 export type Unit =
@@ -41,7 +43,6 @@ export interface InventoryItem {
   category: Category;
   expiry?: string;
   notes?: string;
-  isShareable: boolean;
   status: "active" | "consumed";
   addedAt: string;
 }
