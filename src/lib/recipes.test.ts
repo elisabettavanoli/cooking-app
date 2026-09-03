@@ -55,20 +55,23 @@ describe("matchRecipe", () => {
 });
 
 describe("recipeMatches", () => {
-  it("returns one match per catalog recipe, best coverage first", () => {
-    const res = recipeMatches(undefined, []);
+  it("returns one match per catalog recipe, fewest missing first", () => {
+    const pantry = [inv("pasta"), inv("tomato"), inv("basil"), inv("onion"), inv("garlic")];
+    const res = recipeMatches(undefined, pantry);
     expect(res).toHaveLength(recipeCatalog.length);
     for (let i = 1; i < res.length; i++) {
-      expect(res[i - 1].coverage).toBeGreaterThanOrEqual(res[i].coverage);
+      expect(res[i - 1].missingCount).toBeLessThanOrEqual(res[i].missingCount);
     }
   });
 
   it("restricts matching to the selected concepts", () => {
     const pantry = [inv("pasta"), inv("tomato"), inv("chicken")];
-    const all = recipeMatches(undefined, pantry);
-    const narrowed = recipeMatches(["pasta"], pantry);
-    const bestAll = all[0].haveCount;
-    const bestNarrowed = narrowed[0].haveCount;
-    expect(bestNarrowed).toBeLessThanOrEqual(bestAll);
+    const haveByRecipe = new Map(
+      recipeMatches(undefined, pantry).map((m) => [m.recipe.id, m.haveCount]),
+    );
+    // Narrowing to a subset of concepts can only lower a recipe's have count.
+    for (const m of recipeMatches(["pasta"], pantry)) {
+      expect(m.haveCount).toBeLessThanOrEqual(haveByRecipe.get(m.recipe.id) ?? 0);
+    }
   });
 });
