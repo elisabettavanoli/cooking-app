@@ -36,3 +36,16 @@
   font-size: 13px;
   color: var(--destructive);
 }
+
+.link {
+  display: block;
+  margin: 14px auto 0;
+  padding: 4px;
+  background: none;
+  border: 0;
+  font: inherit;
+  font-size: 13px;
+  color: var(--muted-foreground);
+  text-decoration: underline;
+  cursor: pointer;
+}
