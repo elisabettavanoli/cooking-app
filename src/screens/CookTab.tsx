@@ -80,8 +80,10 @@ export function CookTab() {
         <p className={s.sectionTitle}>{t("cook.suggested").toUpperCase()}</p>
 
         {!enoughIngredients && (
-          <div className={s.emptyCard}>
-            <ChefHat size={32} color={colors.mutedForeground} />
+          <div className={s.emptyState}>
+            <div className={s.emptyIcon}>
+              <ChefHat size={28} color={colors.mutedForeground} />
+            </div>
             <p className={s.emptyTitle}>{t("cook.minIngredientsTitle")}</p>
             <p className={s.emptyText}>
               {t("cook.minIngredientsText", { min: MIN_INGREDIENTS })}
@@ -90,8 +92,10 @@ export function CookTab() {
         )}
 
         {enoughIngredients && topMatches.length === 0 && (
-          <div className={s.emptyCard}>
-            <ChefHat size={32} color={colors.mutedForeground} />
+          <div className={s.emptyState}>
+            <div className={s.emptyIcon}>
+              <ChefHat size={28} color={colors.mutedForeground} />
+            </div>
             <p className={s.emptyTitle}>{t("cook.noMatchTitle")}</p>
             <p className={s.emptyText}>{t("cook.noMatchText")}</p>
           </div>
