@@ -25,6 +25,7 @@ export function ListTab() {
     useCooking();
   const [search, setSearch] = useState("");
   const [draft, setDraft] = useState("");
+  const [composerOpen, setComposerOpen] = useState(false);
 
   const commitDraft = async () => {
     const name = draft.trim();
@@ -143,31 +144,46 @@ export function ListTab() {
         )}
       </div>
 
-      <form
-        className={s.composer}
-        onSubmit={(e) => {
-          e.preventDefault();
-          void commitDraft();
-        }}
-      >
-        <input
-          className={s.composerInput}
-          value={draft}
-          onChange={(e) => setDraft(e.currentTarget.value)}
-          placeholder={t("list.addPlaceholder")}
-          aria-label={t("list.addPlaceholder")}
-          autoComplete="off"
-          enterKeyHint="done"
-        />
+      {composerOpen ? (
+        <form
+          className={s.composer}
+          onSubmit={(e) => {
+            e.preventDefault();
+            void commitDraft();
+          }}
+        >
+          <input
+            className={s.composerInput}
+            value={draft}
+            onChange={(e) => setDraft(e.currentTarget.value)}
+            onBlur={() => {
+              if (!draft.trim()) setComposerOpen(false);
+            }}
+            placeholder={t("list.addPlaceholder")}
+            aria-label={t("list.addPlaceholder")}
+            autoComplete="off"
+            enterKeyHint="done"
+            autoFocus
+          />
+          <button
+            type="submit"
+            className={s.composerBtn}
+            disabled={!draft.trim()}
+            aria-label={t("list.add")}
+          >
+            <Plus size={20} color={colors.primaryForeground} />
+          </button>
+        </form>
+      ) : (
         <button
-          type="submit"
-          className={s.composerBtn}
-          disabled={!draft.trim()}
+          type="button"
+          className={s.fab}
+          onClick={() => setComposerOpen(true)}
           aria-label={t("list.add")}
         >
-          <Plus size={20} color={colors.primaryForeground} />
+          <Plus size={24} color={colors.primaryForeground} strokeWidth={2.5} />
         </button>
-      </form>
+      )}
     </div>
   );
 }

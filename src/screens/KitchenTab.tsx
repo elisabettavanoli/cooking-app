@@ -152,14 +152,6 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
               ) : null}
             </p>
           </div>
-          <button
-            type="button"
-            className={s.addBtn}
-            onClick={() => setAddOpen(true)}
-            aria-label={t("kitchen.addIngredient")}
-          >
-            <Plus size={22} color={colors.primaryForeground} strokeWidth={2.5} />
-          </button>
         </div>
 
         <div className={s.searchRow}>
@@ -228,6 +220,17 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
           </div>
         ))}
       </div>
+
+      {!selectionMode && (
+        <button
+          type="button"
+          className={s.fab}
+          onClick={() => setAddOpen(true)}
+          aria-label={t("kitchen.addIngredient")}
+        >
+          <Plus size={24} color={colors.primaryForeground} strokeWidth={2.5} />
+        </button>
+      )}
 
       {selectionMode && selectedConcepts.length > 0 && (
         <div className={s.cookCta}>

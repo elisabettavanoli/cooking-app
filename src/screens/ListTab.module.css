@@ -3,6 +3,7 @@
   flex-direction: column;
   flex: 1;
   min-height: 0;
+  position: relative;
 }
 .scroll {
   flex: 1;
@@ -10,7 +11,23 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: 16px;
-  padding-bottom: 40px;
+  padding-bottom: 88px;
+}
+.fab {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--r-full);
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  z-index: 5;
 }
 .header {
   display: flex;
