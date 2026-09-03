@@ -33,8 +33,10 @@ later phase (not set up yet).
   into `public/`). SW update UI: `src/components/UpdateToast.tsx`.
 - iOS/standalone meta tags live in `index.html`. Safe areas via
   `env(safe-area-inset-*)` and the `--safe-*` tokens; heights use `dvh`.
-- **Hosting**: Cloudflare Pages (`wrangler.toml`, output `dist/`, SPA fallback
-  `public/_redirects`). `npx wrangler pages deploy dist` or git integration.
+- **Hosting**: Cloudflare Workers static assets (`wrangler.toml` `[assets]`,
+  `directory = "./dist"`, `not_found_handling = "single-page-application"` for the
+  SPA fallback). Deploy: `npx wrangler deploy`, or Cloudflare git integration
+  (build `npm run build`, deploy `npx wrangler deploy`).
 - **Backend (in progress)**: Supabase. Client in `src/lib/supabase.ts` (null
   when `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` are unset — app then runs
   local-only). Auth context `src/lib/auth.tsx` (email magic link), login screen
