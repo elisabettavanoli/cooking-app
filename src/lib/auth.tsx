@@ -45,14 +45,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!supabase) return;
     let active = true;
 
-    supabase.auth.getSession().then(({ data }) => {
+    // `onAuthStateChange` is the single source of truth for the session: it
+    // fires `INITIAL_SESSION` with the restored session on setup, then again on
+    // every sign-in / refresh / sign-out. Driving `session` only from here (and
+    // never also from a racing `getSession()`) avoids a restored session being
+    // clobbered back to null on reload.
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
       if (!active) return;
-      setSession(data.session);
+      setSession(next);
       setReady(true);
     });
 
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
-      setSession(next);
+    // Safety net: if `INITIAL_SESSION` is somehow missed, still leave the
+    // loading state. Deliberately does not touch `session`.
+    supabase.auth.getSession().finally(() => {
+      if (active) setReady(true);
     });
 
     return () => {

@@ -1,11 +1,13 @@
 import {
   useEffect,
   useRef,
+  useState,
   type CSSProperties,
   type ReactNode,
 } from "react";
-import { X } from "lucide-react";
+import { Eye, EyeOff, X } from "lucide-react";
 import { colors } from "../lib/theme";
+import { useI18n } from "../lib/i18n";
 import styles from "./ui.module.css";
 
 type ButtonVariant = "primary" | "outline" | "ghost" | "destructive" | "secondary";
@@ -66,6 +68,11 @@ export function Field({
   type?: "text" | "password";
   style?: CSSProperties;
 }) {
+  const { t } = useI18n();
+  const [revealed, setRevealed] = useState(false);
+  const isPassword = type === "password";
+  const inputType = isPassword && revealed ? "text" : type;
+
   return (
     <div className={styles.field} style={style}>
       {label ? <label className={styles.label}>{label}</label> : null}
@@ -78,10 +85,34 @@ export function Field({
           onBlur={onBlur}
           rows={3}
         />
+      ) : isPassword ? (
+        <div className={styles.inputWrap}>
+          <input
+            className={styles.input}
+            type={inputType}
+            value={value}
+            placeholder={placeholder}
+            inputMode={inputMode}
+            autoCapitalize={autoCapitalize}
+            autoComplete="current-password"
+            onChange={(e) => onChangeText(e.currentTarget.value)}
+            onBlur={onBlur}
+          />
+          <button
+            type="button"
+            className={styles.revealBtn}
+            onClick={() => setRevealed((v) => !v)}
+            aria-label={revealed ? t("common.hidePassword") : t("common.showPassword")}
+            aria-pressed={revealed}
+            tabIndex={-1}
+          >
+            {revealed ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        </div>
       ) : (
         <input
           className={styles.input}
-          type={type}
+          type={inputType}
           value={value}
           placeholder={placeholder}
           inputMode={inputMode}

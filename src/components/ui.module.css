@@ -86,6 +86,35 @@ textarea.input {
   min-height: 76px;
   resize: vertical;
 }
+.inputWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.inputWrap .input {
+  padding-right: 42px;
+}
+.revealBtn {
+  position: absolute;
+  right: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  border-radius: 6px;
+}
+.revealBtn:hover {
+  color: var(--foreground);
+}
+.revealBtn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
 
 /* --- Segmented --- */
 .segmented {
