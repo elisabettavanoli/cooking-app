@@ -34,7 +34,7 @@ export function ListTab() {
     const resolved = await categorizeIngredientAsync(name);
     addShoppingItem({
       conceptId: resolved.conceptId,
-      displayName: resolved.displayName,
+      displayName: name,
       quantity: 1,
       unit: "piece",
       category: resolved.category,

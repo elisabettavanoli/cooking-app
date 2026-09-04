@@ -48,7 +48,6 @@ export function AddItemSheet({
     const trimmed = name.trim();
     if (!trimmed) return null;
     const result = await categorizeIngredientAsync(trimmed);
-    setDisplayName((cur) => cur || result.displayName);
     if (!categoryTouched) setCategory(result.category);
     const next = { name: trimmed, conceptId: result.conceptId };
     setResolved(next);
@@ -60,7 +59,9 @@ export function AddItemSheet({
     const qty = parseFloat(quantity) || 0;
     if (!typed || qty <= 0) return;
     const match = await resolveName(typed);
-    const name = (displayName || match?.displayName || typed).trim();
+    // Keep what the user typed. The "Display name" field is an explicit override;
+    // the matched concept only lends its id (recipe matching) + icon + category.
+    const name = displayName.trim() || typed;
     const conceptId = match?.conceptId ?? typed.toLowerCase().replace(/\s+/g, "-");
     const finalCategory: Category = categoryTouched ? category : match?.category ?? category;
 
