@@ -22,7 +22,7 @@ describe("App interactions", () => {
 
     await user.click(screen.getByRole("button", { name: /add ingredient/i }));
     const dialog = await screen.findByRole("dialog");
-    await user.type(within(dialog).getByPlaceholderText(/3 red tomatoes/i), "Sardines");
+    await user.type(within(dialog).getByPlaceholderText(/tomatoes/i), "Sardines");
     await user.click(within(dialog).getByRole("button", { name: /add to kitchen/i }));
 
     await waitFor(() => expect(screen.getByText("Sardines")).toBeDefined());
