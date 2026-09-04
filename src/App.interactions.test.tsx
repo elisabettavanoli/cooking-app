@@ -40,6 +40,22 @@ describe("App interactions", () => {
     expect(screen.getByText("Sardines")).toBeDefined();
   });
 
+  it("adding the same item twice increases its quantity instead of duplicating it", async () => {
+    const user = userEvent.setup();
+    await bootToKitchen(user);
+
+    for (let i = 0; i < 2; i += 1) {
+      await user.click(screen.getByRole("button", { name: /add ingredient/i }));
+      const dialog = await screen.findByRole("dialog");
+      await user.type(within(dialog).getByPlaceholderText(/tomatoes/i), "Sardines");
+      await user.click(within(dialog).getByRole("button", { name: /add to kitchen/i }));
+      await waitFor(() => expect(screen.getByText("Sardines")).toBeDefined());
+    }
+
+    expect(screen.getAllByText("Sardines")).toHaveLength(1);
+    expect(screen.getByText("2 pieces")).toBeDefined();
+  });
+
   it("toggles a kitchen-sharing switch on the Profile tab", async () => {
     const user = userEvent.setup();
     render(<App />);
