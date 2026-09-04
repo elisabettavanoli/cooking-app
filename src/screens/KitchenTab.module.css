@@ -7,32 +7,21 @@
 }
 
 .header {
-  padding: 8px 16px 12px;
-  border-bottom: 1px solid var(--border);
-  background: var(--background);
-  flex-shrink: 0;
-}
-.headerTop {
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-.headerTexts {
-  flex: 1;
-  min-width: 0;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
 }
 .title {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   color: var(--foreground);
 }
 .subtitle {
   font-size: 13px;
-  font-weight: 600;
-  color: var(--fresh);
-  margin-top: 4px;
+  color: var(--muted-foreground);
+  margin-top: 2px;
 }
 .subtitleWarn {
   color: var(--warn);
@@ -66,8 +55,7 @@
   flex-direction: row;
   align-items: center;
   gap: 8px;
-  background: #fff;
-  border: 1px solid var(--border);
+  background: var(--muted);
   border-radius: var(--r-md);
   padding-inline: 12px;
 }
@@ -84,21 +72,20 @@
 }
 .selectBtn {
   width: 42px;
-  height: 42px;
   border-radius: var(--r-md);
-  border: 1px solid var(--border);
+  border: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: transparent;
+  background: var(--muted);
   cursor: pointer;
 }
 .selectBtnActive {
   background: var(--primary);
-  border-color: var(--primary);
 }
 .hint {
+  margin: 8px 0 14px;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.8px;

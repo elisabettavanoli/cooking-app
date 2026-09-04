@@ -151,9 +151,9 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
 
   return (
     <div className={s.screen}>
-      <div className={s.header}>
-        <div className={s.headerTop}>
-          <div className={s.headerTexts}>
+      <div className={s.scroll}>
+        <div className={s.header}>
+          <div>
             <h1 className={s.title}>{t("kitchen.title")}</h1>
             <p className={s.subtitle}>
               {t("kitchen.itemsTracked", { n: activeInventory.length })}
@@ -193,9 +193,7 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
         <p className={s.hint}>
           {selectionMode ? t("kitchen.hintSelect") : t("kitchen.hintDefault")}
         </p>
-      </div>
 
-      <div className={s.scroll}>
         {grouped.length === 0 && (
           <div className={s.emptyState}>
             <div className={s.emptyIcon}>
