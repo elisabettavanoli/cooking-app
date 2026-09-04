@@ -100,6 +100,7 @@ export const concepts: IngredientConcept[] = [
   c("mozzarella", "Mozzarella", "dairy", "mozzarella", ["fresh mozzarella"]),
   c("parmesan", "Parmesan", "dairy", "parmesan", ["parmigiano"]),
   c("feta", "Feta", "dairy", "feta"),
+  c("cream-cheese", "Cream Cheese", "dairy", "cream-cheese", ["philadelphia", "philadelphia cream cheese"]),
 
   // Meat & Fish
   c("chicken", "Chicken", "meat-fish", "chicken", ["chicken breast", "chicken thighs"]),
@@ -127,6 +128,8 @@ export const concepts: IngredientConcept[] = [
   c("olives", "Olives", "pantry", "olives"),
   c("oats", "Oats", "pantry", "oats", ["rolled oats"]),
   c("nuts", "Nuts", "pantry", "nuts", ["almonds", "walnuts"]),
+  c("pita", "Pita Bread", "pantry", "pita", ["pita bread", "pitta"]),
+  c("ravioli", "Ravioli", "pantry", "ravioli", ["tortellini", "tortelloni"]),
 
   // Sauces & Condiments
   c("olive-oil", "Olive Oil", "sauces-condiments", "olive-oil", ["extra virgin olive oil"]),
@@ -178,6 +181,7 @@ export const concepts: IngredientConcept[] = [
   c("juice", "Juice", "drinks", "juice", ["orange juice", "apple juice"]),
   c("coffee", "Coffee", "drinks", "coffee"),
   c("tea", "Tea", "drinks", "tea"),
+  c("chamomile", "Chamomile Tea", "drinks", "chamomile", ["camomilla", "camomile", "chamomile tea"]),
   c("wine", "Wine", "drinks", "wine", ["white wine", "red wine"]),
   c("beer", "Beer", "drinks", "beer"),
   c("soda", "Soda", "drinks", "soda", ["soft drink"]),
