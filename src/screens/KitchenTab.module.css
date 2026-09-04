@@ -223,8 +223,7 @@
   width: 64px;
   height: 64px;
   border-radius: var(--r-2xl);
-  background: #fff;
-  border: 1px solid var(--border);
+  background: var(--muted);
   display: flex;
   align-items: center;
   justify-content: center;
