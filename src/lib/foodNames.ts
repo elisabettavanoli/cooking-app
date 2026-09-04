@@ -74,6 +74,7 @@ const it: Record<string, string> = {
   mozzarella: "Mozzarella",
   parmesan: "Parmigiano",
   feta: "Feta",
+  "cream-cheese": "Formaggio spalmabile",
 
   // Meat & Fish
   chicken: "Pollo",
@@ -102,6 +103,8 @@ const it: Record<string, string> = {
   oats: "Avena",
   nuts: "Frutta secca",
   pizza: "Pizza",
+  pita: "Pita",
+  ravioli: "Ravioli",
 
   // Sauces & condiments
   "olive-oil": "Olio d'oliva",
@@ -139,6 +142,7 @@ const it: Record<string, string> = {
   juice: "Succo",
   coffee: "Caffè",
   tea: "Tè",
+  chamomile: "Camomilla",
   wine: "Vino",
   beer: "Birra",
   soda: "Bibita",
