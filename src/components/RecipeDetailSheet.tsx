@@ -7,6 +7,7 @@ import { useI18n } from "../lib/i18n";
 import { findConceptById } from "../lib/data";
 import { useActiveInventory, useCooking } from "../lib/store";
 import { matchRecipe } from "../lib/recipes";
+import { formatAmount } from "../lib/units";
 import type { Recipe, RecipeIngredient } from "../lib/types";
 import s from "./RecipeDetailSheet.module.css";
 
@@ -71,9 +72,7 @@ export function RecipeDetailSheet({
               />
               <div className={s.ingText}>
                 <div className={s.ingName}>{ing.displayName}</div>
-                <div className={s.ingQty}>
-                  {ing.quantity} {ing.unit}
-                </div>
+                <div className={s.ingQty}>{formatAmount(ing.quantity, ing.unit, t)}</div>
               </div>
               <Check size={18} color={colors.fresh} />
             </div>
@@ -93,9 +92,7 @@ export function RecipeDetailSheet({
                 />
                 <div className={s.ingText}>
                   <div className={s.ingName}>{ing.displayName}</div>
-                  <div className={s.ingQty}>
-                    {ing.quantity} {ing.unit}
-                  </div>
+                  <div className={s.ingQty}>{formatAmount(ing.quantity, ing.unit, t)}</div>
                 </div>
                 <button
                   type="button"

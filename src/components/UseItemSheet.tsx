@@ -3,6 +3,7 @@ import { BottomSheet, Button } from "./ui";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
 import { foodName } from "../lib/foodNames";
+import { unitLabel } from "../lib/units";
 import { useCooking } from "../lib/store";
 import type { InventoryItem } from "../lib/types";
 import s from "./UseItemSheet.module.css";
@@ -57,7 +58,7 @@ export function UseItemSheet({
         </button>
         <div className={s.qtyValueWrap}>
           <span className={s.qtyValue}>{item.quantity}</span>
-          <span className={s.qtyUnit}>{item.unit}</span>
+          <span className={s.qtyUnit}>{unitLabel(item.unit, t, item.quantity)}</span>
         </div>
         <button
           type="button"

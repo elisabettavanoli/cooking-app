@@ -4,6 +4,7 @@ import { BottomSheet, Button, ChipSelect, Field, uiStyles } from "./ui";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
 import { categories, units } from "../lib/data";
+import { unitLabel } from "../lib/units";
 import { useCooking } from "../lib/store";
 import type { Category, InventoryItem, Unit } from "../lib/types";
 import s from "./EditItemSheet.module.css";
@@ -60,7 +61,7 @@ export function EditItemSheet({
             <ChipSelect
               value={unit}
               onChange={setUnit}
-              options={units.map((x) => ({ value: x, label: x }))}
+              options={units.map((x) => ({ value: x, label: unitLabel(x, t, 1) }))}
             />
           </div>
         </div>
