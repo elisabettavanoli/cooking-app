@@ -68,7 +68,7 @@ export function RecipeDetailSheet({
               <FoodIcon
                 iconKey={ing.conceptId}
                 category={active.find((i) => i.conceptId === ing.conceptId)?.category ?? "other"}
-                size={36}
+                size={40}
               />
               <div className={s.ingText}>
                 <div className={s.ingName}>{ing.displayName}</div>
@@ -88,7 +88,7 @@ export function RecipeDetailSheet({
                 <FoodIcon
                   iconKey={ing.conceptId}
                   category={findConceptById(ing.conceptId)?.category ?? "other"}
-                  size={36}
+                  size={40}
                 />
                 <div className={s.ingText}>
                   <div className={s.ingName}>{ing.displayName}</div>

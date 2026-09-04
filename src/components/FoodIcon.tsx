@@ -1,11 +1,18 @@
+import { UtensilsCrossed } from "lucide-react";
+import type { ReactNode } from "react";
 import { categoryMeta } from "../lib/data";
+import { foodiconpackCategoryFallback, foodiconpackIndex } from "../lib/foodiconpackIndex";
+import { useIconStyle } from "../lib/iconStyle";
 import type { Category } from "../lib/types";
 
 /**
- * Emoji glyph for a food, keyed by the same `iconKey` slugs used across the app
- * (concept ids, their common plurals / synonyms, and Italian names — see
- * `ai.ts` and the concept catalog). Anything not listed falls back to the
- * category emoji, then a shopping trolley.
+ * Emoji glyph for a food, keyed by the same `iconKey` slugs used across the
+ * app (English concept ids and their common plurals/synonyms — see `ai.ts`
+ * and the concept catalog in `data.ts`). A non-English item name is resolved
+ * to its concept id via that catalog's `aliases` before it gets here, so this
+ * map only needs a handful of standalone non-English entries for words with
+ * no curated concept yet. Anything not listed falls back to the category
+ * emoji, then a shopping trolley.
  */
 const foodEmoji: Record<string, string> = {
   // ── Fruit ────────────────────────────────────────────────────────────────
@@ -275,7 +282,6 @@ const foodEmoji: Record<string, string> = {
   "hot-chocolate": "☕",
   tea: "🍵",
   chamomile: "🌼",
-  camomilla: "🌼",
   "iced-tea": "🧋",
   soda: "🥤",
   cola: "🥤",
@@ -332,48 +338,14 @@ const foodEmoji: Record<string, string> = {
   sushi: "🍣",
   ice: "🧊",
 
-  // ── Italian names (catalog aliases are English-only) ─────────────────────
-  biscotti: "🍪",
-  biscotto: "🍪",
+  // ── Italian words with no curated concept (see src/lib/data.ts) ──────────
+  // Everything else typed in Italian resolves to its English concept id in
+  // `categorizeIngredient()` (via the concept's `aliases`) before it ever
+  // reaches this map — these three have no matching concept yet, so they're
+  // the only Italian entries left here.
   torta: "🍰",
-  caramelle: "🍬",
-  cioccolato: "🍫",
-  pane: "🍞",
   panino: "🥪",
-  riso: "🍚",
-  farina: "🌾",
-  zucchero: "🍬",
-  sale: "🧂",
-  pepe: "🧂",
-  olio: "🫒",
-  aceto: "🍶",
-  latte: "🥛",
-  formaggio: "🧀",
-  uova: "🥚",
-  uovo: "🥚",
-  burro: "🧈",
-  pollo: "🍗",
-  manzo: "🥩",
-  maiale: "🥓",
-  pesce: "🐟",
-  gamberi: "🦐",
-  mela: "🍎",
-  mele: "🍎",
-  limone: "🍋",
-  arancia: "🍊",
-  pomodoro: "🍅",
-  pomodori: "🍅",
-  cipolla: "🧅",
-  aglio: "🧄",
-  carota: "🥕",
-  patata: "🥔",
-  patate: "🥔",
   insalata: "🥗",
-  vino: "🍷",
-  birra: "🍺",
-  acqua: "💧",
-  caffe: "☕",
-  the: "🍵",
 };
 
 const categoryEmoji: Record<Category, string> = {
@@ -391,6 +363,43 @@ const categoryEmoji: Record<Category, string> = {
   other: "🛒",
 };
 
+/**
+ * OpenMoji color SVGs (vendored under `public/icons/openmoji/`) are named by
+ * their emoji's Unicode codepoints, stripped of the U+FE0F variation
+ * selector. Deriving the filename from the glyph itself means every emoji
+ * `foodEmoji`/`categoryEmoji` can produce — including the "🛒" catch-all —
+ * automatically has an OpenMoji equivalent, no separate lookup table needed.
+ */
+function openmojiFilename(emoji: string): string {
+  const codepoints: string[] = [];
+  for (const ch of emoji) {
+    const cp = ch.codePointAt(0);
+    if (cp === undefined || cp === 0xfe0f) continue;
+    codepoints.push(cp.toString(16).toUpperCase());
+  }
+  return codepoints.join("-");
+}
+
+/**
+ * Resolves what to actually render for a non-"emoji" style. OpenMoji always
+ * finds a file (its filename is derived from whatever emoji `foodEmoji`/
+ * `categoryEmoji` would show, so it inherits that same fallback chain — never
+ * the emoji glyph itself). foodiconpack falls back to a same-style,
+ * per-category outline icon when the concept isn't in its free set, and to a
+ * neutral outline glyph — never a color emoji — when even that's missing
+ * (only the "other" category today).
+ */
+function styledIcon(
+  style: "openmoji" | "foodiconpack",
+  iconKey: string,
+  category: Category,
+  emoji: string,
+): { src: string } | { neutral: true } {
+  if (style === "openmoji") return { src: `/icons/openmoji/${openmojiFilename(emoji)}.svg` };
+  const path = foodiconpackIndex[iconKey] ?? foodiconpackCategoryFallback[category];
+  return path ? { src: `/icons/foodiconpack/${path}.svg` } : { neutral: true };
+}
+
 export function FoodIcon({
   iconKey,
   category,
@@ -403,15 +412,45 @@ export function FoodIcon({
   variant?: "chip" | "bare";
 }) {
   const meta = categoryMeta[category];
+  const { iconStyle } = useIconStyle();
   const emoji = foodEmoji[iconKey] ?? categoryEmoji[category] ?? "🛒";
+
+  let glyph: ReactNode;
+  if (iconStyle === "emoji") {
+    glyph = (
+      <span aria-hidden style={{ lineHeight: 1 }}>
+        {emoji}
+      </span>
+    );
+  } else {
+    const resolved = styledIcon(iconStyle, iconKey, category, emoji);
+    glyph =
+      "src" in resolved ? (
+        <img
+          src={resolved.src}
+          alt=""
+          aria-hidden
+          style={{ width: "78%", height: "78%", objectFit: "contain" }}
+        />
+      ) : (
+        <UtensilsCrossed aria-hidden size={Math.round(size * 0.5)} color={meta.color} strokeWidth={1.75} />
+      );
+  }
 
   if (variant === "bare") {
     return (
       <span
         aria-hidden
-        style={{ fontSize: Math.round(size * 0.9), lineHeight: 1, display: "inline-block" }}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: Math.round(size * 0.9),
+          height: Math.round(size * 0.9),
+          fontSize: Math.round(size * 0.9),
+        }}
       >
-        {emoji}
+        {glyph}
       </span>
     );
   }
@@ -432,7 +471,7 @@ export function FoodIcon({
         flexShrink: 0,
       }}
     >
-      {emoji}
+      {glyph}
     </span>
   );
 }

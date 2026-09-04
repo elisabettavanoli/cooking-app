@@ -110,7 +110,7 @@ function Tile({
           <Check size={10} color={colors.primaryForeground} strokeWidth={3} />
         </span>
       )}
-      <FoodIcon iconKey={item.conceptId} category={item.category} size={30} variant="bare" />
+      <FoodIcon iconKey={item.conceptId} category={item.category} size={36} variant="bare" />
       <span className={s.tileTexts}>
         <span className={s.tileName}>{foodName(item.conceptId, lang, item.displayName)}</span>
       </span>

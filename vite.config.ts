@@ -42,6 +42,20 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,svg,png,ico,woff2}"],
+        // The two alternate FoodIcon SVG sets (~1.8MB, ~300 files) only matter
+        // to someone who picks that style in Profile — don't force every
+        // install to precache them; cache on first use instead.
+        globIgnores: ["icons/openmoji/**", "icons/foodiconpack/**"],
+        runtimeCaching: [
+          {
+            urlPattern: /\/icons\/(openmoji|foodiconpack)\/.*\.svg$/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "food-icon-styles",
+              expiration: { maxEntries: 400, maxAgeSeconds: 60 * 60 * 24 * 365 },
+            },
+          },
+        ],
         navigateFallback: "/index.html",
         cleanupOutdatedCaches: true,
         clientsClaim: true,

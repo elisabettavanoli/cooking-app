@@ -64,7 +64,7 @@ function CommunitySearch() {
         <div className={s.results}>
           {hits.map((hit) => (
             <div key={`${hit.ownerId}-${hit.communityId}-${hit.conceptId}`} className={s.resultRow}>
-              <FoodIcon iconKey={hit.conceptId} category={hit.category} size={40} />
+              <FoodIcon iconKey={hit.conceptId} category={hit.category} size={44} />
               <div className={s.resultText}>
                 <div className={s.resultName}>
                   {foodName(hit.conceptId, lang, hit.displayName)}

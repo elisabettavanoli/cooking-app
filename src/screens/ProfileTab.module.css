@@ -80,3 +80,48 @@
 .logoutRow {
   margin-top: 8px;
 }
+.iconStyleRow {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+.iconStyleOption {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--card);
+  cursor: pointer;
+}
+.iconStyleOptionActive {
+  border-color: var(--primary);
+  background: var(--muted);
+}
+.iconStyleGlyph {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+}
+.iconStyleGlyph img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.iconStyleLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--foreground);
+  text-align: center;
+}
+.attribution {
+  font-size: 11px;
+  color: var(--muted-foreground);
+}
