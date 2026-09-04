@@ -13,8 +13,9 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  /* App feel: no double-tap zoom, no 300ms tap delay. */
-  touch-action: manipulation;
+  /* App feel: no double-tap zoom, no 300ms tap delay, no pinch-zoom. */
+  touch-action: pan-x pan-y;
+  overscroll-behavior: none;
 }
 
 html,
@@ -24,6 +25,12 @@ body,
 }
 
 body {
+  /* App feel: the page itself never scrolls or rubber-bands — it's pinned to
+     the viewport and only the inner scroll regions move. Kills pull-to-refresh
+     and the elastic overscroll bounce at the document edges. */
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
@@ -32,6 +39,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior: none;
+  touch-action: pan-x pan-y;
   text-rendering: optimizeLegibility;
   /* App feel: don't let the chrome treat UI text as selectable web content. */
   -webkit-touch-callout: none;
@@ -50,8 +58,8 @@ textarea,
 #root {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100%;
+  overflow: hidden;
 }
 
 h1,
