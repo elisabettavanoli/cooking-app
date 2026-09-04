@@ -18,11 +18,26 @@ anything the datasets produce, so re-running is safe.
 
 - Source: <https://www.kaggle.com/c/instacart-market-basket-analysis/data>
 - Put `products.csv`, `aisles.csv`, `departments.csv` in `scripts/sources/instacart/`.
-- English only. ~50k real grocery product names, each with an aisle (134) and
+- English only. ~49.7k real grocery product names, each with an aisle (134) and
   department (21). Mapped via `INSTACART_AISLE_MAP` / `INSTACART_DEPARTMENT_MAP`
   in the build script.
 - Licence: Instacart competition rules — fine for internal use; check before
   redistributing the derived data.
+- **Every row gets a category** — aisle map, then department map, then
+  `"other"`. Nothing is dropped: a non-food aisle (cosmetics, pet food,
+  household, paper goods, …) is learned as `"other"` rather than silently
+  missing, so those product names still resolve deterministically instead of
+  falling through to the AI stub. `aisle_id`/`department_id` `"missing"`
+  (~1.2k rows, ~2.4%) genuinely carries no signal in the source data and lands
+  in `"other"` too — that's the dataset, not the mapping.
+- Three aisle mappings were corrected against sampled real product names
+  (2025-09-04): `"frozen vegan vegetarian"` is frozen ready-meals (veggie
+  burgers, tacos, burritos, pizza), not meat substitutes → `pantry`, not
+  `meat-fish`. `"mint gum"` (candy/gum) → `breakfast-snacks`, not dropped.
+  `"refrigerated"` sampled as almost entirely juices/kombucha/lemonade →
+  `drinks`, not dropped. `"vitamins supplements"` and `"protein meal
+  replacements"` stay unmapped at the aisle level (genuinely mixed, no
+  majority) and resolve via `"other"`.
 
 ## Open Food Facts
 
@@ -40,6 +55,16 @@ anything the datasets produce, so re-running is safe.
   filter — raise it to bias toward common items and cut noise).
 - Licence: **Open Database License (ODbL)** — share-alike applies if you
   redistribute the database. Internal app use is fine.
+- **Tried and discarded (2025-09-04):** ran the full 13 GB / 4.5M-row export
+  through the existing `OFF_TAG_RULES` for it/de/fr/es. Raw size looked great
+  (it.json 150 → 2221 terms) but a random quality sample showed the noise is
+  not limited to the documented fruit/veg split — `categories_tags`
+  substring-matching mis-tags well beyond it (e.g. `"ravioli ricotta e
+  spinaci"` → `drinks`, `"burgers originali"` → `drinks`, `"seitan alla
+  piastra"` → `drinks`; `"drinks"` behaves like a dumping category). Discarded
+  without committing. A future attempt would need leaf-level `categories_tags`
+  rules (e.g. `en:fresh-pastas`, not a `"vegetables"` substring) and a much
+  stricter vote-decisiveness threshold — real work, not a quick re-run.
 
 ### Pre-filtering with DuckDB (recommended)
 
