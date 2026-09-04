@@ -93,7 +93,7 @@ export function ListTab() {
             <div className={s.rows}>
               {items.map((item) => (
                 <div key={item.id} className={s.row}>
-                  <FoodIcon iconKey={item.conceptId} category={item.category} size={44} />
+                  <FoodIcon iconKey={item.conceptId} category={item.category} size={48} />
                   <div className={s.rowText}>
                     <div className={s.rowName}>{foodName(item.conceptId, lang, item.displayName)}</div>
                   </div>
@@ -125,7 +125,7 @@ export function ListTab() {
             <div className={s.rows}>
               {purchased.map((item) => (
                 <div key={item.id} className={[s.row, s.rowPurchased].join(" ")}>
-                  <FoodIcon iconKey={item.conceptId} category={item.category} size={44} />
+                  <FoodIcon iconKey={item.conceptId} category={item.category} size={48} />
                   <div className={s.rowText}>
                     <div className={[s.rowName, s.rowNameStruck].join(" ")}>
                       {foodName(item.conceptId, lang, item.displayName)}

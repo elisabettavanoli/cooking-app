@@ -1,14 +1,28 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Button, Field } from "../components/ui";
 import { Switch } from "../components/Switch";
 import { useAuth } from "../lib/auth";
 import { getCoarsePosition } from "../lib/geo";
 import { useI18n, LANGUAGE_LABELS, LANGUAGE_ORDER } from "../lib/i18n";
+import { ICON_STYLE_ORDER, useIconStyle, type IconStyle } from "../lib/iconStyle";
 import { useCooking } from "../lib/store";
 import s from "./ProfileTab.module.css";
 
+const ICON_STYLE_PREVIEW: Record<IconStyle, { labelKey: string; node: ReactNode }> = {
+  emoji: { labelKey: "profile.iconStyleEmoji", node: "🍎" },
+  openmoji: {
+    labelKey: "profile.iconStyleOpenmoji",
+    node: <img src="/icons/openmoji/1F34E.svg" alt="" />,
+  },
+  foodiconpack: {
+    labelKey: "profile.iconStyleFoodiconpack",
+    node: <img src="/icons/foodiconpack/ingredients/apple.svg" alt="" />,
+  },
+};
+
 export function ProfileTab() {
   const { t, lang, setLang } = useI18n();
+  const { iconStyle, setIconStyle } = useIconStyle();
   const { configured, user, signOut } = useAuth();
   const { profile, updateProfile } = useCooking();
   const [draftName, setDraftName] = useState(profile.displayName);
@@ -71,6 +85,27 @@ export function ProfileTab() {
               </option>
             ))}
           </select>
+        </div>
+
+        <div className={s.card}>
+          <p className={s.sectionTitle}>{t("profile.iconStyle").toUpperCase()}</p>
+          <p className={s.hint}>{t("profile.iconStyleHint")}</p>
+          <div className={s.iconStyleRow} role="radiogroup" aria-label={t("profile.iconStyle")}>
+            {ICON_STYLE_ORDER.map((style) => (
+              <button
+                key={style}
+                type="button"
+                role="radio"
+                aria-checked={iconStyle === style}
+                className={`${s.iconStyleOption} ${iconStyle === style ? s.iconStyleOptionActive : ""}`}
+                onClick={() => setIconStyle(style)}
+              >
+                <span className={s.iconStyleGlyph}>{ICON_STYLE_PREVIEW[style].node}</span>
+                <span className={s.iconStyleLabel}>{t(ICON_STYLE_PREVIEW[style].labelKey)}</span>
+              </button>
+            ))}
+          </div>
+          {iconStyle !== "emoji" && <p className={s.attribution}>{t("profile.iconStyleAttribution")}</p>}
         </div>
 
         <div className={s.card}>
