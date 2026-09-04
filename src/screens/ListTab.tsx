@@ -4,6 +4,7 @@ import { FoodIcon } from "../components/FoodIcon";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
 import { foodName } from "../lib/foodNames";
+import { formatAmount } from "../lib/units";
 import { categorizeIngredientAsync } from "../lib/ai";
 import { useCooking } from "../lib/store";
 import type { Category, ShoppingItem } from "../lib/types";
@@ -94,9 +95,7 @@ export function ListTab() {
                   <FoodIcon iconKey={item.conceptId} category={item.category} size={44} />
                   <div className={s.rowText}>
                     <div className={s.rowName}>{foodName(item.conceptId, lang, item.displayName)}</div>
-                    <div className={s.rowSub}>
-                      {item.quantity} {item.unit}
-                    </div>
+                    <div className={s.rowSub}>{formatAmount(item.quantity, item.unit, t)}</div>
                   </div>
                   <button
                     type="button"
@@ -132,7 +131,7 @@ export function ListTab() {
                       {foodName(item.conceptId, lang, item.displayName)}
                     </div>
                     <div className={[s.rowSub, s.rowSubDone].join(" ")}>
-                      {item.quantity} {item.unit} · {t("list.inYourKitchen")}
+                      {formatAmount(item.quantity, item.unit, t)} · {t("list.inYourKitchen")}
                     </div>
                   </div>
                   <button

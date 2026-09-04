@@ -6,6 +6,7 @@ import { categoryMeta } from "../lib/data";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
 import { foodName } from "../lib/foodNames";
+import { formatAmount } from "../lib/units";
 import { useActiveInventory, useCooking } from "../lib/store";
 import { AddItemSheet } from "../components/AddItemSheet";
 import { EditItemSheet } from "../components/EditItemSheet";
@@ -80,7 +81,7 @@ function Tile({
   onTap: () => void;
   onLongPress: () => void;
 }) {
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
   const badge = SHOW_TILE_BADGES ? tileBadge(item) : null;
   const handlers = useLongPress(onLongPress, onTap);
   return (
@@ -105,9 +106,7 @@ function Tile({
       <FoodIcon iconKey={item.conceptId} category={item.category} size={30} variant="bare" />
       <span className={s.tileTexts}>
         <span className={s.tileName}>{foodName(item.conceptId, lang, item.displayName)}</span>
-        <span className={s.tileQty}>
-          {item.quantity} {item.unit}
-        </span>
+        <span className={s.tileQty}>{formatAmount(item.quantity, item.unit, t)}</span>
       </span>
     </button>
   );

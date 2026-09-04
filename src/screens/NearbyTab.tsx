@@ -7,6 +7,7 @@ import { NearbyMap } from "../components/NearbyMap";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
 import { foodName } from "../lib/foodNames";
+import { formatAmount } from "../lib/units";
 import { useCommunity } from "../lib/community-store";
 import type { CommunityItemHit } from "../lib/types";
 import s from "./NearbyTab.module.css";
@@ -70,7 +71,7 @@ function CommunitySearch() {
                 <div className={s.resultMeta}>
                   {t("nearby.hitMeta", { owner: hit.ownerName, community: hit.communityName })}
                   {" · "}
-                  {hit.quantity} {hit.unit}
+                  {formatAmount(hit.quantity, hit.unit, t)}
                 </div>
               </div>
             </div>
