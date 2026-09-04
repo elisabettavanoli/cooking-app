@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Check, Plus, Search, ShoppingCart, Trash2, Undo2 } from "lucide-react";
 import { FoodIcon } from "../components/FoodIcon";
 import { ConfirmPurchaseSheet } from "../components/ConfirmPurchaseSheet";
+import { PageInfo } from "../components/PageInfo";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
 import { foodName } from "../lib/foodNames";
@@ -65,6 +66,7 @@ export function ListTab() {
             <h1 className={s.title}>{t("list.title")}</h1>
             <p className={s.subtitle}>{t("list.toBuy", { n: active.length })}</p>
           </div>
+          <PageInfo title={t("list.title")} text={t("list.infoText")} />
         </div>
 
         <div className={s.searchBox}>

@@ -4,6 +4,7 @@ import { FoodIcon } from "../components/FoodIcon";
 import { Button } from "../components/ui";
 import { CreateCommunitySheet } from "../components/CreateCommunitySheet";
 import { NearbyMap } from "../components/NearbyMap";
+import { PageInfo } from "../components/PageInfo";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
 import { foodName } from "../lib/foodNames";
@@ -119,7 +120,10 @@ export function NearbyTab() {
     return (
       <div className={s.screen}>
         <div className={s.scroll}>
-          <h1 className={s.title}>{t("nearby.title")}</h1>
+          <div className={s.headerRow}>
+            <h1 className={s.title}>{t("nearby.title")}</h1>
+            <PageInfo title={t("nearby.title")} text={t("nearby.infoText")} />
+          </div>
           <p className={s.subtitle}>{t("nearby.subtitle")}</p>
           <div className={s.card}>
             <p className={s.rowHint}>{t("nearby.signInPrompt")}</p>
@@ -132,7 +136,10 @@ export function NearbyTab() {
   return (
     <div className={s.screen}>
       <div className={s.scroll}>
-        <h1 className={s.title}>{t("nearby.title")}</h1>
+        <div className={s.headerRow}>
+          <h1 className={s.title}>{t("nearby.title")}</h1>
+          <PageInfo title={t("nearby.title")} text={t("nearby.infoText")} />
+        </div>
         <p className={s.subtitle}>{t("nearby.subtitle")}</p>
 
         <CommunitySearch />

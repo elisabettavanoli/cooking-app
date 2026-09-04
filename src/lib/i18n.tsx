@@ -52,6 +52,7 @@ const en: Dict = {
   "common.done": "Done",
   "common.showPassword": "Show password",
   "common.hidePassword": "Hide password",
+  "common.pageInfo": "About this screen",
 
   "nav.kitchen": "Kitchen",
   "nav.list": "List",
@@ -79,8 +80,8 @@ const en: Dict = {
   "kitchen.addIngredient": "Add ingredient",
   "kitchen.enterSelect": "Select items to cook with",
   "kitchen.exitSelect": "Exit selection mode",
-  "kitchen.hintDefault": "Tap to update quantity · long-press for details",
   "kitchen.hintSelect": "Tap items to cook with",
+  "kitchen.infoText": "Everything you have at home. Tap an item to use some of it; long-press it to edit the details. Tap the utensils icon to pick specific ingredients and jump to Cook.",
   "kitchen.emptyTitle": "Your kitchen is empty",
   "kitchen.emptyText": "Tap + to add your first ingredient.",
   "kitchen.noMatchTitle": "Nothing matches that",
@@ -103,6 +104,7 @@ const en: Dict = {
   "cook.minutes": "{n} min",
   "cook.have": "{n} have",
   "cook.servings": "{n} servings",
+  "cook.infoText": "Recipes you can make with what's in your kitchen, sorted by what's missing. Select specific ingredients first to cook with just those, or ask the AI for an idea.",
 
   "list.title": "Shopping List",
   "list.toBuy": { one: "{n} item to buy", other: "{n} items to buy" },
@@ -113,6 +115,7 @@ const en: Dict = {
   "list.inYourKitchen": "in your kitchen",
   "list.addPlaceholder": "Add an item…",
   "list.add": "Add",
+  "list.infoText": "Things to buy. Add an item, then check it off when you get it — it moves straight into your kitchen with the quantity you tell it.",
 
   "nearby.title": "Nearby",
   "nearby.subtitle": "Find ingredients near you",
@@ -145,6 +148,7 @@ const en: Dict = {
   "nearby.mapUseLocation": "Use my location",
   "nearby.mapNoKitchens": "No public kitchens near you yet.",
   "nearby.itemsCount": { one: "{n} item", other: "{n} items" },
+  "nearby.infoText": "Search what your neighbours have available, and see public kitchens on the map. Join or create a community to start sharing.",
 
   "profile.title": "Profile",
   "profile.account": "Account",
@@ -245,6 +249,7 @@ const it: Dict = {
   "common.done": "Fatto",
   "common.showPassword": "Mostra password",
   "common.hidePassword": "Nascondi password",
+  "common.pageInfo": "Informazioni su questa schermata",
 
   "nav.kitchen": "Cucina",
   "nav.list": "Spesa",
@@ -272,8 +277,8 @@ const it: Dict = {
   "kitchen.addIngredient": "Aggiungi ingrediente",
   "kitchen.enterSelect": "Seleziona gli ingredienti da usare",
   "kitchen.exitSelect": "Esci dalla selezione",
-  "kitchen.hintDefault": "Tocca per aggiornare la quantità · tieni premuto per i dettagli",
   "kitchen.hintSelect": "Tocca gli ingredienti da usare",
+  "kitchen.infoText": "Tutto quello che hai in casa. Tocca un prodotto per usarne un po'; tieni premuto per modificarne i dettagli. Tocca l'icona delle posate per scegliere ingredienti specifici e passare a Cucina.",
   "kitchen.emptyTitle": "La tua cucina è vuota",
   "kitchen.emptyText": "Tocca + per aggiungere il primo ingrediente.",
   "kitchen.noMatchTitle": "Nessun risultato",
@@ -296,6 +301,7 @@ const it: Dict = {
   "cook.minutes": "{n} min",
   "cook.have": "{n} disponibili",
   "cook.servings": "{n} porzioni",
+  "cook.infoText": "Ricette che puoi fare con quello che hai in cucina, ordinate per quanto ti manca. Seleziona ingredienti specifici per cucinare solo con quelli, oppure chiedi un'idea all'AI.",
 
   "list.title": "Lista della spesa",
   "list.toBuy": { one: "{n} prodotto da comprare", other: "{n} prodotti da comprare" },
@@ -306,6 +312,7 @@ const it: Dict = {
   "list.inYourKitchen": "nella tua cucina",
   "list.addPlaceholder": "Aggiungi un prodotto…",
   "list.add": "Aggiungi",
+  "list.infoText": "Le cose da comprare. Aggiungi un prodotto, poi spuntalo quando lo compri: passa subito in cucina con la quantità che indichi.",
 
   "nearby.title": "Vicino",
   "nearby.subtitle": "Trova ingredienti vicino a te",
@@ -338,6 +345,7 @@ const it: Dict = {
   "nearby.mapUseLocation": "Usa la mia posizione",
   "nearby.mapNoKitchens": "Ancora nessuna cucina pubblica vicino a te.",
   "nearby.itemsCount": { one: "{n} prodotto", other: "{n} prodotti" },
+  "nearby.infoText": "Cerca cosa hanno disponibile i tuoi vicini e guarda le cucine pubbliche sulla mappa. Entra o crea una community per iniziare a condividere.",
 
   "profile.title": "Profilo",
   "profile.account": "Account",
