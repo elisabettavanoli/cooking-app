@@ -180,7 +180,7 @@ const en: Dict = {
   "sheet.addToKitchen": "Add to kitchen",
   "sheet.addSubtitle": "Enter an ingredient, the category is filled in for you.",
   "sheet.ingredientName": "Ingredient name",
-  "sheet.ingredientPlaceholder": "e.g. 3 red tomatoes",
+  "sheet.ingredientPlaceholder": "e.g. Tomatoes",
   "sheet.quantity": "Quantity",
   "sheet.unit": "Unit",
   "sheet.category": "Category",
