@@ -21,9 +21,16 @@ later phase (not set up yet).
 - **Design tokens**: `src/lib/theme.ts` (TS, for JS-side colors) is mirrored by
   `src/styles/tokens.css` (`:root` custom properties, for CSS Modules). Keep the
   two in sync by hand.
-- **State**: `src/lib/store.tsx` — React context, persisted to IndexedDB via
-  `src/lib/storage.ts` (idb-keyval). Storage key `cooking-store-v1`. Hydration is
-  async and gated by `hydrated`.
+- **State**: `src/lib/store.tsx` — React context. Two providers, picked by
+  whether Supabase is configured: `LocalCookingProvider` persists the whole
+  state as one blob to IndexedDB via `src/lib/storage.ts` (idb-keyval, key
+  `cooking-store-v1`) for local-only / test mode; `RemoteCookingProvider`
+  (signed in) does optimistic local updates + per-entity Supabase reads/writes
+  through `src/lib/remote.ts` (`fetchAll`, `insert*/patch*/delete*` per row for
+  `pantry_items` / `shopping_items` / `profiles`), with a realtime channel
+  (`cooking:<userId>`) that debounce-resyncs on any change to the user's rows.
+  Recipes stay on-device in both modes. Hydration is async and gated by
+  `hydrated`.
 - **Server stand-ins**: `src/lib/ai.ts` runs deterministic local logic; swap for
   `fetch()` when a backend exists (keep the signatures).
 - **i18n**: `src/lib/i18n.tsx` — `<I18nProvider>` + `useI18n()` → `{ lang, setLang, t }`.
@@ -51,13 +58,16 @@ later phase (not set up yet).
   `directory = "./dist"`, `not_found_handling = "single-page-application"` for the
   SPA fallback). Deploy: `npx wrangler deploy`, or Cloudflare git integration
   (build `npm run build`, deploy `npx wrangler deploy`).
-- **Backend (in progress)**: Supabase. Client in `src/lib/supabase.ts` (null
-  when `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` are unset — app then runs
+- **Backend**: Supabase. Client in `src/lib/supabase.ts` (null when
+  `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` are unset — app then runs
   local-only). Auth context `src/lib/auth.tsx` (email magic link), login screen
   `src/components/AuthGate.tsx` wraps the shell in `App.tsx`. Env: `.env.example`
-  → `.env.local`. Next: Postgres schema (`households`, `household_members`,
-  `pantry_items`, …) + RLS, then move `store.tsx` persistence off the single
-  IndexedDB blob onto per-entity Supabase queries + realtime.
+  → `.env.local`. Schema + RLS in `supabase/schema.sql` (idempotent, applied to
+  the live project; no versioned migrations yet). Store persistence already runs
+  on per-entity Supabase queries + realtime when signed in (see **State**);
+  `pantry_items` / `shopping_items` / `profiles` are live. `share_requests`
+  exists in the schema (table + RLS + `ShareRequest` type + `requestsEnabled`
+  profile flag) but has no client code or UI yet.
 - **Community discovery**: `src/lib/community.ts` (pure Supabase fns, like
   `remote.ts`) + `src/lib/community-store.tsx` (`CommunityProvider` /
   `useCommunity()`, mounted under `CookingProvider` in `App.tsx`). Remote-only:
@@ -79,5 +89,10 @@ later phase (not set up yet).
 ## Not yet done
 
 - Capacitor wrapper (`ios/`, `android/`) for the app stores.
-- Supabase schema + RLS; `store.tsx` still persists one local blob (see above).
+- `share_requests` flow: client fns (create / accept / decline) + send UI + an
+  in-app inbox with realtime resync (no PWA push on iOS).
+- Versioned Supabase migrations (`supabase/migrations/`) — currently one
+  idempotent `schema.sql`.
 - iOS `apple-touch-startup-image` splash screens.
+- i18n: `de`/`fr`/`es` are shell-only; `foodNames.ts` is `it`-only; recipe-catalog
+  ingredient names (`recipes.ts`) are English-only with no per-language shape.
