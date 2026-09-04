@@ -35,8 +35,9 @@ export function UseItemSheet({
       status: quantity > 0 ? "active" : "consumed",
     });
   };
-  // Untracked (null) items start counting from the first tap on "+"; there's
-  // nothing to subtract from an unknown amount, so "-" stays disabled.
+  // Untracked (null) items are treated as 0 for the stepper: "+" starts them
+  // counting from the step; "-" goes straight to 0, marking it used up and
+  // removing it from the kitchen — the one way to clear an untracked item.
   const current = item.quantity ?? 0;
 
   return (
@@ -55,7 +56,6 @@ export function UseItemSheet({
           type="button"
           className={s.qtyBtn}
           onClick={() => setQuantity(current - step)}
-          disabled={item.quantity == null}
           aria-label={t("sheet.decrease")}
         >
           <Minus size={18} color={colors.foreground} />
