@@ -13,6 +13,10 @@ import { UseItemSheet } from "../components/UseItemSheet";
 import type { InventoryItem } from "../lib/types";
 import s from "./KitchenTab.module.css";
 
+/** Flip back to `true` to restore the per-tile status badges ("last", "old",
+ *  "3d", …). Hidden for now — see `tileBadge` below for what they showed. */
+const SHOW_TILE_BADGES = false;
+
 function daysUntil(date: string) {
   return Math.ceil((new Date(date).getTime() - Date.now()) / 86_400_000);
 }
@@ -77,7 +81,7 @@ function Tile({
   onLongPress: () => void;
 }) {
   const { lang } = useI18n();
-  const badge = tileBadge(item);
+  const badge = SHOW_TILE_BADGES ? tileBadge(item) : null;
   const handlers = useLongPress(onLongPress, onTap);
   return (
     <button
