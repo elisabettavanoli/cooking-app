@@ -252,9 +252,9 @@ const it: Dict = {
   "common.hidePassword": "Nascondi password",
 
   "nav.kitchen": "Cucina",
-  "nav.list": "Lista",
-  "nav.cook": "Cucinare",
-  "nav.nearby": "Vicino",
+  "nav.list": "Spesa",
+  "nav.cook": "Ricette",
+  "nav.nearby": "Vicini",
   "nav.profile": "Profilo",
 
   "category.fruit": "Frutta",
