@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import { Check, Plus, Search, ShoppingCart, Trash2, Undo2 } from "lucide-react";
 import { FoodIcon } from "../components/FoodIcon";
-import { ConfirmPurchaseSheet } from "../components/ConfirmPurchaseSheet";
 import { PageInfo } from "../components/PageInfo";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
@@ -28,7 +27,6 @@ export function ListTab() {
   const [search, setSearch] = useState("");
   const [draft, setDraft] = useState("");
   const [composerOpen, setComposerOpen] = useState(false);
-  const [confirmItem, setConfirmItem] = useState<ShoppingItem | null>(null);
 
   const commitDraft = async () => {
     const name = draft.trim();
@@ -37,7 +35,7 @@ export function ListTab() {
     addShoppingItem({
       conceptId: resolved.conceptId,
       displayName: name,
-      quantity: 1,
+      quantity: null,
       unit: "piece",
       category: resolved.category,
       source: "manual",
@@ -110,7 +108,7 @@ export function ListTab() {
                   <button
                     type="button"
                     className={[s.iconBtn, s.iconBtnPrimary].join(" ")}
-                    onClick={() => setConfirmItem(item)}
+                    onClick={() => markShoppingItemPurchased(item.id, true)}
                     aria-label={t("list.purchased")}
                   >
                     <Check size={16} color={colors.primaryForeground} />
@@ -190,15 +188,6 @@ export function ListTab() {
         >
           <Plus size={24} color={colors.primaryForeground} strokeWidth={2.5} />
         </button>
-      )}
-
-      {confirmItem && (
-        <ConfirmPurchaseSheet
-          item={confirmItem}
-          open={!!confirmItem}
-          onClose={() => setConfirmItem(null)}
-          onConfirm={(quantity) => markShoppingItemPurchased(confirmItem.id, true, quantity)}
-        />
       )}
     </div>
   );

@@ -101,7 +101,7 @@ interface ItemHitRow {
   concept_id: string;
   display_name: string;
   category: CommunityItemHit["category"];
-  quantity: number | string;
+  quantity: number | string | null;
   unit: CommunityItemHit["unit"];
 }
 
@@ -119,7 +119,7 @@ export async function searchSharedItem(query: string): Promise<CommunityItemHit[
     conceptId: r.concept_id,
     displayName: r.display_name,
     category: r.category,
-    quantity: Number(r.quantity),
+    quantity: r.quantity == null ? null : Number(r.quantity),
     unit: r.unit,
   }));
 }

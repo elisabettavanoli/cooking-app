@@ -38,7 +38,8 @@ export interface InventoryItem {
   id: string;
   conceptId: string;
   displayName: string;
-  quantity: number;
+  /** Untracked by default — set only where the user typed one in explicitly. */
+  quantity: number | null;
   unit: Unit;
   category: Category;
   expiry?: string;
@@ -51,7 +52,8 @@ export interface ShoppingItem {
   id: string;
   conceptId: string;
   displayName: string;
-  quantity: number;
+  /** Untracked by default — the list never shows or asks for it. */
+  quantity: number | null;
   unit: Unit;
   category: Category;
   purchased: boolean;
@@ -109,7 +111,7 @@ export interface CommunityItemHit {
   conceptId: string;
   displayName: string;
   category: Category;
-  quantity: number;
+  quantity: number | null;
   unit: Unit;
 }
 

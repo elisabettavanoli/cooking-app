@@ -35,6 +35,9 @@ export function UseItemSheet({
       status: quantity > 0 ? "active" : "consumed",
     });
   };
+  // Untracked (null) items start counting from the first tap on "+"; there's
+  // nothing to subtract from an unknown amount, so "-" stays disabled.
+  const current = item.quantity ?? 0;
 
   return (
     <BottomSheet
@@ -51,19 +54,20 @@ export function UseItemSheet({
         <button
           type="button"
           className={s.qtyBtn}
-          onClick={() => setQuantity(item.quantity - step)}
+          onClick={() => setQuantity(current - step)}
+          disabled={item.quantity == null}
           aria-label={t("sheet.decrease")}
         >
           <Minus size={18} color={colors.foreground} />
         </button>
         <div className={s.qtyValueWrap}>
-          <span className={s.qtyValue}>{item.quantity}</span>
-          <span className={s.qtyUnit}>{unitLabel(item.unit, t, item.quantity)}</span>
+          <span className={s.qtyValue}>{item.quantity ?? "—"}</span>
+          <span className={s.qtyUnit}>{unitLabel(item.unit, t, item.quantity ?? 1)}</span>
         </div>
         <button
           type="button"
           className={s.qtyBtn}
-          onClick={() => setQuantity(item.quantity + step)}
+          onClick={() => setQuantity(current + step)}
           aria-label={t("sheet.increase")}
         >
           <Plus size={18} color={colors.foreground} />
@@ -79,9 +83,7 @@ export function UseItemSheet({
           addShoppingItem({
             conceptId: item.conceptId,
             displayName: item.displayName,
-            // Restock at the default step (1, or 50 for g/ml), not whatever is
-            // left in the pantry.
-            quantity: step,
+            quantity: null,
             unit: item.unit,
             category: item.category,
             source: "from-inventory",

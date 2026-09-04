@@ -48,12 +48,16 @@ describe("App interactions", () => {
       await user.click(screen.getByRole("button", { name: /add ingredient/i }));
       const dialog = await screen.findByRole("dialog");
       await user.type(within(dialog).getByPlaceholderText(/tomatoes/i), "Sardines");
+      // Quantity is optional; type one in so the merge has something to add.
+      await user.type(within(dialog).getByPlaceholderText(/optional/i), "1");
       await user.click(within(dialog).getByRole("button", { name: /add to kitchen/i }));
       await waitFor(() => expect(screen.getByText("Sardines")).toBeDefined());
     }
 
     expect(screen.getAllByText("Sardines")).toHaveLength(1);
-    expect(screen.getByText("2 pieces")).toBeDefined();
+    // Merged quantity (1 + 1) shows as the tile's corner badge — just the
+    // number, since the unit is "piece".
+    expect(screen.getByText("2")).toBeDefined();
   });
 
   it("toggles a kitchen-sharing switch on the Profile tab", async () => {

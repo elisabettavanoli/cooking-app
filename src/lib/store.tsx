@@ -30,9 +30,8 @@ interface StoreActions {
   addShoppingItem: (item: Omit<ShoppingItem, "id" | "createdAt" | "purchased">) => void;
   updateShoppingItem: (id: string, updates: Partial<ShoppingItem>) => void;
   removeShoppingItem: (id: string) => void;
-  /** `quantity`, when marking purchased, overrides how much lands in the kitchen. */
-  markShoppingItemPurchased: (id: string, purchased: boolean, quantity?: number) => void;
-  moveShoppingItemToInventory: (id: string, quantityOverride?: number) => void;
+  markShoppingItemPurchased: (id: string, purchased: boolean) => void;
+  moveShoppingItemToInventory: (id: string) => void;
   toggleSelectedConcept: (conceptId: string) => void;
   clearSelectedConcepts: () => void;
   addRecipe: (recipe: Recipe) => void;
@@ -55,6 +54,16 @@ function makeId(): string {
     const r = (Math.random() * 16) | 0;
     return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
   });
+}
+
+/**
+ * Combine two possibly-untracked quantities when the same concept + unit
+ * already exists. Both unset → stays unset (we still don't know how much);
+ * one set → adopt it (better than nothing); both set → add them.
+ */
+function mergeQty(a: number | null, b: number | null): number | null {
+  if (a == null && b == null) return null;
+  return (a ?? 0) + (b ?? 0);
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -158,7 +167,7 @@ function LocalCookingProvider({ children }: { children: React.ReactNode }) {
         );
         if (existing) {
           return prev.map((i) =>
-            i.id === existing.id ? { ...i, quantity: i.quantity + item.quantity } : i,
+            i.id === existing.id ? { ...i, quantity: mergeQty(i.quantity, item.quantity) } : i,
           );
         }
         const newItem: InventoryItem = {
@@ -203,7 +212,7 @@ function LocalCookingProvider({ children }: { children: React.ReactNode }) {
         );
         if (existing) {
           return prev.map((i) =>
-            i.id === existing.id ? { ...i, quantity: i.quantity + item.quantity } : i,
+            i.id === existing.id ? { ...i, quantity: mergeQty(i.quantity, item.quantity) } : i,
           );
         }
         const newItem: ShoppingItem = {
@@ -232,28 +241,29 @@ function LocalCookingProvider({ children }: { children: React.ReactNode }) {
     [setShoppingList],
   );
 
-  const moveShoppingItemToInventory = useCallback((id: string, quantityOverride?: number) => {
+  const moveShoppingItemToInventory = useCallback((id: string) => {
     setState((prev) => {
       const item = prev.shoppingList.find((i) => i.id === id);
       if (!item) return prev;
       const concept = findConceptById(item.conceptId);
       const now = new Date().toISOString();
       const category = concept?.category ?? item.category;
-      const qty = quantityOverride ?? item.quantity;
 
       const existing = prev.inventory.find(
         (i) => i.conceptId === item.conceptId && i.unit === item.unit && i.status === "active",
       );
       const inventory = existing
         ? prev.inventory.map((i) =>
-            i.id === existing.id ? { ...i, quantity: i.quantity + qty } : i,
+            i.id === existing.id
+              ? { ...i, quantity: mergeQty(i.quantity, item.quantity) }
+              : i,
           )
         : [
             {
               id: makeId(),
               conceptId: item.conceptId,
               displayName: concept?.displayName ?? item.displayName,
-              quantity: qty,
+              quantity: item.quantity,
               unit: item.unit,
               category,
               status: "active" as const,
@@ -273,9 +283,9 @@ function LocalCookingProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const markShoppingItemPurchased = useCallback(
-    (id: string, purchased: boolean, quantity?: number) => {
+    (id: string, purchased: boolean) => {
       if (purchased) {
-        moveShoppingItemToInventory(id, quantity);
+        moveShoppingItemToInventory(id);
         return;
       }
       setShoppingList((prev) => prev.map((i) => (i.id === id ? { ...i, purchased: false } : i)));
@@ -438,7 +448,7 @@ function RemoteCookingProvider({ children }: { children: React.ReactNode }) {
         (i) => i.conceptId === item.conceptId && i.unit === item.unit && i.status === "active",
       );
       if (existing) {
-        const quantity = existing.quantity + item.quantity;
+        const quantity = mergeQty(existing.quantity, item.quantity);
         setInventory((prev) => prev.map((i) => (i.id === existing.id ? { ...i, quantity } : i)));
         remote.patchInventory(existing.id, { quantity }).catch(onWriteError);
         return;
@@ -487,7 +497,7 @@ function RemoteCookingProvider({ children }: { children: React.ReactNode }) {
         (i) => i.conceptId === item.conceptId && i.unit === item.unit && !i.purchased,
       );
       if (existing) {
-        const quantity = existing.quantity + item.quantity;
+        const quantity = mergeQty(existing.quantity, item.quantity);
         setShoppingList((prev) =>
           prev.map((i) => (i.id === existing.id ? { ...i, quantity } : i)),
         );
@@ -523,13 +533,12 @@ function RemoteCookingProvider({ children }: { children: React.ReactNode }) {
   );
 
   const moveShoppingItemToInventory = useCallback(
-    (id: string, quantityOverride?: number) => {
+    (id: string) => {
       if (!userId) return;
       const item = shopRef.current.find((i) => i.id === id);
       if (!item) return;
       const concept = findConceptById(item.conceptId);
       const category = concept?.category ?? item.category;
-      const qty = quantityOverride ?? item.quantity;
       const existing = invRef.current.find(
         (i) => i.conceptId === item.conceptId && i.unit === item.unit && i.status === "active",
       );
@@ -537,7 +546,7 @@ function RemoteCookingProvider({ children }: { children: React.ReactNode }) {
       setShoppingList((prev) => prev.map((i) => (i.id === id ? { ...i, purchased: true } : i)));
 
       if (existing) {
-        const quantity = existing.quantity + qty;
+        const quantity = mergeQty(existing.quantity, item.quantity);
         setInventory((prev) =>
           prev.map((i) => (i.id === existing.id ? { ...i, quantity } : i)),
         );
@@ -550,7 +559,7 @@ function RemoteCookingProvider({ children }: { children: React.ReactNode }) {
           id: makeId(),
           conceptId: item.conceptId,
           displayName: concept?.displayName ?? item.displayName,
-          quantity: qty,
+          quantity: item.quantity,
           unit: item.unit,
           category,
           status: "active",
@@ -567,9 +576,9 @@ function RemoteCookingProvider({ children }: { children: React.ReactNode }) {
   );
 
   const markShoppingItemPurchased = useCallback(
-    (id: string, purchased: boolean, quantity?: number) => {
+    (id: string, purchased: boolean) => {
       if (purchased) {
-        moveShoppingItemToInventory(id, quantity);
+        moveShoppingItemToInventory(id);
         return;
       }
       setShoppingList((prev) => prev.map((i) => (i.id === id ? { ...i, purchased: false } : i)));

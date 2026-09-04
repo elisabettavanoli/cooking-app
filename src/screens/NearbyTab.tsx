@@ -71,8 +71,12 @@ function CommunitySearch() {
                 </div>
                 <div className={s.resultMeta}>
                   {t("nearby.hitMeta", { owner: hit.ownerName, community: hit.communityName })}
-                  {" · "}
-                  {formatAmount(hit.quantity, hit.unit, t)}
+                  {hit.quantity != null && (
+                    <>
+                      {" · "}
+                      {formatAmount(hit.quantity, hit.unit, t)}
+                    </>
+                  )}
                 </div>
               </div>
             </div>

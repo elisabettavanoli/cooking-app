@@ -6,7 +6,7 @@ import { categoryMeta } from "../lib/data";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
 import { foodName } from "../lib/foodNames";
-import { formatAmount } from "../lib/units";
+import { compactAmount } from "../lib/units";
 import { useActiveInventory, useCooking } from "../lib/store";
 import { AddItemSheet } from "../components/AddItemSheet";
 import { EditItemSheet } from "../components/EditItemSheet";
@@ -29,7 +29,7 @@ function tileBadge(item: InventoryItem): { text: string; color: string; bg: stri
     if (d < 0) return { text: "old", color: colors.destructive, bg: "#FCE0E4" };
     if (d <= 3) return { text: d === 0 ? "today" : `${d}d`, color: colors.warn, bg: colors.warnSoft };
   }
-  if (item.unit === "piece" && item.quantity <= 1) {
+  if (item.unit === "piece" && item.quantity != null && item.quantity <= 1) {
     return { text: "last", color: colors.low, bg: colors.lowSoft };
   }
   return null;
@@ -82,7 +82,7 @@ function Tile({
   onTap: () => void;
   onLongPress: () => void;
 }) {
-  const { lang, t } = useI18n();
+  const { lang } = useI18n();
   const badge = SHOW_TILE_BADGES ? tileBadge(item) : null;
   const handlers = useLongPress(onLongPress, onTap);
   return (
@@ -99,6 +99,12 @@ function Tile({
           </span>
         </span>
       )}
+      {/* Quantity is only shown once you've told the app how much you have —
+          untracked (null) items get no badge at all. Same corner as the status
+          badge above, but that one is currently off (SHOW_TILE_BADGES). */}
+      {item.quantity != null && (
+        <span className={s.qtyBadge}>{compactAmount(item.quantity, item.unit)}</span>
+      )}
       {selected && (
         <span className={s.tileCheck}>
           <Check size={10} color={colors.primaryForeground} strokeWidth={3} />
@@ -107,7 +113,6 @@ function Tile({
       <FoodIcon iconKey={item.conceptId} category={item.category} size={30} variant="bare" />
       <span className={s.tileTexts}>
         <span className={s.tileName}>{foodName(item.conceptId, lang, item.displayName)}</span>
-        <span className={s.tileQty}>{formatAmount(item.quantity, item.unit, t)}</span>
       </span>
     </button>
   );

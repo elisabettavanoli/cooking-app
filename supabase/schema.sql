@@ -86,7 +86,8 @@ create table if not exists public.pantry_items (
   owner_id     uuid not null references auth.users(id) on delete cascade,
   concept_id   text not null,
   display_name text not null,
-  quantity     numeric not null default 1,
+  -- Untracked by default (null) — set only where the user typed one in.
+  quantity     numeric,
   unit         text not null default 'piece'  check (unit = any (public.co_units())),
   category     text not null default 'other'  check (category = any (public.co_categories())),
   expiry       date,
@@ -102,7 +103,8 @@ create table if not exists public.shopping_items (
   owner_id     uuid not null references auth.users(id) on delete cascade,
   concept_id   text not null,
   display_name text not null,
-  quantity     numeric not null default 1,
+  -- Untracked by default (null) — the shopping list never shows or asks for it.
+  quantity     numeric,
   unit         text not null default 'piece' check (unit = any (public.co_units())),
   category     text not null default 'other' check (category = any (public.co_categories())),
   purchased    boolean not null default false,
@@ -110,6 +112,15 @@ create table if not exists public.shopping_items (
   created_at   timestamptz not null default now()
 );
 create index if not exists shopping_items_owner_idx on public.shopping_items (owner_id);
+
+-- quantity became optional (null = untracked) after the tables above already
+-- existed on the live project — the `create table if not exists` blocks won't
+-- touch it, so migrate existing rows/columns explicitly. Both statements are
+-- no-ops if already applied.
+alter table public.pantry_items alter column quantity drop not null;
+alter table public.pantry_items alter column quantity drop default;
+alter table public.shopping_items alter column quantity drop not null;
+alter table public.shopping_items alter column quantity drop default;
 
 create table if not exists public.share_requests (
   id           uuid primary key default gen_random_uuid(),

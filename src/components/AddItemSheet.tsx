@@ -22,7 +22,7 @@ export function AddItemSheet({
   const [rawName, setRawName] = useState("");
   const [category, setCategory] = useState<Category>("other");
   const [categoryTouched, setCategoryTouched] = useState(false);
-  const [quantity, setQuantity] = useState("1");
+  const [quantity, setQuantity] = useState("");
   const [unit, setUnit] = useState<Unit>("piece");
   const [notes, setNotes] = useState("");
   const [, setResolved] = useState<{ name: string; conceptId: string } | null>(null);
@@ -31,7 +31,7 @@ export function AddItemSheet({
     setRawName("");
     setCategory("other");
     setCategoryTouched(false);
-    setQuantity("1");
+    setQuantity("");
     setUnit("piece");
     setNotes("");
     setResolved(null);
@@ -49,8 +49,11 @@ export function AddItemSheet({
 
   const handleSubmit = async () => {
     const typed = rawName.trim();
-    const qty = parseFloat(quantity) || 0;
-    if (!typed || qty <= 0) return;
+    if (!typed) return;
+    // Quantity is optional — untracked (null) unless you type one in.
+    const trimmedQty = quantity.trim();
+    const qty = trimmedQty ? Number(trimmedQty) : null;
+    if (qty !== null && (!Number.isFinite(qty) || qty <= 0)) return;
     const match = await resolveName(typed);
     // Keep the name the user typed; the matched concept only lends its id
     // (recipe matching) + icon + category.
@@ -93,6 +96,7 @@ export function AddItemSheet({
             value={quantity}
             onChangeText={setQuantity}
             inputMode="decimal"
+            placeholder={t("sheet.quantityOptional")}
             style={{ flex: 1 }}
           />
           <div className={s.grow2}>
