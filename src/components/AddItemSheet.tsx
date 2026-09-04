@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import { BottomSheet, Button, ChipSelect, Field, Segmented, uiStyles } from "./ui";
+import { BottomSheet, Button, ChipSelect, Field, uiStyles } from "./ui";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
 import { categories, units } from "../lib/data";
@@ -10,22 +10,16 @@ import { categorizeIngredientAsync } from "../lib/ai";
 import type { Category, Unit } from "../lib/types";
 import s from "./AddItemSheet.module.css";
 
-type AddMode = "inventory" | "list";
-
 export function AddItemSheet({
   open,
   onClose,
-  defaultMode = "inventory",
 }: {
   open: boolean;
   onClose: () => void;
-  defaultMode?: AddMode;
 }) {
   const { t } = useI18n();
-  const { addInventoryItem, addShoppingItem } = useCooking();
-  const [mode, setMode] = useState<AddMode>(defaultMode);
+  const { addInventoryItem } = useCooking();
   const [rawName, setRawName] = useState("");
-  const [displayName, setDisplayName] = useState("");
   const [category, setCategory] = useState<Category>("other");
   const [categoryTouched, setCategoryTouched] = useState(false);
   const [quantity, setQuantity] = useState("1");
@@ -35,7 +29,6 @@ export function AddItemSheet({
 
   const reset = () => {
     setRawName("");
-    setDisplayName("");
     setCategory("other");
     setCategoryTouched(false);
     setQuantity("1");
@@ -59,18 +52,19 @@ export function AddItemSheet({
     const qty = parseFloat(quantity) || 0;
     if (!typed || qty <= 0) return;
     const match = await resolveName(typed);
-    // Keep what the user typed. The "Display name" field is an explicit override;
-    // the matched concept only lends its id (recipe matching) + icon + category.
-    const name = displayName.trim() || typed;
+    // Keep the name the user typed; the matched concept only lends its id
+    // (recipe matching) + icon + category.
     const conceptId = match?.conceptId ?? typed.toLowerCase().replace(/\s+/g, "-");
     const finalCategory: Category = categoryTouched ? category : match?.category ?? category;
 
-    const base = { conceptId, displayName: name, category: finalCategory, quantity: qty, unit, notes };
-    if (mode === "inventory") {
-      addInventoryItem(base);
-    } else {
-      addShoppingItem({ ...base, source: "manual" });
-    }
+    addInventoryItem({
+      conceptId,
+      displayName: typed,
+      category: finalCategory,
+      quantity: qty,
+      unit,
+      notes,
+    });
     reset();
     onClose();
   };
@@ -79,19 +73,10 @@ export function AddItemSheet({
     <BottomSheet
       open={open}
       onClose={onClose}
-      title={mode === "inventory" ? t("sheet.addToKitchen") : t("sheet.addToList")}
+      title={t("sheet.addToKitchen")}
       subtitle={t("sheet.addSubtitle")}
     >
       <div className={uiStyles.sheetScroll}>
-        <Segmented
-          value={mode}
-          onChange={setMode}
-          options={[
-            { value: "inventory", label: t("sheet.modeKitchen") },
-            { value: "list", label: t("sheet.modeList") },
-          ]}
-        />
-
         <Field
           label={t("sheet.ingredientName")}
           value={rawName}
@@ -100,13 +85,6 @@ export function AddItemSheet({
             void resolveName(rawName);
           }}
           placeholder={t("sheet.ingredientPlaceholder")}
-        />
-
-        <Field
-          label={t("sheet.displayName")}
-          value={displayName}
-          onChangeText={setDisplayName}
-          placeholder={t("sheet.displayNamePlaceholder")}
         />
 
         <div className={s.row}>
@@ -150,7 +128,7 @@ export function AddItemSheet({
         <div className={s.rowActions}>
           <Button label={t("common.cancel")} variant="outline" onPress={onClose} style={{ flex: 1 }} />
           <Button
-            label={mode === "inventory" ? t("sheet.addToKitchenBtn") : t("sheet.addToListBtn")}
+            label={t("sheet.addToKitchenBtn")}
             onPress={() => {
               void handleSubmit();
             }}

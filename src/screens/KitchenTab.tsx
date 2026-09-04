@@ -254,7 +254,7 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
         </div>
       )}
 
-      <AddItemSheet open={addOpen} onClose={() => setAddOpen(false)} defaultMode="inventory" />
+      <AddItemSheet open={addOpen} onClose={() => setAddOpen(false)} />
       {editItem && (
         <EditItemSheet item={editItem} open={!!editItemId} onClose={() => setEditItemId(null)} />
       )}
