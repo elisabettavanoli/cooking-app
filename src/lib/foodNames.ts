@@ -11,6 +11,7 @@
  * Category labels live in the i18n string tables under `category.<key>`.
  */
 import type { LangCode } from "./category/locales";
+import { findConceptById } from "./data";
 
 const it: Record<string, string> = {
   // Fruit
@@ -163,10 +164,18 @@ const it: Record<string, string> = {
 const TABLES: Partial<Record<LangCode, Record<string, string>>> = { it };
 
 /**
- * Display name for a catalog concept in the active UI language, falling back to
- * `fallback` (the stored English `displayName`, or whatever a custom item was
- * typed as) when there's no translation.
+ * Display name for an item in the active UI language.
+ *
+ * The curated translation is used only when `stored` is the concept's canonical
+ * English `displayName` — i.e. it was auto-filled (seed data, or a recipe-sourced
+ * shopping item). A name the user typed themselves ("Nutella", "latte di mamma")
+ * is kept verbatim, in any language, even when its concept has a translation.
+ * Custom items (concept id not in the catalog) always fall back to `stored`.
  */
-export function foodName(conceptId: string, lang: LangCode, fallback: string): string {
-  return TABLES[lang]?.[conceptId] ?? fallback;
+export function foodName(conceptId: string, lang: LangCode, stored: string): string {
+  const translated = TABLES[lang]?.[conceptId];
+  if (!translated) return stored;
+  const canonical = findConceptById(conceptId)?.displayName;
+  const isAutoFilled = !!canonical && stored.trim().toLowerCase() === canonical.toLowerCase();
+  return isAutoFilled ? translated : stored;
 }
