@@ -35,10 +35,12 @@ npm run typecheck
 
 ## Regenerate PWA icons
 
+Edit `assets/icon.svg` (the master — a full-bleed coral tile), then:
+
 ```bash
-npx pwa-assets-generator --preset minimal-2023 assets/icon.png
+npx pwa-assets-generator            # config: pwa-assets.config.ts
 # then move pwa-*.png, maskable-icon-*.png, apple-touch-icon-*.png, favicon.ico
-# into public/
+# from assets/ into public/, and copy assets/icon.svg to public/favicon.svg
 ```
 
 ## Project layout
@@ -48,7 +50,7 @@ npx pwa-assets-generator --preset minimal-2023 assets/icon.png
 - `src/components/`, `src/screens/` — DOM UI + co-located `*.module.css`.
 - `src/styles/` — `tokens.css` (design tokens mirroring `lib/theme.ts`) + `global.css`.
 - `public/` — PWA icons and favicon.
-- `assets/` — source `icon.png` for icon generation.
+- `assets/` — source `icon.svg` for icon generation.
 
 ## Roadmap
 

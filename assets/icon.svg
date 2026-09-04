@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Co-oking app icon — direction "Twin-O & steam".
+       Full-bleed coral so the maskable / adaptive crop bleeds to the edge;
+       the mark stays inside the centre safe zone (radius ~205 from centre). -->
+  <rect width="512" height="512" fill="#F0384B"/>
+  <g fill="none" stroke="#FFB020" stroke-width="22" stroke-linecap="round">
+    <path d="M312 190 C 295 163 331 146 314 120 C 301 101 325 84 316 62"/>
+    <path d="M362 183 C 347 160 377 143 362 120 C 352 105 370 91 363 72"/>
+  </g>
+  <g fill="none" stroke="#FFFFFF" stroke-width="28">
+    <circle cx="162" cy="304" r="80"/>
+    <circle cx="350" cy="304" r="80"/>
+  </g>
+</svg>

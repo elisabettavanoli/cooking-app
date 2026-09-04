@@ -49,9 +49,12 @@ later phase (not set up yet).
   (`src/lib/recipes.ts`) are still English-only.
 - **Sheets**: `BottomSheet` in `src/components/ui.tsx` is a native `<dialog>`.
 - **PWA**: `vite-plugin-pwa` in `vite.config.ts` (generateSW, `registerType: prompt`).
-  Icons in `public/` (regenerate: `npx pwa-assets-generator --preset minimal-2023
-  assets/icon.png`, then move `pwa-*`/`maskable-*`/`apple-touch-icon-*`/`favicon.ico`
-  into `public/`). SW update UI: `src/components/UpdateToast.tsx`.
+  Master icon `assets/icon.svg` (full-bleed coral "twin-O & steam" mark);
+  `public/` icons regenerate with `npx pwa-assets-generator` (config
+  `pwa-assets.config.ts`, padding 0 + coral canvas so every size bleeds
+  edge-to-edge), then move `pwa-*`/`maskable-*`/`apple-touch-icon-*`/`favicon.ico`
+  from `assets/` into `public/` and copy `icon.svg` to `public/favicon.svg`.
+  SW update UI: `src/components/UpdateToast.tsx`.
 - iOS/standalone meta tags live in `index.html`. Safe areas via
   `env(safe-area-inset-*)` and the `--safe-*` tokens; heights use `dvh`.
 - **Hosting**: Cloudflare Workers static assets (`wrangler.toml` `[assets]`,

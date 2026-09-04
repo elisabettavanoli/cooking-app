@@ -3,9 +3,10 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
 
-// PWA icons live in public/ and are (re)generated with:
-//   npx pwa-assets-generator --preset minimal-2023 assets/icon.png
-//   (then move the pwa-*/maskable-*/apple-touch-icon-*/favicon.ico into public/)
+// PWA icons live in public/ and are (re)generated from assets/icon.svg with:
+//   npx pwa-assets-generator            (config in pwa-assets.config.ts)
+//   (then move the pwa-*/maskable-*/apple-touch-icon-*/favicon.ico into public/,
+//    and copy assets/icon.svg to public/favicon.svg)
 export default defineConfig({
   plugins: [
     react(),
@@ -13,7 +14,7 @@ export default defineConfig({
       strategies: "generateSW",
       registerType: "prompt",
       injectRegister: false,
-      includeAssets: ["favicon.ico", "apple-touch-icon-180x180.png"],
+      includeAssets: ["favicon.svg", "favicon.ico", "apple-touch-icon-180x180.png"],
       manifest: {
         id: "/",
         name: "Co-oking",
