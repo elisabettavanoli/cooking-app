@@ -138,10 +138,13 @@
   color: var(--muted-foreground);
 }
 
+/* Fixed-size cells that wrap to the next row when the screen runs out of
+   width — same feel as a native app's icon grid, not a fluid web layout. */
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
   gap: 8px;
+  justify-content: start;
 }
 .tile {
   aspect-ratio: 1;
