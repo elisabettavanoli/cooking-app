@@ -58,11 +58,16 @@ const INSTACART_DEPARTMENT_MAP = {
   "pantry": "pantry",
   breakfast: "breakfast-snacks",
   deli: "meat-fish",
+  // null here just means "no reliable department-wide guess" — every real
+  // aisle in these three departments has its own entry above, so this is a
+  // safety net for an aisle that isn't; it resolves to "other" via the
+  // fallback below, same as the rest.
   produce: null,
   frozen: null,
   snacks: null,
-  // Non-food departments are dropped: we never want to *learn* cosmetics,
-  // cleaning products, pet or baby items — the app's "other" is a last resort.
+  // Non-food departments (cosmetics, cleaning, pet, baby, paper goods, …) map
+  // to "other" via the fallback below — every product row is kept and
+  // categorised, none silently dropped.
   household: null,
   "personal care": null,
   pets: null,
@@ -75,7 +80,9 @@ const INSTACART_DEPARTMENT_MAP = {
 
 /**
  * Instacart `aisles.csv` name → Category. Applied before the department map.
- * Covers all 134 aisles; null = drop.
+ * Covers all 134 aisles; null = ambiguous at the aisle level, fall through to
+ * the department map, then to "other" — see ingestInstacart(). Nothing is
+ * dropped.
  */
 const INSTACART_AISLE_MAP = {
   // fruit / vegetables
@@ -97,7 +104,10 @@ const INSTACART_AISLE_MAP = {
   "canned meat seafood": "meat-fish",
   "frozen meat seafood": "meat-fish",
   "tofu meat alternatives": "meat-fish",
-  "frozen vegan vegetarian": "meat-fish",
+  // "frozen vegan vegetarian" is frozen ready-meals (veggie burgers, tacos,
+  // burritos, pizza) more than meat substitutes — pantry, like the app's other
+  // frozen-meal aisles, not meat-fish.
+  "frozen vegan vegetarian": "pantry",
   // dairy
   milk: "dairy",
   yogurt: "dairy",
@@ -184,11 +194,15 @@ const INSTACART_AISLE_MAP = {
   "nuts seeds dried fruit": "pantry",
   "bulk dried fruits vegetables": "pantry",
   "pickled goods olives": "pantry",
-  // dropped
+  // Sampled the real product names before deciding these — see the aisle
+  // names/samples in scripts/sources/README.md.
+  "mint gum": "breakfast-snacks", // gum/mints — candy, like "candy chocolate"
+  refrigerated: "drinks", // sampled: almost entirely juices/kombucha/lemonade
+  // Genuinely mixed or not food in the cooking sense — "other" (below) via the
+  // fallback, not dropped: vitamins/supplements, protein shakes vs. bars with
+  // no clear majority.
   "protein meal replacements": null,
-  "mint gum": null,
   "vitamins supplements": null,
-  refrigerated: null,
 };
 
 /**
@@ -364,9 +378,11 @@ function ingestInstacart(dir, votes) {
   for (const row of readCsvObjects(products)) {
     const aisle = aisleById.get(row.aisle_id);
     const dept = deptById.get(row.department_id);
+    // Every row gets a category — aisle, then department, then "other". Nothing
+    // is dropped, so a non-food product (cosmetics, pet food, …) is learned as
+    // "other" rather than silently missing from the lexicon.
     const category =
-      INSTACART_AISLE_MAP[aisle] ?? INSTACART_DEPARTMENT_MAP[dept] ?? null;
-    if (!category) continue;
+      INSTACART_AISLE_MAP[aisle] ?? INSTACART_DEPARTMENT_MAP[dept] ?? "other";
     addVote(votes, "en", row.product_name, category, 1);
     kept += 1;
   }
