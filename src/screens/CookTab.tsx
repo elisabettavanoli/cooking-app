@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { ChefHat, Clock, Leaf, Sparkles, Users } from "lucide-react";
 import { Button } from "../components/ui";
+import { PageInfo } from "../components/PageInfo";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
 import { useActiveInventory, useCooking } from "../lib/store";
@@ -38,9 +39,12 @@ export function CookTab() {
   return (
     <div className={s.screen}>
       <div className={s.scroll}>
-        <h1 className={s.title}>
-          {selectedConcepts.length > 0 ? t("cook.titleSelected") : t("cook.titleDefault")}
-        </h1>
+        <div className={s.headerRow}>
+          <h1 className={s.title}>
+            {selectedConcepts.length > 0 ? t("cook.titleSelected") : t("cook.titleDefault")}
+          </h1>
+          <PageInfo title={t("cook.titleDefault")} text={t("cook.infoText")} />
+        </div>
         <p className={s.subtitle}>
           {selectedConcepts.length > 0
             ? t("cook.subtitleSelected", { n: selectedConcepts.length })

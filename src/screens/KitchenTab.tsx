@@ -11,6 +11,7 @@ import { useActiveInventory, useCooking } from "../lib/store";
 import { AddItemSheet } from "../components/AddItemSheet";
 import { EditItemSheet } from "../components/EditItemSheet";
 import { UseItemSheet } from "../components/UseItemSheet";
+import { PageInfo } from "../components/PageInfo";
 import type { InventoryItem } from "../lib/types";
 import s from "./KitchenTab.module.css";
 
@@ -162,6 +163,7 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
               ) : null}
             </p>
           </div>
+          <PageInfo title={t("kitchen.title")} text={t("kitchen.infoText")} />
         </div>
 
         <div className={s.searchRow}>
@@ -190,9 +192,7 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
             )}
           </button>
         </div>
-        <p className={s.hint}>
-          {selectionMode ? t("kitchen.hintSelect") : t("kitchen.hintDefault")}
-        </p>
+        {selectionMode && <p className={s.hint}>{t("kitchen.hintSelect")}</p>}
 
         {grouped.length === 0 && (
           <div className={s.emptyState}>

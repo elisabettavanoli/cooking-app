@@ -1,0 +1,17 @@
+.btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.text {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--foreground);
+}
