@@ -22,15 +22,19 @@ export function EditItemSheet({
   const { updateInventoryItem, removeInventoryItem } = useCooking();
   const [displayName, setDisplayName] = useState(item.displayName);
   const [category, setCategory] = useState<Category>(item.category);
-  const [quantity, setQuantity] = useState(String(item.quantity));
+  const [quantity, setQuantity] = useState(item.quantity != null ? String(item.quantity) : "");
   const [unit, setUnit] = useState<Unit>(item.unit);
   const [notes, setNotes] = useState(item.notes ?? "");
 
   const handleSave = () => {
+    // Quantity is optional — clear the field to go back to untracked (null).
+    const trimmedQty = quantity.trim();
+    const qty = trimmedQty ? Number(trimmedQty) : null;
+    if (qty !== null && (!Number.isFinite(qty) || qty < 0)) return;
     updateInventoryItem(item.id, {
       displayName,
       category,
-      quantity: parseFloat(quantity) || 0,
+      quantity: qty,
       unit,
       notes,
     });
@@ -54,6 +58,7 @@ export function EditItemSheet({
             value={quantity}
             onChangeText={setQuantity}
             inputMode="decimal"
+            placeholder={t("sheet.quantityOptional")}
             style={{ flex: 1 }}
           />
           <div className={s.grow2}>

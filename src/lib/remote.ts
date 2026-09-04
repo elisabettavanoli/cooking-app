@@ -13,7 +13,7 @@ interface PantryRow {
   id: string;
   concept_id: string;
   display_name: string;
-  quantity: number | string;
+  quantity: number | string | null;
   unit: InventoryItem["unit"];
   category: InventoryItem["category"];
   expiry: string | null;
@@ -26,7 +26,7 @@ interface ShoppingRow {
   id: string;
   concept_id: string;
   display_name: string;
-  quantity: number | string;
+  quantity: number | string | null;
   unit: ShoppingItem["unit"];
   category: ShoppingItem["category"];
   purchased: boolean;
@@ -49,7 +49,7 @@ const toInventory = (r: PantryRow): InventoryItem => ({
   id: r.id,
   conceptId: r.concept_id,
   displayName: r.display_name,
-  quantity: Number(r.quantity),
+  quantity: r.quantity == null ? null : Number(r.quantity),
   unit: r.unit,
   category: r.category,
   expiry: r.expiry ?? undefined,
@@ -62,7 +62,7 @@ const toShopping = (r: ShoppingRow): ShoppingItem => ({
   id: r.id,
   conceptId: r.concept_id,
   displayName: r.display_name,
-  quantity: Number(r.quantity),
+  quantity: r.quantity == null ? null : Number(r.quantity),
   unit: r.unit,
   category: r.category,
   purchased: r.purchased,

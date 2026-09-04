@@ -7,7 +7,11 @@ export function matchRecipe(recipe: Recipe, available: InventoryItem[]): RecipeM
   const optionalHave: RecipeIngredient[] = [];
 
   for (const ing of recipe.ingredients) {
-    const inv = available.find((i) => i.conceptId === ing.conceptId && i.quantity >= ing.quantity);
+    // Untracked quantity (null) counts as "enough" — the user told us they
+    // have it, just didn't say how much.
+    const inv = available.find(
+      (i) => i.conceptId === ing.conceptId && (i.quantity == null || i.quantity >= ing.quantity),
+    );
     if (inv) {
       have.push(ing);
     } else if (ing.optional) {

@@ -115,7 +115,7 @@ const en: Dict = {
   "list.inYourKitchen": "in your kitchen",
   "list.addPlaceholder": "Add an item…",
   "list.add": "Add",
-  "list.infoText": "Things to buy. Add an item, then check it off when you get it — it moves straight into your kitchen with the quantity you tell it.",
+  "list.infoText": "Things to buy. Add an item, then check it off when you get it — it moves straight into your kitchen.",
 
   "nearby.title": "Nearby",
   "nearby.subtitle": "Find ingredients near you",
@@ -186,6 +186,7 @@ const en: Dict = {
   "sheet.ingredientName": "Ingredient name",
   "sheet.ingredientPlaceholder": "e.g. Tomatoes",
   "sheet.quantity": "Quantity",
+  "sheet.quantityOptional": "Optional",
   "sheet.unit": "Unit",
   "sheet.category": "Category",
 
@@ -209,7 +210,6 @@ const en: Dict = {
   "sheet.editSubtitle": "Adjust name, quantity, or category.",
   "sheet.name": "Name",
   "sheet.useIntro": "Lower the amount as you use it — reaching zero clears it from your kitchen.",
-  "sheet.confirmPurchaseIntro": "How many did you get?",
   "sheet.decrease": "Decrease quantity",
   "sheet.increase": "Increase quantity",
   "sheet.addToShoppingList": "Add to shopping list",
@@ -312,7 +312,7 @@ const it: Dict = {
   "list.inYourKitchen": "nella tua cucina",
   "list.addPlaceholder": "Aggiungi un prodotto…",
   "list.add": "Aggiungi",
-  "list.infoText": "Le cose da comprare. Aggiungi un prodotto, poi spuntalo quando lo compri: passa subito in cucina con la quantità che indichi.",
+  "list.infoText": "Le cose da comprare. Aggiungi un prodotto, poi spuntalo quando lo compri: passa subito in cucina.",
 
   "nearby.title": "Vicino",
   "nearby.subtitle": "Trova ingredienti vicino a te",
@@ -383,6 +383,7 @@ const it: Dict = {
   "sheet.ingredientName": "Nome dell'ingrediente",
   "sheet.ingredientPlaceholder": "es. Pomodori",
   "sheet.quantity": "Quantità",
+  "sheet.quantityOptional": "Facoltativa",
   "sheet.unit": "Unità",
   "sheet.category": "Categoria",
 
@@ -406,7 +407,6 @@ const it: Dict = {
   "sheet.editSubtitle": "Cambia nome, quantità o categoria.",
   "sheet.name": "Nome",
   "sheet.useIntro": "Riduci la quantità man mano che lo usi — a zero sparisce dalla cucina.",
-  "sheet.confirmPurchaseIntro": "Quanti ne hai presi?",
   "sheet.decrease": "Riduci la quantità",
   "sheet.increase": "Aumenta la quantità",
   "sheet.addToShoppingList": "Aggiungi alla lista della spesa",
