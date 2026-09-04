@@ -20,6 +20,13 @@ import { primeCache } from "./lib/category";
 // synchronously on the first keystroke.
 void primeCache();
 
+// App feel: iOS Safari still honours pinch-zoom gestures even with
+// `user-scalable=no` / `touch-action`. Cancel the gesture events it fires so the
+// PWA can't be zoomed like a web page.
+for (const evt of ["gesturestart", "gesturechange", "gestureend"]) {
+  document.addEventListener(evt, (e) => e.preventDefault(), { passive: false });
+}
+
 const container = document.getElementById("root");
 if (!container) throw new Error("Root container #root not found");
 
