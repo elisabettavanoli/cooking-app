@@ -4,10 +4,11 @@
  * backend. When a real API is wired up later, swap these implementations for
  * fetch() calls and keep the same signatures.
  */
-import { findConceptByName, findConceptById, recipeCatalog } from "./data";
+import { findConceptByName, findConceptByNameExact, findConceptByToken, findConceptById, recipeCatalog } from "./data";
 import type { AICategorizationResult, Category, Recipe } from "./types";
 import {
   resolveCategory,
+  normalizeName,
   cacheKey,
   getCachedCategory,
   rememberCategory,
@@ -35,22 +36,43 @@ export function categorizeIngredient(
 ): AICategorizationResult {
   const trimmed = name.trim();
   const resolution = resolveCategory(trimmed, opts);
-  const concept = findConceptByName(trimmed);
 
-  // Adopt the curated concept's id + icon when the resolver chose it, or (for
-  // English only) when it agrees with the resolved category. The English gate
-  // matters: the catalog matches loosely by substring, so "jus d'orange" would
-  // otherwise borrow the orange concept the moment the token vote also guessed
-  // produce.
-  const conceptAgrees =
-    resolution.source === "concept" ||
-    (resolution.lang === "en" && !!concept && concept.category === resolution.category);
-  if (concept && conceptAgrees) {
+  // Exact whole-name/alias match — trusted outright. A single-token exact
+  // match (e.g. "pesce" inside "bastoncini di pesce" or "pesce fritto") is
+  // only trusted when it agrees with the resolver's own category: the token
+  // is still just one word out of the phrase, and another word can change
+  // what the product actually is ("succo di mela" contains "mela"/apple but
+  // is a juice, not the fruit — the resolver's keyword-stem step already
+  // knows "succo" means drinks, so the mismatch vetoes the token guess).
+  const tokenConcept = findConceptByToken(
+    normalizeName(trimmed, opts.lang ?? resolution.lang).tokens,
+  );
+  const safeConcept =
+    findConceptByNameExact(trimmed) ??
+    (tokenConcept && (resolution.category === null || tokenConcept.category === resolution.category)
+      ? tokenConcept
+      : undefined);
+  if (safeConcept) {
     return {
-      conceptId: concept.id,
-      displayName: concept.displayName,
-      category: concept.category,
-      iconKey: concept.iconKey,
+      conceptId: safeConcept.id,
+      displayName: safeConcept.displayName,
+      category: safeConcept.category,
+      iconKey: safeConcept.iconKey,
+      confidence: 0.95,
+    };
+  }
+
+  // English-only fuzzy substring fallback: the catalog matches loosely by
+  // substring, so "jus d'orange" would otherwise borrow the orange concept
+  // the moment the token vote also guessed produce. Only trusted when it
+  // agrees with the resolver's own category call.
+  const fuzzyConcept = resolution.lang === "en" ? findConceptByName(trimmed) : undefined;
+  if (fuzzyConcept && fuzzyConcept.category === resolution.category) {
+    return {
+      conceptId: fuzzyConcept.id,
+      displayName: fuzzyConcept.displayName,
+      category: fuzzyConcept.category,
+      iconKey: fuzzyConcept.iconKey,
       confidence: 0.95,
     };
   }

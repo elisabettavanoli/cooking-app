@@ -53,20 +53,20 @@ const c = (
 
 export const concepts: IngredientConcept[] = [
   // Fruit
-  c("lemon", "Lemon", "fruit", "lemon", ["lemons"]),
+  c("lemon", "Lemon", "fruit", "lemon", ["lemons", "limone", "limoni"]),
   c("lime", "Lime", "fruit", "lime", ["limes"]),
   c("avocado", "Avocado", "fruit", "avocado", ["avocados"]),
-  c("apple", "Apple", "fruit", "apple", ["apples"]),
+  c("apple", "Apple", "fruit", "apple", ["apples", "mela", "mele"]),
   c("banana", "Banana", "fruit", "banana", ["bananas"]),
-  c("orange", "Orange", "fruit", "orange", ["oranges"]),
+  c("orange", "Orange", "fruit", "orange", ["oranges", "arancia", "arance"]),
   c("berries", "Berries", "fruit", "berries", ["strawberries", "blueberries", "raspberries"]),
 
   // Vegetables
-  c("tomato", "Tomato", "vegetables", "tomato", ["tomatoes", "cherry tomato", "roma tomato"]),
-  c("onion", "Onion", "vegetables", "onion", ["onions", "yellow onion", "red onion"]),
-  c("garlic", "Garlic", "vegetables", "garlic", ["garlic cloves"]),
-  c("carrot", "Carrot", "vegetables", "carrot", ["carrots"]),
-  c("potato", "Potato", "vegetables", "potato", ["potatoes"]),
+  c("tomato", "Tomato", "vegetables", "tomato", ["tomatoes", "cherry tomato", "roma tomato", "pomodoro", "pomodori"]),
+  c("onion", "Onion", "vegetables", "onion", ["onions", "yellow onion", "red onion", "cipolla", "cipolle"]),
+  c("garlic", "Garlic", "vegetables", "garlic", ["garlic cloves", "aglio"]),
+  c("carrot", "Carrot", "vegetables", "carrot", ["carrots", "carota", "carote"]),
+  c("potato", "Potato", "vegetables", "potato", ["potatoes", "patata", "patate"]),
   c("bell-pepper", "Bell Pepper", "vegetables", "bell-pepper", ["pepper", "capsicum"]),
   c("spinach", "Spinach", "vegetables", "spinach", ["baby spinach"]),
   c("mushroom", "Mushroom", "vegetables", "mushroom", ["mushrooms"]),
@@ -91,34 +91,34 @@ export const concepts: IngredientConcept[] = [
   c("mint", "Mint", "spices-herbs", "mint", ["fresh mint"]),
 
   // Dairy
-  c("milk", "Milk", "dairy", "milk"),
-  c("butter", "Butter", "dairy", "butter"),
-  c("eggs", "Eggs", "dairy", "eggs", ["egg"]),
+  c("milk", "Milk", "dairy", "milk", ["latte"]),
+  c("butter", "Butter", "dairy", "butter", ["burro"]),
+  c("eggs", "Eggs", "dairy", "eggs", ["egg", "uovo", "uova"]),
   c("yogurt", "Yogurt", "dairy", "yogurt", ["greek yogurt"]),
   c("cream", "Cream", "dairy", "cream", ["heavy cream", "whipping cream"]),
-  c("cheese", "Cheese", "dairy", "cheese", ["cheddar", "gouda", "cheese block"]),
+  c("cheese", "Cheese", "dairy", "cheese", ["cheddar", "gouda", "cheese block", "formaggio"]),
   c("mozzarella", "Mozzarella", "dairy", "mozzarella", ["fresh mozzarella"]),
   c("parmesan", "Parmesan", "dairy", "parmesan", ["parmigiano"]),
   c("feta", "Feta", "dairy", "feta"),
   c("cream-cheese", "Cream Cheese", "dairy", "cream-cheese", ["philadelphia", "philadelphia cream cheese"]),
 
   // Meat & Fish
-  c("chicken", "Chicken", "meat-fish", "chicken", ["chicken breast", "chicken thighs"]),
-  c("beef", "Beef", "meat-fish", "beef", ["ground beef", "minced beef", "steak"]),
-  c("pork", "Pork", "meat-fish", "pork", ["pork chops"]),
+  c("chicken", "Chicken", "meat-fish", "chicken", ["chicken breast", "chicken thighs", "pollo"]),
+  c("beef", "Beef", "meat-fish", "beef", ["ground beef", "minced beef", "steak", "manzo"]),
+  c("pork", "Pork", "meat-fish", "pork", ["pork chops", "maiale"]),
   c("bacon", "Bacon", "meat-fish", "bacon"),
   c("ham", "Ham", "meat-fish", "ham"),
   c("sausage", "Sausage", "meat-fish", "sausage", ["sausages"]),
-  c("fish", "Fish", "meat-fish", "fish", ["white fish", "cod", "tilapia"]),
+  c("fish", "Fish", "meat-fish", "fish", ["white fish", "cod", "tilapia", "pesce"]),
   c("salmon", "Salmon", "meat-fish", "salmon"),
-  c("shrimp", "Shrimp", "meat-fish", "shrimp", ["prawns"]),
+  c("shrimp", "Shrimp", "meat-fish", "shrimp", ["prawns", "gamberi"]),
   c("tuna", "Tuna", "meat-fish", "tuna", ["canned tuna"]),
 
   // Pantry
   c("pasta", "Pasta", "pantry", "pasta", ["penne", "spaghetti", "fusilli", "macaroni"]),
-  c("rice", "Rice", "pantry", "rice", ["white rice", "jasmine rice", "basmati rice"]),
+  c("rice", "Rice", "pantry", "rice", ["white rice", "jasmine rice", "basmati rice", "riso"]),
   c("noodles", "Noodles", "pantry", "noodles", ["ramen noodles", "egg noodles"]),
-  c("bread", "Bread", "pantry", "bread", ["loaf", "sliced bread"]),
+  c("bread", "Bread", "pantry", "bread", ["loaf", "sliced bread", "pane"]),
   c("tortilla", "Tortilla", "pantry", "tortilla", ["tortillas", "wrap", "wraps"]),
   c("chickpeas", "Chickpeas", "pantry", "chickpeas", ["canned chickpeas"]),
   c("lentils", "Lentils", "pantry", "lentils", ["red lentils", "green lentils"]),
@@ -132,10 +132,10 @@ export const concepts: IngredientConcept[] = [
   c("ravioli", "Ravioli", "pantry", "ravioli", ["tortellini", "tortelloni"]),
 
   // Sauces & Condiments
-  c("olive-oil", "Olive Oil", "sauces-condiments", "olive-oil", ["extra virgin olive oil"]),
+  c("olive-oil", "Olive Oil", "sauces-condiments", "olive-oil", ["extra virgin olive oil", "olio"]),
   c("vegetable-oil", "Vegetable Oil", "sauces-condiments", "vegetable-oil", ["canola oil", "sunflower oil"]),
   c("soy-sauce", "Soy Sauce", "sauces-condiments", "soy-sauce"),
-  c("vinegar", "Vinegar", "sauces-condiments", "vinegar", ["white vinegar", "apple cider vinegar"]),
+  c("vinegar", "Vinegar", "sauces-condiments", "vinegar", ["white vinegar", "apple cider vinegar", "aceto"]),
   c("balsamic-vinegar", "Balsamic Vinegar", "sauces-condiments", "balsamic-vinegar"),
   c("tomato-sauce", "Tomato Sauce", "sauces-condiments", "tomato-sauce", ["marinara", "passata"]),
   c("tomato-paste", "Tomato Paste", "sauces-condiments", "tomato-paste"),
@@ -153,8 +153,8 @@ export const concepts: IngredientConcept[] = [
   c("salsa", "Salsa", "sauces-condiments", "salsa"),
 
   // Spices & Herbs
-  c("salt", "Salt", "spices-herbs", "salt", ["sea salt", "kosher salt"]),
-  c("black-pepper", "Black Pepper", "spices-herbs", "black-pepper", ["pepper"]),
+  c("salt", "Salt", "spices-herbs", "salt", ["sea salt", "kosher salt", "sale"]),
+  c("black-pepper", "Black Pepper", "spices-herbs", "black-pepper", ["pepper", "pepe"]),
   c("cumin", "Cumin", "spices-herbs", "cumin", ["cumin powder"]),
   c("paprika", "Paprika", "spices-herbs", "paprika", ["smoked paprika"]),
   c("curry-powder", "Curry Powder", "spices-herbs", "curry-powder"),
@@ -167,32 +167,32 @@ export const concepts: IngredientConcept[] = [
   c("bay-leaf", "Bay Leaf", "spices-herbs", "bay-leaf", ["bay leaves"]),
 
   // Baking
-  c("flour", "Flour", "baking", "flour", ["all-purpose flour"]),
-  c("sugar", "Sugar", "baking", "sugar", ["white sugar", "granulated sugar"]),
+  c("flour", "Flour", "baking", "flour", ["all-purpose flour", "farina"]),
+  c("sugar", "Sugar", "baking", "sugar", ["white sugar", "granulated sugar", "zucchero"]),
   c("brown-sugar", "Brown Sugar", "baking", "brown-sugar"),
   c("baking-powder", "Baking Powder", "baking", "baking-powder"),
   c("baking-soda", "Baking Soda", "baking", "baking-soda"),
   c("vanilla", "Vanilla Extract", "baking", "vanilla"),
-  c("chocolate", "Chocolate", "baking", "chocolate", ["chocolate chips"]),
+  c("chocolate", "Chocolate", "baking", "chocolate", ["chocolate chips", "cioccolato"]),
   c("yeast", "Yeast", "baking", "yeast"),
 
   // Drinks
-  c("water", "Water", "drinks", "water"),
+  c("water", "Water", "drinks", "water", ["acqua"]),
   c("juice", "Juice", "drinks", "juice", ["orange juice", "apple juice"]),
-  c("coffee", "Coffee", "drinks", "coffee"),
-  c("tea", "Tea", "drinks", "tea"),
+  c("coffee", "Coffee", "drinks", "coffee", ["caffè", "caffe"]),
+  c("tea", "Tea", "drinks", "tea", ["tè", "te", "the"]),
   c("chamomile", "Chamomile Tea", "drinks", "chamomile", ["camomilla", "camomile", "chamomile tea"]),
-  c("wine", "Wine", "drinks", "wine", ["white wine", "red wine"]),
-  c("beer", "Beer", "drinks", "beer"),
+  c("wine", "Wine", "drinks", "wine", ["white wine", "red wine", "vino"]),
+  c("beer", "Beer", "drinks", "beer", ["birra"]),
   c("soda", "Soda", "drinks", "soda", ["soft drink"]),
 
   // Breakfast & treats
   c("cereal", "Cereal", "breakfast-snacks", "cereal", ["breakfast cereal", "corn flakes"]),
-  c("biscuits", "Biscuits", "breakfast-snacks", "biscuits", ["cookies", "digestives"]),
+  c("biscuits", "Biscuits", "breakfast-snacks", "biscuits", ["cookies", "digestives", "biscotti", "biscotto"]),
   c("chocolate-bar", "Chocolate Bar", "breakfast-snacks", "chocolate-bar", ["milk chocolate bar", "candy bar"]),
   c("ice-cream", "Ice Cream", "breakfast-snacks", "ice-cream", ["gelato"]),
   c("chocolate-spread", "Chocolate Spread", "breakfast-snacks", "chocolate-spread", ["nutella", "hazelnut spread"]),
-  c("sweets", "Sweets", "breakfast-snacks", "sweets", ["candy", "gummies"]),
+  c("sweets", "Sweets", "breakfast-snacks", "sweets", ["candy", "gummies", "caramelle", "caramella"]),
 
   // Savoury snacks
   c("crisps", "Crisps", "snacks", "crisps", ["potato chips", "chips"]),
@@ -230,6 +230,25 @@ export function findConceptByName(name: string): IngredientConcept | undefined {
       x.aliases.some((a) => a.includes(normalized) || normalized.includes(a)),
     )
   );
+}
+
+/**
+ * Exact match on a single normalized token against a concept's aliases —
+ * multi-word aliases never equal a single token, so this stays as safe in
+ * any language as `findConceptByNameExact`. Catches a curated ingredient
+ * inside an otherwise-uncurated phrase ("pesce" in "bastoncini di pesce",
+ * "pesce fritto") that the whole-string exact match misses. Returns
+ * undefined when zero or more than one distinct concept matches — an
+ * ambiguous phrase (e.g. "chicken and tomato soup") is left for the caller's
+ * slug/category-only fallback rather than guessing.
+ */
+export function findConceptByToken(tokens: string[]): IngredientConcept | undefined {
+  const matches = new Map<string, IngredientConcept>();
+  for (const token of tokens) {
+    const hit = concepts.find((x) => x.aliases.includes(token));
+    if (hit) matches.set(hit.id, hit);
+  }
+  return matches.size === 1 ? [...matches.values()][0] : undefined;
 }
 
 export function categoryLabel(category: Category): string {
