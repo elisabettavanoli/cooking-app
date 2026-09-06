@@ -178,7 +178,7 @@ export const concepts: IngredientConcept[] = [
 
   // Drinks
   c("water", "Water", "drinks", "water", ["acqua"]),
-  c("juice", "Juice", "drinks", "juice", ["orange juice", "apple juice"]),
+  c("juice", "Juice", "drinks", "juice", ["orange juice", "apple juice", "succo", "succhi"]),
   c("coffee", "Coffee", "drinks", "coffee", ["caffè", "caffe"]),
   c("tea", "Tea", "drinks", "tea", ["tè", "te", "the"]),
   c("chamomile", "Chamomile Tea", "drinks", "chamomile", ["camomilla", "camomile", "chamomile tea"]),

@@ -41,21 +41,11 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // Includes the two alternate FoodIcon SVG sets under public/icons/
+        // (~1.8MB, ~300 small files) so every icon style works offline right
+        // after install, same as the rest of the app — not just once a given
+        // icon has been fetched over the network at least once.
         globPatterns: ["**/*.{js,css,html,svg,png,ico,woff2}"],
-        // The two alternate FoodIcon SVG sets (~1.8MB, ~300 files) only matter
-        // to someone who picks that style in Profile — don't force every
-        // install to precache them; cache on first use instead.
-        globIgnores: ["icons/openmoji/**", "icons/foodiconpack/**"],
-        runtimeCaching: [
-          {
-            urlPattern: /\/icons\/(openmoji|foodiconpack)\/.*\.svg$/,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "food-icon-styles",
-              expiration: { maxEntries: 400, maxAgeSeconds: 60 * 60 * 24 * 365 },
-            },
-          },
-        ],
         navigateFallback: "/index.html",
         cleanupOutdatedCaches: true,
         clientsClaim: true,
