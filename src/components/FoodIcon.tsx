@@ -414,6 +414,7 @@ export function FoodIcon({
   const meta = categoryMeta[category];
   const { iconStyle } = useIconStyle();
   const emoji = foodEmoji[iconKey] ?? categoryEmoji[category] ?? "🛒";
+  const isBare = variant === "bare";
 
   let glyph: ReactNode;
   if (iconStyle === "emoji") {
@@ -424,16 +425,25 @@ export function FoodIcon({
     );
   } else {
     const resolved = styledIcon(iconStyle, iconKey, category, emoji);
+    // The wrapper sizes the emoji via `fontSize`; an SVG icon has no font size,
+    // so it needs an explicit box. Match it to the emoji's optical size: fill
+    // the bare wrapper (whose fontSize is 90% of `size`), stay inset in the chip.
+    const imgScale = isBare ? "100%" : "82%";
     glyph =
       "src" in resolved ? (
         <img
           src={resolved.src}
           alt=""
           aria-hidden
-          style={{ width: "78%", height: "78%", objectFit: "contain" }}
+          style={{ width: imgScale, height: imgScale, objectFit: "contain" }}
         />
       ) : (
-        <UtensilsCrossed aria-hidden size={Math.round(size * 0.5)} color={meta.color} strokeWidth={1.75} />
+        <UtensilsCrossed
+          aria-hidden
+          size={Math.round(size * (isBare ? 0.62 : 0.5))}
+          color={meta.color}
+          strokeWidth={1.75}
+        />
       );
   }
 
