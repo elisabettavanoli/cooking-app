@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Check, Plus, Search, ShoppingCart, Trash2, Undo2 } from "lucide-react";
+import { EditShoppingItemSheet } from "../components/EditShoppingItemSheet";
 import { FoodIcon } from "../components/FoodIcon";
 import { PageInfo } from "../components/PageInfo";
 import { colors } from "../lib/theme";
@@ -8,6 +9,7 @@ import { foodName } from "../lib/foodNames";
 import { categorizeIngredientAsync } from "../lib/ai";
 import { useCooking } from "../lib/store";
 import type { Category, ShoppingItem } from "../lib/types";
+import { unitLabel } from "../lib/units";
 import s from "./ListTab.module.css";
 
 function groupByCategory(items: ShoppingItem[]) {
@@ -27,6 +29,7 @@ export function ListTab() {
   const [search, setSearch] = useState("");
   const [draft, setDraft] = useState("");
   const [composerOpen, setComposerOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<ShoppingItem | null>(null);
 
   const commitDraft = async () => {
     const name = draft.trim();
@@ -92,15 +95,34 @@ export function ListTab() {
             <p className={s.sectionTitle}>{t(`category.${category}`).toUpperCase()}</p>
             <div className={s.rows}>
               {items.map((item) => (
-                <div key={item.id} className={s.row}>
-                  <FoodIcon iconKey={item.conceptId} category={item.category} size={48} />
+                <div key={item.id} className={s.row}
+                    onClick={() => setEditingItem(item)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            setEditingItem(item);
+                        }
+                    }}
+                  >
+                  <FoodIcon iconKey={item.conceptId} category={item.category} size={48}/>
+
                   <div className={s.rowText}>
-                    <div className={s.rowName}>{foodName(item.conceptId, lang, item.displayName)}</div>
+                    <div className={s.rowName}> {foodName(item.conceptId, lang, item.displayName)}</div>
+                      {item.quantity != null && (
+                          <div className={s.rowSub}>
+                              {item.quantity} {unitLabel(item.unit, t, item.quantity)}
+                          </div>
+                      )}
                   </div>
                   <button
                     type="button"
                     className={s.iconBtn}
-                    onClick={() => removeShoppingItem(item.id)}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        removeShoppingItem(item.id);
+                    }}
                     aria-label={t("common.remove")}
                   >
                     <Trash2 size={16} color={colors.destructive} />
@@ -108,7 +130,10 @@ export function ListTab() {
                   <button
                     type="button"
                     className={[s.iconBtn, s.iconBtnPrimary].join(" ")}
-                    onClick={() => markShoppingItemPurchased(item.id, true)}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        markShoppingItemPurchased(item.id, true);
+                    }}
                     aria-label={t("list.purchased")}
                   >
                     <Check size={16} color={colors.primaryForeground} />
@@ -137,7 +162,10 @@ export function ListTab() {
                   <button
                     type="button"
                     className={s.iconBtn}
-                    onClick={() => markShoppingItemPurchased(item.id, false)}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        markShoppingItemPurchased(item.id, false);
+                    }}
                     aria-label={t("common.undo")}
                   >
                     <Undo2 size={16} color={colors.foreground} />
@@ -189,6 +217,11 @@ export function ListTab() {
           <Plus size={24} color={colors.primaryForeground} strokeWidth={2.5} />
         </button>
       )}
+        <EditShoppingItemSheet
+            item={editingItem}
+            open={editingItem !== null}
+            onClose={() => setEditingItem(null)}
+            />
     </div>
   );
 }

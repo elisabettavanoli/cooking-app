@@ -196,7 +196,7 @@ begin
       ('popcorn', 'Popcorn', 'snacks'),
       ('pretzels', 'Pretzels', 'snacks'),
       ('pizza', 'Pizza', 'pantry'),
-      ('ice', 'Ice', 'other'),
+      ('ice', 'Ice', 'other')
     ) as concept(concept_id, display_name, category)
     where concept.concept_id = v_shopping.concept_id;
 
