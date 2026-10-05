@@ -2,7 +2,7 @@
 
 Repo / package / Cloudflare project: **`cooking-app`**. User-facing name
 (PWA manifest, `<title>`, login header): **Co-oking**. The lowercase word
-`pantry` that remains in the code is a *food category* ("dry goods"), not the
+`pantry` that remains in the code is a _food category_ ("dry goods"), not the
 old project name — leave it.
 
 This project **was** an Expo / React Native app (SDK 54). It is now a plain

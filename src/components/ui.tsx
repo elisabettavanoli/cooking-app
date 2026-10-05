@@ -1,10 +1,4 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-  type ReactNode,
-} from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { Eye, EyeOff, X } from "lucide-react";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
@@ -171,11 +165,9 @@ export function ChipSelect<T extends string>({
           key={o.value}
           type="button"
           onClick={() => onChange(o.value)}
-          className={[
-            "resetButton",
-            styles.chip,
-            o.value === value ? styles.chipActive : "",
-          ].join(" ")}
+          className={["resetButton", styles.chip, o.value === value ? styles.chipActive : ""].join(
+            " ",
+          )}
         >
           {o.label}
         </button>
@@ -230,9 +222,7 @@ export function BottomSheet({
     <dialog
       ref={ref}
       className={styles.sheet}
-      style={
-        { "--sheet-max": `${Math.round(heightPct * 100)}dvh` } as CSSProperties
-      }
+      style={{ "--sheet-max": `${Math.round(heightPct * 100)}dvh` } as CSSProperties}
       onCancel={(e) => {
         e.preventDefault();
         onClose();

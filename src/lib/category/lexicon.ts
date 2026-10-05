@@ -92,10 +92,7 @@ export function lookupExact(n: Normalized): LexiconHit | null {
   return null;
 }
 
-function voteFrom(
-  tokens: string[],
-  map: Map<string, Set<Category>>,
-): Category | null {
+function voteFrom(tokens: string[], map: Map<string, Set<Category>>): Category | null {
   const votes = new Map<Category, number>();
   for (const t of tokens) {
     const cats = map.get(t);

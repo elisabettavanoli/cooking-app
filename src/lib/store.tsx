@@ -254,9 +254,7 @@ function LocalCookingProvider({ children }: { children: React.ReactNode }) {
       );
       const inventory = existing
         ? prev.inventory.map((i) =>
-            i.id === existing.id
-              ? { ...i, quantity: mergeQty(i.quantity, item.quantity) }
-              : i,
+            i.id === existing.id ? { ...i, quantity: mergeQty(i.quantity, item.quantity) } : i,
           )
         : [
             {
@@ -275,9 +273,7 @@ function LocalCookingProvider({ children }: { children: React.ReactNode }) {
       return {
         ...prev,
         inventory,
-        shoppingList: prev.shoppingList.map((i) =>
-          i.id === id ? { ...i, purchased: true } : i,
-        ),
+        shoppingList: prev.shoppingList.map((i) => (i.id === id ? { ...i, purchased: true } : i)),
       };
     });
   }, []);
@@ -498,9 +494,7 @@ function RemoteCookingProvider({ children }: { children: React.ReactNode }) {
       );
       if (existing) {
         const quantity = mergeQty(existing.quantity, item.quantity);
-        setShoppingList((prev) =>
-          prev.map((i) => (i.id === existing.id ? { ...i, quantity } : i)),
-        );
+        setShoppingList((prev) => prev.map((i) => (i.id === existing.id ? { ...i, quantity } : i)));
         remote.patchShopping(existing.id, { quantity }).catch(onWriteError);
         return;
       }

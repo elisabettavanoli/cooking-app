@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { clear } from "idb-keyval";
 import { App } from "./App";
 
-async function bootToKitchen(_user: ReturnType<typeof userEvent.setup>) {
+async function bootToKitchen() {
   const result = render(<App />);
   await waitFor(() => screen.getByText(/my kitchen/i));
   return result;
@@ -18,7 +18,7 @@ beforeEach(async () => {
 describe("App interactions", () => {
   it("opens the Add sheet, adds an item, and persists it across a remount", async () => {
     const user = userEvent.setup();
-    const first = await bootToKitchen(user);
+    const first = await bootToKitchen();
 
     await user.click(screen.getByRole("button", { name: /add ingredient/i }));
     const dialog = await screen.findByRole("dialog");
@@ -35,14 +35,13 @@ describe("App interactions", () => {
     });
 
     first.unmount();
-    const user2 = userEvent.setup();
-    await bootToKitchen(user2);
+    await bootToKitchen();
     expect(screen.getByText("Sardines")).toBeDefined();
   });
 
   it("adding the same item twice increases its quantity instead of duplicating it", async () => {
     const user = userEvent.setup();
-    await bootToKitchen(user);
+    await bootToKitchen();
 
     for (let i = 0; i < 2; i += 1) {
       await user.click(screen.getByRole("button", { name: /add ingredient/i }));

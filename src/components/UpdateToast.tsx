@@ -43,7 +43,12 @@ export function UpdateToast() {
           {t("update.reload")}
         </button>
       )}
-      <button type="button" className={styles.dismiss} onClick={close} aria-label={t("update.dismiss")}>
+      <button
+        type="button"
+        className={styles.dismiss}
+        onClick={close}
+        aria-label={t("update.dismiss")}
+      >
         <X size={16} />
       </button>
     </div>

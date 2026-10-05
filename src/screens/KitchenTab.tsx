@@ -27,7 +27,8 @@ function tileBadge(item: InventoryItem): { text: string; color: string; bg: stri
   if (item.expiry) {
     const d = daysUntil(item.expiry);
     if (d < 0) return { text: "old", color: colors.destructive, bg: "#FCE0E4" };
-    if (d <= 3) return { text: d === 0 ? "today" : `${d}d`, color: colors.warn, bg: colors.warnSoft };
+    if (d <= 3)
+      return { text: d === 0 ? "today" : `${d}d`, color: colors.warn, bg: colors.warnSoft };
   }
   if (item.unit === "piece" && item.quantity != null && item.quantity <= 1) {
     return { text: "last", color: colors.low, bg: colors.lowSoft };
@@ -126,7 +127,8 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
   const [useItemId, setUseItemId] = useState<string | null>(null);
 
   const { t, lang } = useI18n();
-  const { inventory, selectedConcepts, toggleSelectedConcept, clearSelectedConcepts } = useCooking();
+  const { inventory, selectedConcepts, toggleSelectedConcept, clearSelectedConcepts } =
+    useCooking();
   const activeInventory = useActiveInventory();
 
   const grouped = useMemo(() => {
@@ -164,7 +166,10 @@ export function KitchenTab({ onSwitchToCook }: { onSwitchToCook: () => void }) {
             <p className={s.subtitle}>
               {t("kitchen.itemsTracked", { n: activeInventory.length })}
               {expiringCount > 0 ? (
-                <span className={s.subtitleWarn}> · {t("kitchen.toUseSoon", { n: expiringCount })}</span>
+                <span className={s.subtitleWarn}>
+                  {" "}
+                  · {t("kitchen.toUseSoon", { n: expiringCount })}
+                </span>
               ) : null}
             </p>
           </div>

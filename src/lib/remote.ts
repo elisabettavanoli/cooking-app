@@ -158,9 +158,7 @@ export async function fetchAll(userId: string): Promise<{
   return {
     inventory: (pantry.data as PantryRow[]).map(toInventory),
     shoppingList: (shopping.data as ShoppingRow[]).map(toShopping),
-    profile: profile.data
-      ? toProfile(profile.data as ProfileRow)
-      : defaultProfile(userId),
+    profile: profile.data ? toProfile(profile.data as ProfileRow) : defaultProfile(userId),
   };
 }
 
@@ -178,10 +176,7 @@ export async function insertInventory(userId: string, item: InventoryItem) {
 }
 
 export async function patchInventory(id: string, updates: Partial<InventoryItem>) {
-  const { error } = await db()
-    .from("pantry_items")
-    .update(inventoryPatch(updates))
-    .eq("id", id);
+  const { error } = await db().from("pantry_items").update(inventoryPatch(updates)).eq("id", id);
   if (error) throw error;
 }
 
@@ -203,10 +198,7 @@ export async function insertShopping(userId: string, item: ShoppingItem) {
 }
 
 export async function patchShopping(id: string, updates: Partial<ShoppingItem>) {
-  const { error } = await db()
-    .from("shopping_items")
-    .update(shoppingPatch(updates))
-    .eq("id", id);
+  const { error } = await db().from("shopping_items").update(shoppingPatch(updates)).eq("id", id);
   if (error) throw error;
 }
 
@@ -223,19 +215,13 @@ export async function deleteShopping(id: string) {
 }
 
 export async function patchProfile(userId: string, updates: Partial<UserProfile>) {
-  const { error } = await db()
-    .from("profiles")
-    .update(profilePatch(updates))
-    .eq("id", userId);
+  const { error } = await db().from("profiles").update(profilePatch(updates)).eq("id", userId);
   if (error) throw error;
 }
 
 export async function clearAll(userId: string) {
   const pantry = await db().from("pantry_items").delete().eq("owner_id", userId);
   if (pantry.error) throw pantry.error;
-  const shopping = await db()
-    .from("shopping_items")
-    .delete()
-    .eq("owner_id", userId);
+  const shopping = await db().from("shopping_items").delete().eq("owner_id", userId);
   if (shopping.error) throw shopping.error;
 }

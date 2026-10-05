@@ -81,7 +81,8 @@ const en: Dict = {
   "kitchen.enterSelect": "Select items to cook with",
   "kitchen.exitSelect": "Exit selection mode",
   "kitchen.hintSelect": "Tap items to cook with",
-  "kitchen.infoText": "Everything you have at home. Tap an item to use some of it; long-press it to edit the details. Tap the utensils icon to pick specific ingredients and jump to Cook.",
+  "kitchen.infoText":
+    "Everything you have at home. Tap an item to use some of it; long-press it to edit the details. Tap the utensils icon to pick specific ingredients and jump to Cook.",
   "kitchen.emptyTitle": "Your kitchen is empty",
   "kitchen.emptyText": "Tap + to add your first ingredient.",
   "kitchen.noMatchTitle": "Nothing matches that",
@@ -104,7 +105,8 @@ const en: Dict = {
   "cook.minutes": "{n} min",
   "cook.have": "{n} have",
   "cook.servings": "{n} servings",
-  "cook.infoText": "Recipes you can make with what's in your kitchen, sorted by what's missing. Select specific ingredients first to cook with just those, or ask the AI for an idea.",
+  "cook.infoText":
+    "Recipes you can make with what's in your kitchen, sorted by what's missing. Select specific ingredients first to cook with just those, or ask the AI for an idea.",
 
   "list.title": "Shopping List",
   "list.toBuy": { one: "{n} item to buy", other: "{n} items to buy" },
@@ -115,7 +117,8 @@ const en: Dict = {
   "list.inYourKitchen": "in your kitchen",
   "list.addPlaceholder": "Add an item…",
   "list.add": "Add",
-  "list.infoText": "Things to buy. Add an item, then check it off when you get it — it moves straight into your kitchen.",
+  "list.infoText":
+    "Things to buy. Add an item, then check it off when you get it — it moves straight into your kitchen.",
 
   "nearby.title": "Nearby",
   "nearby.subtitle": "Find ingredients near you",
@@ -148,7 +151,8 @@ const en: Dict = {
   "nearby.mapUseLocation": "Use my location",
   "nearby.mapNoKitchens": "No public kitchens near you yet.",
   "nearby.itemsCount": { one: "{n} item", other: "{n} items" },
-  "nearby.infoText": "Search what your neighbours have available, and see public kitchens on the map. Join or create a community to start sharing.",
+  "nearby.infoText":
+    "Search what your neighbours have available, and see public kitchens on the map. Join or create a community to start sharing.",
 
   "profile.title": "Profile",
   "profile.account": "Account",
@@ -161,7 +165,8 @@ const en: Dict = {
   "profile.iconStyleEmoji": "Emoji",
   "profile.iconStyleOpenmoji": "OpenMoji",
   "profile.iconStyleFoodiconpack": "Outline",
-  "profile.iconStyleAttribution": "OpenMoji icons © OpenMoji (CC BY-SA 4.0). Outline icons © Food Icon Pack (CC BY 4.0).",
+  "profile.iconStyleAttribution":
+    "OpenMoji icons © OpenMoji (CC BY-SA 4.0). Outline icons © Food Icon Pack (CC BY 4.0).",
   "profile.sharingSection": "Kitchen sharing",
   "profile.shareCommunitiesLabel": "Share with my communities",
   "profile.shareCommunitiesHint": "Co-members see the items you have available.",
@@ -225,9 +230,13 @@ const en: Dict = {
   "sheet.aiSubtitleAvailable": "Based on available ingredients.",
   "sheet.aiMood": "What are you in the mood for? (optional)",
   "sheet.aiMoodPlaceholder": "e.g. something spicy, quick, breakfast",
-  "sheet.aiUsing": { one: "Using {n} ingredient from your kitchen.", other: "Using {n} ingredients from your kitchen." },
+  "sheet.aiUsing": {
+    one: "Using {n} ingredient from your kitchen.",
+    other: "Using {n} ingredients from your kitchen.",
+  },
   "sheet.aiClearSelection": "Clear selection",
-  "sheet.aiOffline": "Offline mode: picks the closest catalog recipe. Real AI generation is wired up later.",
+  "sheet.aiOffline":
+    "Offline mode: picks the closest catalog recipe. Real AI generation is wired up later.",
   "sheet.aiGenerate": "Generate recipe",
   "sheet.readyToCook": "Ready to cook",
   "sheet.youHave": "You have ({n})",
@@ -286,7 +295,8 @@ const it: Dict = {
   "kitchen.enterSelect": "Seleziona gli ingredienti da usare",
   "kitchen.exitSelect": "Esci dalla selezione",
   "kitchen.hintSelect": "Tocca gli ingredienti da usare",
-  "kitchen.infoText": "Tutto quello che hai in casa. Tocca un prodotto per usarne un po'; tieni premuto per modificarne i dettagli. Tocca l'icona delle posate per scegliere ingredienti specifici e passare a Cucina.",
+  "kitchen.infoText":
+    "Tutto quello che hai in casa. Tocca un prodotto per usarne un po'; tieni premuto per modificarne i dettagli. Tocca l'icona delle posate per scegliere ingredienti specifici e passare a Cucina.",
   "kitchen.emptyTitle": "La tua cucina è vuota",
   "kitchen.emptyText": "Tocca + per aggiungere il primo ingrediente.",
   "kitchen.noMatchTitle": "Nessun risultato",
@@ -295,8 +305,14 @@ const it: Dict = {
 
   "cook.titleDefault": "Cosa posso cucinare?",
   "cook.titleSelected": "Cucina con la selezione",
-  "cook.subtitleItems": { one: "{n} prodotto nella tua cucina", other: "{n} prodotti nella tua cucina" },
-  "cook.subtitleSelected": { one: "{n} ingrediente selezionato", other: "{n} ingredienti selezionati" },
+  "cook.subtitleItems": {
+    one: "{n} prodotto nella tua cucina",
+    other: "{n} prodotti nella tua cucina",
+  },
+  "cook.subtitleSelected": {
+    one: "{n} ingrediente selezionato",
+    other: "{n} ingredienti selezionati",
+  },
   "cook.usingSelected": "Uso gli ingredienti selezionati",
   "cook.aiRecipe": "Ricetta AI",
   "cook.suggested": "Ricette suggerite",
@@ -309,7 +325,8 @@ const it: Dict = {
   "cook.minutes": "{n} min",
   "cook.have": "{n} disponibili",
   "cook.servings": "{n} porzioni",
-  "cook.infoText": "Ricette che puoi fare con quello che hai in cucina, ordinate per quanto ti manca. Seleziona ingredienti specifici per cucinare solo con quelli, oppure chiedi un'idea all'AI.",
+  "cook.infoText":
+    "Ricette che puoi fare con quello che hai in cucina, ordinate per quanto ti manca. Seleziona ingredienti specifici per cucinare solo con quelli, oppure chiedi un'idea all'AI.",
 
   "list.title": "Lista della spesa",
   "list.toBuy": { one: "{n} prodotto da comprare", other: "{n} prodotti da comprare" },
@@ -320,7 +337,8 @@ const it: Dict = {
   "list.inYourKitchen": "nella tua cucina",
   "list.addPlaceholder": "Aggiungi un prodotto…",
   "list.add": "Aggiungi",
-  "list.infoText": "Le cose da comprare. Aggiungi un prodotto, poi spuntalo quando lo compri: passa subito in cucina.",
+  "list.infoText":
+    "Le cose da comprare. Aggiungi un prodotto, poi spuntalo quando lo compri: passa subito in cucina.",
 
   "nearby.title": "Vicini",
   "nearby.subtitle": "Trova ingredienti vicino a te",
@@ -353,7 +371,8 @@ const it: Dict = {
   "nearby.mapUseLocation": "Usa la mia posizione",
   "nearby.mapNoKitchens": "Ancora nessuna cucina pubblica vicino a te.",
   "nearby.itemsCount": { one: "{n} prodotto", other: "{n} prodotti" },
-  "nearby.infoText": "Cerca cosa hanno disponibile i tuoi vicini e guarda le cucine pubbliche sulla mappa. Entra o crea una community per iniziare a condividere.",
+  "nearby.infoText":
+    "Cerca cosa hanno disponibile i tuoi vicini e guarda le cucine pubbliche sulla mappa. Entra o crea una community per iniziare a condividere.",
 
   "profile.title": "Profilo",
   "profile.account": "Account",
@@ -366,12 +385,14 @@ const it: Dict = {
   "profile.iconStyleEmoji": "Emoji",
   "profile.iconStyleOpenmoji": "OpenMoji",
   "profile.iconStyleFoodiconpack": "Outline",
-  "profile.iconStyleAttribution": "Icone OpenMoji © OpenMoji (CC BY-SA 4.0). Icone outline © Food Icon Pack (CC BY 4.0).",
+  "profile.iconStyleAttribution":
+    "Icone OpenMoji © OpenMoji (CC BY-SA 4.0). Icone outline © Food Icon Pack (CC BY 4.0).",
   "profile.sharingSection": "Condivisione della cucina",
   "profile.shareCommunitiesLabel": "Condividi con le mie community",
   "profile.shareCommunitiesHint": "Chi è nelle tue community vede i prodotti che hai disponibili.",
   "profile.shareMapLabel": "Mostra sulla mappa pubblica",
-  "profile.shareMapHint": "Chiunque abbia un account può vedere la tua cucina vicino alla tua posizione approssimativa.",
+  "profile.shareMapHint":
+    "Chiunque abbia un account può vedere la tua cucina vicino alla tua posizione approssimativa.",
   "profile.requestsLabel": "Consenti richieste",
   "profile.requestsHint": "Gli altri possono chiederti in prestito un tuo prodotto.",
   "profile.locationDenied": "Impossibile ottenere la posizione — la mappa resta disattivata.",
@@ -430,9 +451,13 @@ const it: Dict = {
   "sheet.aiSubtitleAvailable": "In base agli ingredienti disponibili.",
   "sheet.aiMood": "Cosa ti va di mangiare? (facoltativo)",
   "sheet.aiMoodPlaceholder": "es. qualcosa di piccante, veloce, colazione",
-  "sheet.aiUsing": { one: "Uso {n} ingrediente della tua cucina.", other: "Uso {n} ingredienti della tua cucina." },
+  "sheet.aiUsing": {
+    one: "Uso {n} ingrediente della tua cucina.",
+    other: "Uso {n} ingredienti della tua cucina.",
+  },
   "sheet.aiClearSelection": "Cancella selezione",
-  "sheet.aiOffline": "Modalità offline: sceglie la ricetta più simile dal catalogo. La vera generazione AI arriverà più avanti.",
+  "sheet.aiOffline":
+    "Modalità offline: sceglie la ricetta più simile dal catalogo. La vera generazione AI arriverà più avanti.",
   "sheet.aiGenerate": "Genera ricetta",
   "sheet.readyToCook": "Pronta da cucinare",
   "sheet.youHave": "Hai ({n})",
@@ -470,7 +495,10 @@ const de: Dict = {
   "kitchen.emptyTitle": "Deine Küche ist leer",
   "kitchen.emptyText": "Tippe auf +, um deine erste Zutat hinzuzufügen.",
   "cook.titleDefault": "Was kann ich kochen?",
-  "cook.subtitleItems": { one: "{n} Artikel in deiner Küche", other: "{n} Artikel in deiner Küche" },
+  "cook.subtitleItems": {
+    one: "{n} Artikel in deiner Küche",
+    other: "{n} Artikel in deiner Küche",
+  },
   "cook.suggested": "Vorgeschlagene Rezepte",
   "cook.minIngredientsTitle": "Füge noch ein paar Zutaten hinzu",
   "cook.minIngredientsText": "Du brauchst mindestens {min} Zutaten für Rezeptvorschläge.",
@@ -509,7 +537,10 @@ const fr: Dict = {
   "kitchen.emptyTitle": "Votre cuisine est vide",
   "kitchen.emptyText": "Touchez + pour ajouter votre premier ingrédient.",
   "cook.titleDefault": "Que puis-je cuisiner ?",
-  "cook.subtitleItems": { one: "{n} article dans votre cuisine", other: "{n} articles dans votre cuisine" },
+  "cook.subtitleItems": {
+    one: "{n} article dans votre cuisine",
+    other: "{n} articles dans votre cuisine",
+  },
   "cook.suggested": "Recettes suggérées",
   "cook.minIngredientsTitle": "Ajoutez quelques ingrédients",
   "cook.minIngredientsText": "Il faut au moins {min} ingrédients pour les suggestions de recettes.",
@@ -551,7 +582,8 @@ const es: Dict = {
   "cook.subtitleItems": { one: "{n} artículo en tu cocina", other: "{n} artículos en tu cocina" },
   "cook.suggested": "Recetas sugeridas",
   "cook.minIngredientsTitle": "Añade algunos ingredientes más",
-  "cook.minIngredientsText": "Necesitas al menos {min} ingredientes para las sugerencias de recetas.",
+  "cook.minIngredientsText":
+    "Necesitas al menos {min} ingredientes para las sugerencias de recetas.",
   "list.title": "Lista de la compra",
   "list.emptyTitle": "Tu lista está vacía",
   "list.addPlaceholder": "Añadir un artículo…",

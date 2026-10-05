@@ -10,13 +10,7 @@ import { categorizeIngredientAsync } from "../lib/ai";
 import type { Category, Unit } from "../lib/types";
 import s from "./AddItemSheet.module.css";
 
-export function AddItemSheet({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
+export function AddItemSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { t } = useI18n();
   const { addInventoryItem } = useCooking();
   const [rawName, setRawName] = useState("");
@@ -58,7 +52,7 @@ export function AddItemSheet({
     // Keep the name the user typed; the matched concept only lends its id
     // (recipe matching) + icon + category.
     const conceptId = match?.conceptId ?? typed.toLowerCase().replace(/\s+/g, "-");
-    const finalCategory: Category = categoryTouched ? category : match?.category ?? category;
+    const finalCategory: Category = categoryTouched ? category : (match?.category ?? category);
 
     addInventoryItem({
       conceptId,
@@ -130,7 +124,12 @@ export function AddItemSheet({
         />
 
         <div className={s.rowActions}>
-          <Button label={t("common.cancel")} variant="outline" onPress={onClose} style={{ flex: 1 }} />
+          <Button
+            label={t("common.cancel")}
+            variant="outline"
+            onPress={onClose}
+            style={{ flex: 1 }}
+          />
           <Button
             label={t("sheet.addToKitchenBtn")}
             onPress={() => {

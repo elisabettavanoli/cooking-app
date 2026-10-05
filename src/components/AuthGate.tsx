@@ -34,9 +34,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
     setBusy(true);
     setError(null);
     const res =
-      mode === "signup"
-        ? await signUp(email, password, name)
-        : await signIn(email, password);
+      mode === "signup" ? await signUp(email, password, name) : await signIn(email, password);
     setBusy(false);
     if (res.error) setError(res.error);
     // on success onAuthStateChange sets the session → this swaps to <children>.
@@ -84,13 +82,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
           {error ? <p className={styles.error}>{error}</p> : null}
           <Button
             type="submit"
-            label={
-              busy
-                ? t("auth.wait")
-                : mode === "signin"
-                  ? t("auth.signin")
-                  : t("auth.signup")
-            }
+            label={busy ? t("auth.wait") : mode === "signin" ? t("auth.signin") : t("auth.signup")}
             disabled={busy || !canSubmit}
             style={{ width: "100%", marginTop: 8 }}
           />

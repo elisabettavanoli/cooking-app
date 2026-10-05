@@ -18,12 +18,7 @@ import { lookupExact, lookupKeywords, lookupTokens } from "./lexicon";
 import { cacheKey, peekCachedCategory } from "./cache";
 
 export type ResolutionSource =
-  | "concept"
-  | "cache"
-  | "lexicon-exact"
-  | "lexicon-token"
-  | "keyword"
-  | "none";
+  "concept" | "cache" | "lexicon-exact" | "lexicon-token" | "keyword" | "none";
 
 export interface CategoryResolution {
   /** Resolved category, or null if every deterministic step missed. */
@@ -36,10 +31,7 @@ export interface CategoryResolution {
   key: string;
 }
 
-export function resolveCategory(
-  name: string,
-  opts: { lang?: LangCode } = {},
-): CategoryResolution {
+export function resolveCategory(name: string, opts: { lang?: LangCode } = {}): CategoryResolution {
   const n = normalizeName(name, opts.lang ?? undefined);
   const base = { lang: n.lang, key: n.key };
 
@@ -59,20 +51,35 @@ export function resolveCategory(
   // 3. Lexicon exact.
   const exact = lookupExact(n);
   if (exact) {
-    return { ...base, category: exact.category, confidence: exact.confidence, source: "lexicon-exact" };
+    return {
+      ...base,
+      category: exact.category,
+      confidence: exact.confidence,
+      source: "lexicon-exact",
+    };
   }
 
   // 4. Keyword stems — run before the token vote so a category-bearing stem
   //    ("succo", "cookie", "olio") beats a stray fruit/veg noun in the phrase.
   const keyword = lookupKeywords(n);
   if (keyword) {
-    return { ...base, category: keyword.category, confidence: keyword.confidence, source: "keyword" };
+    return {
+      ...base,
+      category: keyword.category,
+      confidence: keyword.confidence,
+      source: "keyword",
+    };
   }
 
   // 5. Lexicon token vote.
   const tokens = lookupTokens(n);
   if (tokens) {
-    return { ...base, category: tokens.category, confidence: tokens.confidence, source: "lexicon-token" };
+    return {
+      ...base,
+      category: tokens.category,
+      confidence: tokens.confidence,
+      source: "lexicon-token",
+    };
   }
 
   // 6. Concept catalog, FUZZY substring — English only (it false-positives

@@ -13,18 +13,7 @@ export type Category =
   | "other";
 
 export type Unit =
-  | "piece"
-  | "g"
-  | "kg"
-  | "ml"
-  | "l"
-  | "cup"
-  | "tbsp"
-  | "tsp"
-  | "pack"
-  | "bunch"
-  | "can"
-  | "bottle";
+  "piece" | "g" | "kg" | "ml" | "l" | "cup" | "tbsp" | "tsp" | "pack" | "bunch" | "can" | "bottle";
 
 export interface IngredientConcept {
   id: string;

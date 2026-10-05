@@ -28,10 +28,7 @@ export function CookTab() {
 
   const matches = useMemo(
     () =>
-      recipeMatches(
-        selectedConcepts.length > 0 ? selectedConcepts : undefined,
-        activeInventory,
-      ),
+      recipeMatches(selectedConcepts.length > 0 ? selectedConcepts : undefined, activeInventory),
     [selectedConcepts, activeInventory],
   );
   const topMatches = enoughIngredients ? matches.slice(0, 10) : [];
@@ -83,9 +80,7 @@ export function CookTab() {
               <ChefHat size={28} color={colors.mutedForeground} />
             </div>
             <p className={s.emptyTitle}>{t("cook.minIngredientsTitle")}</p>
-            <p className={s.emptyText}>
-              {t("cook.minIngredientsText", { min: MIN_INGREDIENTS })}
-            </p>
+            <p className={s.emptyText}>{t("cook.minIngredientsText", { min: MIN_INGREDIENTS })}</p>
           </div>
         )}
 

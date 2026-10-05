@@ -66,9 +66,7 @@ function CommunitySearch() {
             <div key={`${hit.ownerId}-${hit.communityId}-${hit.conceptId}`} className={s.resultRow}>
               <FoodIcon iconKey={hit.conceptId} category={hit.category} size={44} />
               <div className={s.resultText}>
-                <div className={s.resultName}>
-                  {foodName(hit.conceptId, lang, hit.displayName)}
-                </div>
+                <div className={s.resultName}>{foodName(hit.conceptId, lang, hit.displayName)}</div>
                 <div className={s.resultMeta}>
                   {t("nearby.hitMeta", { owner: hit.ownerName, community: hit.communityName })}
                   {hit.quantity != null && (
@@ -170,11 +168,7 @@ export function NearbyTab() {
                       <span>{t("nearby.memberCount", { n: c.memberCount ?? 1 })}</span>
                     </div>
                   </div>
-                  <button
-                    type="button"
-                    className={s.leaveBtn}
-                    onClick={() => void leave(c.id)}
-                  >
+                  <button type="button" className={s.leaveBtn} onClick={() => void leave(c.id)}>
                     {t("nearby.leave")}
                   </button>
                 </div>

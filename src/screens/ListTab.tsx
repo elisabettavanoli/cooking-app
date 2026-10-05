@@ -95,33 +95,38 @@ export function ListTab() {
             <p className={s.sectionTitle}>{t(`category.${category}`).toUpperCase()}</p>
             <div className={s.rows}>
               {items.map((item) => (
-                <div key={item.id} className={s.row}
-                    onClick={() => setEditingItem(item)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            setEditingItem(item);
-                        }
-                    }}
-                  >
-                  <FoodIcon iconKey={item.conceptId} category={item.category} size={48}/>
+                <div
+                  key={item.id}
+                  className={s.row}
+                  onClick={() => setEditingItem(item)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setEditingItem(item);
+                    }
+                  }}
+                >
+                  <FoodIcon iconKey={item.conceptId} category={item.category} size={48} />
 
                   <div className={s.rowText}>
-                    <div className={s.rowName}> {foodName(item.conceptId, lang, item.displayName)}</div>
-                      {item.quantity != null && (
-                          <div className={s.rowSub}>
-                              {item.quantity} {unitLabel(item.unit, t, item.quantity)}
-                          </div>
-                      )}
+                    <div className={s.rowName}>
+                      {" "}
+                      {foodName(item.conceptId, lang, item.displayName)}
+                    </div>
+                    {item.quantity != null && (
+                      <div className={s.rowSub}>
+                        {item.quantity} {unitLabel(item.unit, t, item.quantity)}
+                      </div>
+                    )}
                   </div>
                   <button
                     type="button"
                     className={s.iconBtn}
                     onClick={(e) => {
-                        e.stopPropagation();
-                        removeShoppingItem(item.id);
+                      e.stopPropagation();
+                      removeShoppingItem(item.id);
                     }}
                     aria-label={t("common.remove")}
                   >
@@ -131,8 +136,8 @@ export function ListTab() {
                     type="button"
                     className={[s.iconBtn, s.iconBtnPrimary].join(" ")}
                     onClick={(e) => {
-                        e.stopPropagation();
-                        markShoppingItemPurchased(item.id, true);
+                      e.stopPropagation();
+                      markShoppingItemPurchased(item.id, true);
                     }}
                     aria-label={t("list.purchased")}
                   >
@@ -163,8 +168,8 @@ export function ListTab() {
                     type="button"
                     className={s.iconBtn}
                     onClick={(e) => {
-                        e.stopPropagation();
-                        markShoppingItemPurchased(item.id, false);
+                      e.stopPropagation();
+                      markShoppingItemPurchased(item.id, false);
                     }}
                     aria-label={t("common.undo")}
                   >
@@ -217,11 +222,11 @@ export function ListTab() {
           <Plus size={24} color={colors.primaryForeground} strokeWidth={2.5} />
         </button>
       )}
-        <EditShoppingItemSheet
-            item={editingItem}
-            open={editingItem !== null}
-            onClose={() => setEditingItem(null)}
-            />
+      <EditShoppingItemSheet
+        item={editingItem}
+        open={editingItem !== null}
+        onClose={() => setEditingItem(null)}
+      />
     </div>
   );
 }

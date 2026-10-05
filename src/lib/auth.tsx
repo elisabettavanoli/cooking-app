@@ -9,13 +9,7 @@
  * `configured: false`; `AuthGate` uses that to skip the login screen so the
  * app keeps working offline / local-only.
  */
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase, supabaseConfigured } from "./supabase";
 

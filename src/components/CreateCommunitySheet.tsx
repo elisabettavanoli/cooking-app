@@ -4,13 +4,7 @@ import { useI18n } from "../lib/i18n";
 import { useCommunity } from "../lib/community-store";
 import s from "./CreateCommunitySheet.module.css";
 
-export function CreateCommunitySheet({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
+export function CreateCommunitySheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { t } = useI18n();
   const { createCommunity } = useCommunity();
   const [name, setName] = useState("");

@@ -6,8 +6,7 @@
  * dependency installed — it only reads the global Capacitor injects.
  */
 export function isNative(): boolean {
-  const cap = (globalThis as { Capacitor?: { isNativePlatform?: () => boolean } })
-    .Capacitor;
+  const cap = (globalThis as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor;
   return typeof cap?.isNativePlatform === "function" ? cap.isNativePlatform() : false;
 }
 

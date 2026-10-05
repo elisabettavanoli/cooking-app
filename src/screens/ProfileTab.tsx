@@ -105,7 +105,9 @@ export function ProfileTab() {
               </button>
             ))}
           </div>
-          {iconStyle !== "emoji" && <p className={s.attribution}>{t("profile.iconStyleAttribution")}</p>}
+          {iconStyle !== "emoji" && (
+            <p className={s.attribution}>{t("profile.iconStyleAttribution")}</p>
+          )}
         </div>
 
         <div className={s.card}>

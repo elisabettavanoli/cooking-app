@@ -4,7 +4,13 @@
  * backend. When a real API is wired up later, swap these implementations for
  * fetch() calls and keep the same signatures.
  */
-import { findConceptByName, findConceptByNameExact, findConceptByToken, findConceptById, recipeCatalog } from "./data";
+import {
+  findConceptByName,
+  findConceptByNameExact,
+  findConceptByToken,
+  findConceptById,
+  recipeCatalog,
+} from "./data";
 import type { AICategorizationResult, Category, Recipe } from "./types";
 import {
   resolveCategory,

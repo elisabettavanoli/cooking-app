@@ -44,7 +44,10 @@ export function IconStyleProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const value = useMemo<IconStyleValue>(() => ({ iconStyle, setIconStyle }), [iconStyle, setIconStyle]);
+  const value = useMemo<IconStyleValue>(
+    () => ({ iconStyle, setIconStyle }),
+    [iconStyle, setIconStyle],
+  );
 
   return <IconStyleContext.Provider value={value}>{children}</IconStyleContext.Provider>;
 }

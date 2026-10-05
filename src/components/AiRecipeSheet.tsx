@@ -35,7 +35,9 @@ export function AiRecipeSheet({
       open={open}
       onClose={onClose}
       title={t("cook.aiRecipe")}
-      subtitle={selectedConcepts.length > 0 ? t("sheet.aiSubtitleSelected") : t("sheet.aiSubtitleAvailable")}
+      subtitle={
+        selectedConcepts.length > 0 ? t("sheet.aiSubtitleSelected") : t("sheet.aiSubtitleAvailable")
+      }
       heightPct={0.7}
     >
       <div className={s.wrap}>

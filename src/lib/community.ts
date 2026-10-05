@@ -42,9 +42,7 @@ export async function fetchMyCommunities(userId: string): Promise<Community[]> {
     community_id: string;
     communities: CommunityRow | null;
   }[];
-  const communities = rows
-    .map((r) => r.communities)
-    .filter((c): c is CommunityRow => c != null);
+  const communities = rows.map((r) => r.communities).filter((c): c is CommunityRow => c != null);
   if (communities.length === 0) return [];
 
   const counts = await db()

@@ -36,7 +36,7 @@ anything the datasets produce, so re-running is safe.
   `meat-fish`. `"mint gum"` (candy/gum) → `breakfast-snacks`, not dropped.
   `"refrigerated"` sampled as almost entirely juices/kombucha/lemonade →
   `drinks`, not dropped. `"vitamins supplements"` and `"protein meal
-  replacements"` stay unmapped at the aisle level (genuinely mixed, no
+replacements"` stay unmapped at the aisle level (genuinely mixed, no
   majority) and resolve via `"other"`.
 
 ## Open Food Facts
@@ -60,8 +60,8 @@ anything the datasets produce, so re-running is safe.
   (it.json 150 → 2221 terms) but a random quality sample showed the noise is
   not limited to the documented fruit/veg split — `categories_tags`
   substring-matching mis-tags well beyond it (e.g. `"ravioli ricotta e
-  spinaci"` → `drinks`, `"burgers originali"` → `drinks`, `"seitan alla
-  piastra"` → `drinks`; `"drinks"` behaves like a dumping category). Discarded
+spinaci"` → `drinks`, `"burgers originali"` → `drinks`, `"seitan alla
+piastra"` → `drinks`; `"drinks"` behaves like a dumping category). Discarded
   without committing. A future attempt would need leaf-level `categories_tags`
   rules (e.g. `en:fresh-pastas`, not a `"vegetables"` substring) and a much
   stricter vote-decisiveness threshold — real work, not a quick re-run.

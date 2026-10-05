@@ -1,9 +1,6 @@
 import type { Category, IngredientConcept, Recipe, Unit } from "./types";
 
-export const categoryMeta: Record<
-  Category,
-  { label: string; color: string; bg: string }
-> = {
+export const categoryMeta: Record<Category, { label: string; color: string; bg: string }> = {
   // "Citrus Pop" palette — vivid category colours, each a distinct hue, on a
   // soft tint of the same colour.
   fruit: { label: "Fruit", color: "#F0384B", bg: "#FCDEE1" },
@@ -62,8 +59,20 @@ export const concepts: IngredientConcept[] = [
   c("berries", "Berries", "fruit", "berries", ["strawberries", "blueberries", "raspberries"]),
 
   // Vegetables
-  c("tomato", "Tomato", "vegetables", "tomato", ["tomatoes", "cherry tomato", "roma tomato", "pomodoro", "pomodori"]),
-  c("onion", "Onion", "vegetables", "onion", ["onions", "yellow onion", "red onion", "cipolla", "cipolle"]),
+  c("tomato", "Tomato", "vegetables", "tomato", [
+    "tomatoes",
+    "cherry tomato",
+    "roma tomato",
+    "pomodoro",
+    "pomodori",
+  ]),
+  c("onion", "Onion", "vegetables", "onion", [
+    "onions",
+    "yellow onion",
+    "red onion",
+    "cipolla",
+    "cipolle",
+  ]),
   c("garlic", "Garlic", "vegetables", "garlic", ["garlic cloves", "aglio"]),
   c("carrot", "Carrot", "vegetables", "carrot", ["carrots", "carota", "carote"]),
   c("potato", "Potato", "vegetables", "potato", ["potatoes", "patata", "patate"]),
@@ -100,7 +109,10 @@ export const concepts: IngredientConcept[] = [
   c("mozzarella", "Mozzarella", "dairy", "mozzarella", ["fresh mozzarella"]),
   c("parmesan", "Parmesan", "dairy", "parmesan", ["parmigiano"]),
   c("feta", "Feta", "dairy", "feta"),
-  c("cream-cheese", "Cream Cheese", "dairy", "cream-cheese", ["philadelphia", "philadelphia cream cheese"]),
+  c("cream-cheese", "Cream Cheese", "dairy", "cream-cheese", [
+    "philadelphia",
+    "philadelphia cream cheese",
+  ]),
 
   // Meat & Fish
   c("chicken", "Chicken", "meat-fish", "chicken", ["chicken breast", "chicken thighs", "pollo"]),
@@ -133,9 +145,16 @@ export const concepts: IngredientConcept[] = [
 
   // Sauces & Condiments
   c("olive-oil", "Olive Oil", "sauces-condiments", "olive-oil", ["extra virgin olive oil", "olio"]),
-  c("vegetable-oil", "Vegetable Oil", "sauces-condiments", "vegetable-oil", ["canola oil", "sunflower oil"]),
+  c("vegetable-oil", "Vegetable Oil", "sauces-condiments", "vegetable-oil", [
+    "canola oil",
+    "sunflower oil",
+  ]),
   c("soy-sauce", "Soy Sauce", "sauces-condiments", "soy-sauce"),
-  c("vinegar", "Vinegar", "sauces-condiments", "vinegar", ["white vinegar", "apple cider vinegar", "aceto"]),
+  c("vinegar", "Vinegar", "sauces-condiments", "vinegar", [
+    "white vinegar",
+    "apple cider vinegar",
+    "aceto",
+  ]),
   c("balsamic-vinegar", "Balsamic Vinegar", "sauces-condiments", "balsamic-vinegar"),
   c("tomato-sauce", "Tomato Sauce", "sauces-condiments", "tomato-sauce", ["marinara", "passata"]),
   c("tomato-paste", "Tomato Paste", "sauces-condiments", "tomato-paste"),
@@ -181,18 +200,38 @@ export const concepts: IngredientConcept[] = [
   c("juice", "Juice", "drinks", "juice", ["orange juice", "apple juice", "succo", "succhi"]),
   c("coffee", "Coffee", "drinks", "coffee", ["caffè", "caffe"]),
   c("tea", "Tea", "drinks", "tea", ["tè", "te", "the"]),
-  c("chamomile", "Chamomile Tea", "drinks", "chamomile", ["camomilla", "camomile", "chamomile tea"]),
+  c("chamomile", "Chamomile Tea", "drinks", "chamomile", [
+    "camomilla",
+    "camomile",
+    "chamomile tea",
+  ]),
   c("wine", "Wine", "drinks", "wine", ["white wine", "red wine", "vino"]),
   c("beer", "Beer", "drinks", "beer", ["birra"]),
   c("soda", "Soda", "drinks", "soda", ["soft drink"]),
 
   // Breakfast & treats
   c("cereal", "Cereal", "breakfast-snacks", "cereal", ["breakfast cereal", "corn flakes"]),
-  c("biscuits", "Biscuits", "breakfast-snacks", "biscuits", ["cookies", "digestives", "biscotti", "biscotto"]),
-  c("chocolate-bar", "Chocolate Bar", "breakfast-snacks", "chocolate-bar", ["milk chocolate bar", "candy bar"]),
+  c("biscuits", "Biscuits", "breakfast-snacks", "biscuits", [
+    "cookies",
+    "digestives",
+    "biscotti",
+    "biscotto",
+  ]),
+  c("chocolate-bar", "Chocolate Bar", "breakfast-snacks", "chocolate-bar", [
+    "milk chocolate bar",
+    "candy bar",
+  ]),
   c("ice-cream", "Ice Cream", "breakfast-snacks", "ice-cream", ["gelato"]),
-  c("chocolate-spread", "Chocolate Spread", "breakfast-snacks", "chocolate-spread", ["nutella", "hazelnut spread"]),
-  c("sweets", "Sweets", "breakfast-snacks", "sweets", ["candy", "gummies", "caramelle", "caramella"]),
+  c("chocolate-spread", "Chocolate Spread", "breakfast-snacks", "chocolate-spread", [
+    "nutella",
+    "hazelnut spread",
+  ]),
+  c("sweets", "Sweets", "breakfast-snacks", "sweets", [
+    "candy",
+    "gummies",
+    "caramelle",
+    "caramella",
+  ]),
 
   // Savoury snacks
   c("crisps", "Crisps", "snacks", "crisps", ["potato chips", "chips"]),
@@ -226,9 +265,7 @@ export function findConceptByName(name: string): IngredientConcept | undefined {
   const normalized = name.trim().toLowerCase();
   return (
     findConceptByNameExact(name) ??
-    concepts.find((x) =>
-      x.aliases.some((a) => a.includes(normalized) || normalized.includes(a)),
-    )
+    concepts.find((x) => x.aliases.some((a) => a.includes(normalized) || normalized.includes(a)))
   );
 }
 
@@ -271,8 +308,20 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 20,
     servings: 2,
     tags: ["quick", "vegetarian", "pantry"],
-    ingredients: [u("pasta", 250, "g"), u("tomato-sauce", 400, "g"), u("garlic", 2, "piece"), u("olive-oil", 2, "tbsp"), u("basil", 10, "g"), u("parmesan", 30, "g", true)],
-    instructions: ["Boil salted water and cook pasta until al dente.", "Warm olive oil in a pan, add minced garlic and cook for 30 seconds.", "Add tomato sauce and simmer for 10 minutes.", "Toss pasta with sauce, top with basil and parmesan if available."],
+    ingredients: [
+      u("pasta", 250, "g"),
+      u("tomato-sauce", 400, "g"),
+      u("garlic", 2, "piece"),
+      u("olive-oil", 2, "tbsp"),
+      u("basil", 10, "g"),
+      u("parmesan", 30, "g", true),
+    ],
+    instructions: [
+      "Boil salted water and cook pasta until al dente.",
+      "Warm olive oil in a pan, add minced garlic and cook for 30 seconds.",
+      "Add tomato sauce and simmer for 10 minutes.",
+      "Toss pasta with sauce, top with basil and parmesan if available.",
+    ],
   },
   {
     id: "caprese-salad",
@@ -281,8 +330,19 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 10,
     servings: 2,
     tags: ["no-cook", "vegetarian", "summer"],
-    ingredients: [u("tomato", 2, "piece"), u("mozzarella", 200, "g"), u("basil", 10, "g"), u("olive-oil", 1, "tbsp"), u("balsamic-vinegar", 1, "tbsp", true)],
-    instructions: ["Slice tomatoes and mozzarella.", "Layer them on a plate with basil leaves.", "Drizzle olive oil and balsamic vinegar if available.", "Sprinkle with salt and pepper."],
+    ingredients: [
+      u("tomato", 2, "piece"),
+      u("mozzarella", 200, "g"),
+      u("basil", 10, "g"),
+      u("olive-oil", 1, "tbsp"),
+      u("balsamic-vinegar", 1, "tbsp", true),
+    ],
+    instructions: [
+      "Slice tomatoes and mozzarella.",
+      "Layer them on a plate with basil leaves.",
+      "Drizzle olive oil and balsamic vinegar if available.",
+      "Sprinkle with salt and pepper.",
+    ],
   },
   {
     id: "simple-omelette",
@@ -291,8 +351,18 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 10,
     servings: 1,
     tags: ["quick", "breakfast", "vegetarian"],
-    ingredients: [u("eggs", 3, "piece"), u("milk", 2, "tbsp"), u("butter", 10, "g"), u("salt", 1, "tsp"), u("black-pepper", 1, "tsp", true)],
-    instructions: ["Whisk eggs with milk, salt, and pepper.", "Melt butter in a non-stick pan over medium heat.", "Pour in eggs, let set briefly, then fold and serve."],
+    ingredients: [
+      u("eggs", 3, "piece"),
+      u("milk", 2, "tbsp"),
+      u("butter", 10, "g"),
+      u("salt", 1, "tsp"),
+      u("black-pepper", 1, "tsp", true),
+    ],
+    instructions: [
+      "Whisk eggs with milk, salt, and pepper.",
+      "Melt butter in a non-stick pan over medium heat.",
+      "Pour in eggs, let set briefly, then fold and serve.",
+    ],
   },
   {
     id: "chicken-stir-fry",
@@ -301,8 +371,23 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 25,
     servings: 2,
     tags: ["quick", "asian", "dinner"],
-    ingredients: [u("chicken", 250, "g"), u("rice", 150, "g"), u("soy-sauce", 2, "tbsp"), u("bell-pepper", 1, "piece"), u("onion", 1, "piece"), u("garlic", 2, "piece"), u("ginger", 15, "g", true), u("sesame-oil", 1, "tbsp", true)],
-    instructions: ["Cook rice according to package instructions.", "Cut chicken and vegetables into bite-sized pieces.", "Stir-fry chicken in a hot pan until cooked through, then remove.", "Stir-fry vegetables, add garlic and ginger, return chicken to pan.", "Add soy sauce and sesame oil, toss with rice."],
+    ingredients: [
+      u("chicken", 250, "g"),
+      u("rice", 150, "g"),
+      u("soy-sauce", 2, "tbsp"),
+      u("bell-pepper", 1, "piece"),
+      u("onion", 1, "piece"),
+      u("garlic", 2, "piece"),
+      u("ginger", 15, "g", true),
+      u("sesame-oil", 1, "tbsp", true),
+    ],
+    instructions: [
+      "Cook rice according to package instructions.",
+      "Cut chicken and vegetables into bite-sized pieces.",
+      "Stir-fry chicken in a hot pan until cooked through, then remove.",
+      "Stir-fry vegetables, add garlic and ginger, return chicken to pan.",
+      "Add soy sauce and sesame oil, toss with rice.",
+    ],
   },
   {
     id: "fried-rice",
@@ -311,8 +396,22 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 20,
     servings: 2,
     tags: ["quick", "leftover-friendly", "asian"],
-    ingredients: [u("rice", 300, "g"), u("eggs", 2, "piece"), u("soy-sauce", 2, "tbsp"), u("onion", 1, "piece"), u("carrot", 1, "piece"), u("peas", 80, "g"), u("garlic", 2, "piece"), u("vegetable-oil", 1, "tbsp")],
-    instructions: ["Heat oil in a pan, scramble eggs and remove.", "Sauté onion, garlic, carrot and peas until softened.", "Add cold rice and soy sauce, stir-fry over high heat.", "Mix in scrambled eggs and serve."],
+    ingredients: [
+      u("rice", 300, "g"),
+      u("eggs", 2, "piece"),
+      u("soy-sauce", 2, "tbsp"),
+      u("onion", 1, "piece"),
+      u("carrot", 1, "piece"),
+      u("peas", 80, "g"),
+      u("garlic", 2, "piece"),
+      u("vegetable-oil", 1, "tbsp"),
+    ],
+    instructions: [
+      "Heat oil in a pan, scramble eggs and remove.",
+      "Sauté onion, garlic, carrot and peas until softened.",
+      "Add cold rice and soy sauce, stir-fry over high heat.",
+      "Mix in scrambled eggs and serve.",
+    ],
   },
   {
     id: "chicken-curry",
@@ -321,8 +420,24 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 40,
     servings: 3,
     tags: ["comfort", "dinner", "spicy"],
-    ingredients: [u("chicken", 400, "g"), u("rice", 150, "g"), u("onion", 1, "piece"), u("garlic", 3, "piece"), u("ginger", 20, "g"), u("coconut-milk", 400, "ml"), u("curry-powder", 2, "tbsp"), u("tomato", 2, "piece"), u("cilantro", 10, "g", true)],
-    instructions: ["Sauté chopped onion, garlic, and ginger until soft.", "Add curry powder and cook for 1 minute.", "Add chicken and cook until no longer pink.", "Pour in coconut milk and tomatoes, simmer 20 minutes.", "Serve over rice, garnished with cilantro if available."],
+    ingredients: [
+      u("chicken", 400, "g"),
+      u("rice", 150, "g"),
+      u("onion", 1, "piece"),
+      u("garlic", 3, "piece"),
+      u("ginger", 20, "g"),
+      u("coconut-milk", 400, "ml"),
+      u("curry-powder", 2, "tbsp"),
+      u("tomato", 2, "piece"),
+      u("cilantro", 10, "g", true),
+    ],
+    instructions: [
+      "Sauté chopped onion, garlic, and ginger until soft.",
+      "Add curry powder and cook for 1 minute.",
+      "Add chicken and cook until no longer pink.",
+      "Pour in coconut milk and tomatoes, simmer 20 minutes.",
+      "Serve over rice, garnished with cilantro if available.",
+    ],
   },
   {
     id: "tomato-soup",
@@ -331,8 +446,21 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 30,
     servings: 3,
     tags: ["comfort", "vegetarian", "quick"],
-    ingredients: [u("tomato", 800, "g"), u("onion", 1, "piece"), u("garlic", 2, "piece"), u("stock", 500, "ml"), u("cream", 100, "ml", true), u("basil", 10, "g"), u("olive-oil", 1, "tbsp")],
-    instructions: ["Sauté onion and garlic in olive oil.", "Add tomatoes and stock, simmer 20 minutes.", "Blend until smooth.", "Stir in cream if available, garnish with basil."],
+    ingredients: [
+      u("tomato", 800, "g"),
+      u("onion", 1, "piece"),
+      u("garlic", 2, "piece"),
+      u("stock", 500, "ml"),
+      u("cream", 100, "ml", true),
+      u("basil", 10, "g"),
+      u("olive-oil", 1, "tbsp"),
+    ],
+    instructions: [
+      "Sauté onion and garlic in olive oil.",
+      "Add tomatoes and stock, simmer 20 minutes.",
+      "Blend until smooth.",
+      "Stir in cream if available, garnish with basil.",
+    ],
   },
   {
     id: "greek-salad",
@@ -341,8 +469,20 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 10,
     servings: 2,
     tags: ["no-cook", "vegetarian", "fresh"],
-    ingredients: [u("cucumber", 1, "piece"), u("tomato", 2, "piece"), u("feta", 150, "g"), u("olives", 80, "g"), u("onion", 0.5, "piece"), u("olive-oil", 1, "tbsp"), u("oregano-dried", 1, "tsp", true)],
-    instructions: ["Chop cucumber, tomato, and onion.", "Combine in a bowl with olives and feta.", "Drizzle olive oil and sprinkle oregano."],
+    ingredients: [
+      u("cucumber", 1, "piece"),
+      u("tomato", 2, "piece"),
+      u("feta", 150, "g"),
+      u("olives", 80, "g"),
+      u("onion", 0.5, "piece"),
+      u("olive-oil", 1, "tbsp"),
+      u("oregano-dried", 1, "tsp", true),
+    ],
+    instructions: [
+      "Chop cucumber, tomato, and onion.",
+      "Combine in a bowl with olives and feta.",
+      "Drizzle olive oil and sprinkle oregano.",
+    ],
   },
   {
     id: "carbonara",
@@ -351,8 +491,20 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 25,
     servings: 2,
     tags: ["italian", "comfort", "quick"],
-    ingredients: [u("pasta", 250, "g"), u("eggs", 2, "piece"), u("bacon", 150, "g"), u("parmesan", 50, "g"), u("black-pepper", 1, "tsp"), u("garlic", 1, "piece", true)],
-    instructions: ["Cook pasta in salted water.", "Crisp bacon in a pan, add garlic if using.", "Whisk eggs with grated parmesan and pepper.", "Toss hot pasta with bacon and egg mixture off the heat."],
+    ingredients: [
+      u("pasta", 250, "g"),
+      u("eggs", 2, "piece"),
+      u("bacon", 150, "g"),
+      u("parmesan", 50, "g"),
+      u("black-pepper", 1, "tsp"),
+      u("garlic", 1, "piece", true),
+    ],
+    instructions: [
+      "Cook pasta in salted water.",
+      "Crisp bacon in a pan, add garlic if using.",
+      "Whisk eggs with grated parmesan and pepper.",
+      "Toss hot pasta with bacon and egg mixture off the heat.",
+    ],
   },
   {
     id: "aglio-e-olio",
@@ -361,8 +513,20 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 20,
     servings: 2,
     tags: ["italian", "vegetarian", "pantry"],
-    ingredients: [u("pasta", 250, "g"), u("garlic", 4, "piece"), u("olive-oil", 4, "tbsp"), u("chili-flakes", 0.5, "tsp"), u("parsley", 10, "g"), u("parmesan", 30, "g", true)],
-    instructions: ["Cook pasta until al dente.", "Slowly cook sliced garlic in olive oil until golden.", "Add chili flakes and pasta water.", "Toss pasta with sauce and parsley."],
+    ingredients: [
+      u("pasta", 250, "g"),
+      u("garlic", 4, "piece"),
+      u("olive-oil", 4, "tbsp"),
+      u("chili-flakes", 0.5, "tsp"),
+      u("parsley", 10, "g"),
+      u("parmesan", 30, "g", true),
+    ],
+    instructions: [
+      "Cook pasta until al dente.",
+      "Slowly cook sliced garlic in olive oil until golden.",
+      "Add chili flakes and pasta water.",
+      "Toss pasta with sauce and parsley.",
+    ],
   },
   {
     id: "mushroom-risotto",
@@ -371,8 +535,22 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 35,
     servings: 2,
     tags: ["comfort", "italian", "vegetarian"],
-    ingredients: [u("rice", 200, "g"), u("mushroom", 200, "g"), u("onion", 1, "piece"), u("garlic", 2, "piece"), u("stock", 800, "ml"), u("parmesan", 50, "g"), u("wine", 100, "ml", true), u("butter", 20, "g")],
-    instructions: ["Sauté mushrooms until browned, remove.", "Sauté onion and garlic, add rice and toast 2 minutes.", "Add wine if using, then stock ladle by ladle.", "Stir in mushrooms, butter and parmesan."],
+    ingredients: [
+      u("rice", 200, "g"),
+      u("mushroom", 200, "g"),
+      u("onion", 1, "piece"),
+      u("garlic", 2, "piece"),
+      u("stock", 800, "ml"),
+      u("parmesan", 50, "g"),
+      u("wine", 100, "ml", true),
+      u("butter", 20, "g"),
+    ],
+    instructions: [
+      "Sauté mushrooms until browned, remove.",
+      "Sauté onion and garlic, add rice and toast 2 minutes.",
+      "Add wine if using, then stock ladle by ladle.",
+      "Stir in mushrooms, butter and parmesan.",
+    ],
   },
   {
     id: "simple-tacos",
@@ -381,8 +559,21 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 25,
     servings: 2,
     tags: ["mexican", "quick", "dinner"],
-    ingredients: [u("tortilla", 4, "piece"), u("beef", 250, "g"), u("onion", 0.5, "piece"), u("tomato", 1, "piece"), u("lettuce", 50, "g"), u("cheese", 50, "g"), u("salsa", 4, "tbsp", true), u("cumin", 1, "tsp")],
-    instructions: ["Brown beef with onion and cumin.", "Warm tortillas in a dry pan.", "Fill tortillas with beef, lettuce, tomato, cheese and salsa."],
+    ingredients: [
+      u("tortilla", 4, "piece"),
+      u("beef", 250, "g"),
+      u("onion", 0.5, "piece"),
+      u("tomato", 1, "piece"),
+      u("lettuce", 50, "g"),
+      u("cheese", 50, "g"),
+      u("salsa", 4, "tbsp", true),
+      u("cumin", 1, "tsp"),
+    ],
+    instructions: [
+      "Brown beef with onion and cumin.",
+      "Warm tortillas in a dry pan.",
+      "Fill tortillas with beef, lettuce, tomato, cheese and salsa.",
+    ],
   },
   {
     id: "shakshuka",
@@ -391,8 +582,23 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 30,
     servings: 2,
     tags: ["breakfast", "vegetarian", "comfort"],
-    ingredients: [u("eggs", 4, "piece"), u("tomato", 400, "g"), u("bell-pepper", 1, "piece"), u("onion", 1, "piece"), u("cumin", 1, "tsp"), u("paprika", 1, "tsp"), u("garlic", 2, "piece"), u("olive-oil", 1, "tbsp"), u("cilantro", 10, "g", true)],
-    instructions: ["Sauté onion, pepper, and garlic in olive oil.", "Add spices and tomatoes, simmer 15 minutes.", "Make wells and crack eggs into the sauce.", "Cover and cook until eggs are set."],
+    ingredients: [
+      u("eggs", 4, "piece"),
+      u("tomato", 400, "g"),
+      u("bell-pepper", 1, "piece"),
+      u("onion", 1, "piece"),
+      u("cumin", 1, "tsp"),
+      u("paprika", 1, "tsp"),
+      u("garlic", 2, "piece"),
+      u("olive-oil", 1, "tbsp"),
+      u("cilantro", 10, "g", true),
+    ],
+    instructions: [
+      "Sauté onion, pepper, and garlic in olive oil.",
+      "Add spices and tomatoes, simmer 15 minutes.",
+      "Make wells and crack eggs into the sauce.",
+      "Cover and cook until eggs are set.",
+    ],
   },
   {
     id: "pancakes",
@@ -401,8 +607,22 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 25,
     servings: 2,
     tags: ["breakfast", "sweet", "comfort"],
-    ingredients: [u("flour", 150, "g"), u("milk", 200, "ml"), u("eggs", 1, "piece"), u("butter", 20, "g"), u("sugar", 1, "tbsp"), u("baking-powder", 1, "tsp"), u("salt", 0.25, "tsp"), u("honey", 2, "tbsp", true)],
-    instructions: ["Mix flour, sugar, baking powder and salt.", "Whisk in milk, egg and melted butter.", "Cook spoonfuls on a buttered pan until bubbles form.", "Flip and cook until golden."],
+    ingredients: [
+      u("flour", 150, "g"),
+      u("milk", 200, "ml"),
+      u("eggs", 1, "piece"),
+      u("butter", 20, "g"),
+      u("sugar", 1, "tbsp"),
+      u("baking-powder", 1, "tsp"),
+      u("salt", 0.25, "tsp"),
+      u("honey", 2, "tbsp", true),
+    ],
+    instructions: [
+      "Mix flour, sugar, baking powder and salt.",
+      "Whisk in milk, egg and melted butter.",
+      "Cook spoonfuls on a buttered pan until bubbles form.",
+      "Flip and cook until golden.",
+    ],
   },
   {
     id: "banana-smoothie",
@@ -411,7 +631,13 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 5,
     servings: 1,
     tags: ["quick", "breakfast", "healthy"],
-    ingredients: [u("banana", 1, "piece"), u("milk", 200, "ml"), u("yogurt", 100, "g"), u("honey", 1, "tbsp"), u("oats", 20, "g", true)],
+    ingredients: [
+      u("banana", 1, "piece"),
+      u("milk", 200, "ml"),
+      u("yogurt", 100, "g"),
+      u("honey", 1, "tbsp"),
+      u("oats", 20, "g", true),
+    ],
     instructions: ["Blend all ingredients until smooth.", "Add ice if desired."],
   },
   {
@@ -421,8 +647,19 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 10,
     servings: 1,
     tags: ["quick", "breakfast", "vegetarian"],
-    ingredients: [u("bread", 2, "piece"), u("avocado", 1, "piece"), u("lemon", 0.5, "piece"), u("salt", 0.5, "tsp"), u("black-pepper", 0.5, "tsp"), u("chili-flakes", 0.5, "tsp", true)],
-    instructions: ["Toast bread until golden.", "Mash avocado with lemon juice, salt and pepper.", "Spread on toast and add chili flakes if available."],
+    ingredients: [
+      u("bread", 2, "piece"),
+      u("avocado", 1, "piece"),
+      u("lemon", 0.5, "piece"),
+      u("salt", 0.5, "tsp"),
+      u("black-pepper", 0.5, "tsp"),
+      u("chili-flakes", 0.5, "tsp", true),
+    ],
+    instructions: [
+      "Toast bread until golden.",
+      "Mash avocado with lemon juice, salt and pepper.",
+      "Spread on toast and add chili flakes if available.",
+    ],
   },
   {
     id: "chicken-noodle-soup",
@@ -431,8 +668,22 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 35,
     servings: 3,
     tags: ["comfort", "soup", "healthy"],
-    ingredients: [u("chicken", 250, "g"), u("noodles", 150, "g"), u("carrot", 2, "piece"), u("onion", 1, "piece"), u("celery", 2, "piece"), u("stock", 800, "ml"), u("garlic", 2, "piece"), u("parsley", 10, "g", true)],
-    instructions: ["Sauté onion, garlic, carrot, and celery.", "Add stock and chicken, simmer 20 minutes.", "Add noodles and cook until tender.", "Garnish with parsley if available."],
+    ingredients: [
+      u("chicken", 250, "g"),
+      u("noodles", 150, "g"),
+      u("carrot", 2, "piece"),
+      u("onion", 1, "piece"),
+      u("celery", 2, "piece"),
+      u("stock", 800, "ml"),
+      u("garlic", 2, "piece"),
+      u("parsley", 10, "g", true),
+    ],
+    instructions: [
+      "Sauté onion, garlic, carrot, and celery.",
+      "Add stock and chicken, simmer 20 minutes.",
+      "Add noodles and cook until tender.",
+      "Garnish with parsley if available.",
+    ],
   },
   {
     id: "pasta-salad",
@@ -441,8 +692,20 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 20,
     servings: 2,
     tags: ["no-cook", "vegetarian", "summer"],
-    ingredients: [u("pasta", 250, "g"), u("tomato", 2, "piece"), u("cucumber", 1, "piece"), u("mozzarella", 150, "g"), u("olive-oil", 2, "tbsp"), u("basil", 10, "g"), u("balsamic-vinegar", 1, "tbsp", true)],
-    instructions: ["Cook pasta, cool under running water.", "Chop tomato, cucumber, and mozzarella.", "Toss with olive oil, basil, and vinegar if available."],
+    ingredients: [
+      u("pasta", 250, "g"),
+      u("tomato", 2, "piece"),
+      u("cucumber", 1, "piece"),
+      u("mozzarella", 150, "g"),
+      u("olive-oil", 2, "tbsp"),
+      u("basil", 10, "g"),
+      u("balsamic-vinegar", 1, "tbsp", true),
+    ],
+    instructions: [
+      "Cook pasta, cool under running water.",
+      "Chop tomato, cucumber, and mozzarella.",
+      "Toss with olive oil, basil, and vinegar if available.",
+    ],
   },
   {
     id: "rice-beans",
@@ -451,8 +714,22 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 25,
     servings: 2,
     tags: ["budget", "vegetarian", "pantry"],
-    ingredients: [u("rice", 150, "g"), u("beans", 400, "g"), u("onion", 1, "piece"), u("garlic", 2, "piece"), u("cumin", 1, "tsp"), u("tomato", 2, "piece"), u("olive-oil", 1, "tbsp"), u("cilantro", 10, "g", true)],
-    instructions: ["Cook rice.", "Sauté onion and garlic, add cumin, tomatoes, and beans.", "Simmer 10 minutes.", "Serve beans over rice with cilantro."],
+    ingredients: [
+      u("rice", 150, "g"),
+      u("beans", 400, "g"),
+      u("onion", 1, "piece"),
+      u("garlic", 2, "piece"),
+      u("cumin", 1, "tsp"),
+      u("tomato", 2, "piece"),
+      u("olive-oil", 1, "tbsp"),
+      u("cilantro", 10, "g", true),
+    ],
+    instructions: [
+      "Cook rice.",
+      "Sauté onion and garlic, add cumin, tomatoes, and beans.",
+      "Simmer 10 minutes.",
+      "Serve beans over rice with cilantro.",
+    ],
   },
   {
     id: "chickpea-spinach-curry",
@@ -461,8 +738,22 @@ export const recipeCatalog: Recipe[] = [
     timeMinutes: 25,
     servings: 2,
     tags: ["vegetarian", "quick", "spicy"],
-    ingredients: [u("chickpeas", 400, "g"), u("spinach", 150, "g"), u("onion", 1, "piece"), u("garlic", 2, "piece"), u("ginger", 15, "g"), u("curry-powder", 1, "tbsp"), u("coconut-milk", 200, "ml", true), u("rice", 150, "g", true)],
-    instructions: ["Sauté onion, garlic, and ginger.", "Add curry powder and chickpeas.", "Add coconut milk if available, simmer 10 minutes.", "Stir in spinach until wilted, serve with rice."],
+    ingredients: [
+      u("chickpeas", 400, "g"),
+      u("spinach", 150, "g"),
+      u("onion", 1, "piece"),
+      u("garlic", 2, "piece"),
+      u("ginger", 15, "g"),
+      u("curry-powder", 1, "tbsp"),
+      u("coconut-milk", 200, "ml", true),
+      u("rice", 150, "g", true),
+    ],
+    instructions: [
+      "Sauté onion, garlic, and ginger.",
+      "Add curry powder and chickpeas.",
+      "Add coconut milk if available, simmer 10 minutes.",
+      "Stir in spinach until wilted, serve with rice.",
+    ],
   },
 ];
 

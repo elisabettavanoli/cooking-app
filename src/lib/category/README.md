@@ -6,21 +6,22 @@ genuinely unknown items. Multilingual by design.
 
 ## Pipeline (cheapest first)
 
-| Step | Source | Confidence | Notes |
-|---|---|---|---|
-| 1. concept catalog — **exact** name/alias | `src/lib/data.ts` | 0.95 | curated, also yields an icon; safe in any language |
-| 2. learned cache | IndexedDB `cooking-category-cache-v1` | 0.90 | past AI answers, peeked sync |
-| 3. lexicon exact | `data/<lang>.json` | 0.82–0.90 | normalized term match |
-| 4. keyword stems | `data/keywords.json` | 0.45–0.50 | `cookie`, `succo`, `olio`, `pesce`, … — before the token vote |
-| 5. lexicon token vote | `data/<lang>.json` | 0.60 | multi-word names, own-language votes first |
-| 6. concept catalog — **fuzzy** substring | `src/lib/data.ts` | 0.95 | English only; catches "roma tomatoes", loanwords |
-| 7. AI fallback | `aiCategorize()` in `../ai.ts` | from API | **only** if 1–6 miss; result cached |
+| Step                                      | Source                                | Confidence | Notes                                                         |
+| ----------------------------------------- | ------------------------------------- | ---------- | ------------------------------------------------------------- |
+| 1. concept catalog — **exact** name/alias | `src/lib/data.ts`                     | 0.95       | curated, also yields an icon; safe in any language            |
+| 2. learned cache                          | IndexedDB `cooking-category-cache-v1` | 0.90       | past AI answers, peeked sync                                  |
+| 3. lexicon exact                          | `data/<lang>.json`                    | 0.82–0.90  | normalized term match                                         |
+| 4. keyword stems                          | `data/keywords.json`                  | 0.45–0.50  | `cookie`, `succo`, `olio`, `pesce`, … — before the token vote |
+| 5. lexicon token vote                     | `data/<lang>.json`                    | 0.60       | multi-word names, own-language votes first                    |
+| 6. concept catalog — **fuzzy** substring  | `src/lib/data.ts`                     | 0.95       | English only; catches "roma tomatoes", loanwords              |
+| 7. AI fallback                            | `aiCategorize()` in `../ai.ts`        | from API   | **only** if 1–6 miss; result cached                           |
 
 `resolveCategory(name, { lang? })` runs the synchronous steps and returns
 `{ category, confidence, source, lang, key }` (or `category: null`).
 `categorizeIngredientAsync()` in `../ai.ts` adds the cache and AI steps.
 
 Two things learned the hard way:
+
 - The concept catalog matches by loose substring (`"chocolate chip cookies"` →
   the `chocolate` concept, `"jus d'orange"` → `orange`). So only its **exact**
   match is trusted early; the fuzzy pass is last and English-only.

@@ -26,9 +26,32 @@ export interface LocaleRule {
 
 const SHARED_NOISE = [
   // metric / imperial units and pack words that show up in typed names
-  "kg", "kgs", "g", "gr", "grs", "mg", "l", "lt", "ml", "cl", "dl",
-  "oz", "lb", "lbs", "pc", "pcs", "pack", "packs", "pkg", "ct", "count",
-  "x", "approx", "ca", "circa", "about",
+  "kg",
+  "kgs",
+  "g",
+  "gr",
+  "grs",
+  "mg",
+  "l",
+  "lt",
+  "ml",
+  "cl",
+  "dl",
+  "oz",
+  "lb",
+  "lbs",
+  "pc",
+  "pcs",
+  "pack",
+  "packs",
+  "pkg",
+  "ct",
+  "count",
+  "x",
+  "approx",
+  "ca",
+  "circa",
+  "about",
 ];
 
 /**
@@ -54,7 +77,18 @@ export const LOCALE_RULES: Record<LangCode, LocaleRule> = {
   en: {
     detectHints: ["the", "with", "fresh", "frozen", "sliced", "whole"],
     stopwords: ["the", "a", "an", "of", "with", "and", "in", "for"],
-    noise: [...SHARED_NOISE, "bottle", "can", "jar", "tin", "box", "bag", "tub", "carton", "punnet"],
+    noise: [
+      ...SHARED_NOISE,
+      "bottle",
+      "can",
+      "jar",
+      "tin",
+      "box",
+      "bag",
+      "tub",
+      "carton",
+      "punnet",
+    ],
     singularize: (w) => {
       if (w.length <= 3) return w;
       if (w.endsWith("ies")) return `${w.slice(0, -3)}y`;
@@ -65,26 +99,104 @@ export const LOCALE_RULES: Record<LangCode, LocaleRule> = {
   },
   it: {
     detectHints: ["di", "con", "della", "allo", "alla", "confezione", "fresco", "surgelati"],
-    stopwords: ["il", "lo", "la", "i", "gli", "le", "di", "del", "della", "dello", "con", "e", "al", "alla", "allo", "in", "per", "da"],
-    noise: [...SHARED_NOISE, "bottiglia", "lattina", "barattolo", "vasetto", "confezione", "conf", "busta", "sacchetto", "scatola", "cartone"],
+    stopwords: [
+      "il",
+      "lo",
+      "la",
+      "i",
+      "gli",
+      "le",
+      "di",
+      "del",
+      "della",
+      "dello",
+      "con",
+      "e",
+      "al",
+      "alla",
+      "allo",
+      "in",
+      "per",
+      "da",
+    ],
+    noise: [
+      ...SHARED_NOISE,
+      "bottiglia",
+      "lattina",
+      "barattolo",
+      "vasetto",
+      "confezione",
+      "conf",
+      "busta",
+      "sacchetto",
+      "scatola",
+      "cartone",
+    ],
     singularize: identity,
   },
   de: {
     detectHints: ["mit", "und", "frische", "geschnitten", "tiefkuhl", "der", "die", "das"],
     stopwords: ["der", "die", "das", "mit", "und", "im", "in", "fur", "aus", "von"],
-    noise: [...SHARED_NOISE, "flasche", "dose", "glas", "packung", "beutel", "schachtel", "karton", "stuck", "stk"],
+    noise: [
+      ...SHARED_NOISE,
+      "flasche",
+      "dose",
+      "glas",
+      "packung",
+      "beutel",
+      "schachtel",
+      "karton",
+      "stuck",
+      "stk",
+    ],
     singularize: identity,
   },
   fr: {
     detectHints: ["avec", "frais", "surgele", "tranche", "entier", "le", "la", "les", "du"],
-    stopwords: ["le", "la", "les", "un", "une", "de", "des", "du", "au", "aux", "avec", "et", "en", "pour", "a"],
-    noise: [...SHARED_NOISE, "bouteille", "boite", "bocal", "pot", "sachet", "paquet", "carton", "brique"],
+    stopwords: [
+      "le",
+      "la",
+      "les",
+      "un",
+      "une",
+      "de",
+      "des",
+      "du",
+      "au",
+      "aux",
+      "avec",
+      "et",
+      "en",
+      "pour",
+      "a",
+    ],
+    noise: [
+      ...SHARED_NOISE,
+      "bouteille",
+      "boite",
+      "bocal",
+      "pot",
+      "sachet",
+      "paquet",
+      "carton",
+      "brique",
+    ],
     singularize: trimRomancePlural,
   },
   es: {
     detectHints: ["con", "fresco", "congelado", "rebanado", "entero", "el", "la", "los", "las"],
     stopwords: ["el", "la", "los", "las", "un", "una", "de", "del", "con", "y", "en", "para", "al"],
-    noise: [...SHARED_NOISE, "botella", "lata", "bote", "tarro", "bolsa", "paquete", "caja", "brik"],
+    noise: [
+      ...SHARED_NOISE,
+      "botella",
+      "lata",
+      "bote",
+      "tarro",
+      "bolsa",
+      "paquete",
+      "caja",
+      "brik",
+    ],
     singularize: trimRomancePlural,
   },
 };
@@ -105,7 +217,8 @@ export function isSupportedLang(code: string): code is LangCode {
  */
 export function getAppLang(): LangCode {
   try {
-    const picked = typeof localStorage !== "undefined" ? localStorage.getItem(LANG_STORAGE_KEY) : null;
+    const picked =
+      typeof localStorage !== "undefined" ? localStorage.getItem(LANG_STORAGE_KEY) : null;
     if (picked && isSupportedLang(picked)) return picked;
   } catch {
     // localStorage unavailable — fall through to the browser locale

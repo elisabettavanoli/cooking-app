@@ -55,7 +55,7 @@ const INSTACART_DEPARTMENT_MAP = {
   bakery: "pantry",
   beverages: "drinks",
   alcohol: "drinks",
-  "pantry": "pantry",
+  pantry: "pantry",
   breakfast: "breakfast-snacks",
   deli: "meat-fish",
   // null here just means "no reliable department-wide guess" — every real
@@ -332,7 +332,7 @@ function readCsvObjects(path, delimiter = ",") {
 function cleanTerm(raw) {
   return String(raw || "")
     .toLowerCase()
-    .replace(/["'’`.,;:()\[\]]/g, "")
+    .replace(/["'’`.,;:()[\]]/g, "")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -368,9 +368,7 @@ function ingestInstacart(dir, votes) {
       return;
     }
   }
-  const aisleById = new Map(
-    readCsvObjects(aisles).map((a) => [a.aisle_id, cleanTerm(a.aisle)]),
-  );
+  const aisleById = new Map(readCsvObjects(aisles).map((a) => [a.aisle_id, cleanTerm(a.aisle)]));
   const deptById = new Map(
     readCsvObjects(departments).map((d) => [d.department_id, cleanTerm(d.department)]),
   );
@@ -381,8 +379,7 @@ function ingestInstacart(dir, votes) {
     // Every row gets a category — aisle, then department, then "other". Nothing
     // is dropped, so a non-food product (cosmetics, pet food, …) is learned as
     // "other" rather than silently missing from the lexicon.
-    const category =
-      INSTACART_AISLE_MAP[aisle] ?? INSTACART_DEPARTMENT_MAP[dept] ?? "other";
+    const category = INSTACART_AISLE_MAP[aisle] ?? INSTACART_DEPARTMENT_MAP[dept] ?? "other";
     addVote(votes, "en", row.product_name, category, 1);
     kept += 1;
   }
@@ -513,9 +510,7 @@ function loadExisting(lang) {
 }
 
 function writeSorted(lang, obj) {
-  const sorted = Object.fromEntries(
-    Object.entries(obj).sort(([a], [b]) => a.localeCompare(b)),
-  );
+  const sorted = Object.fromEntries(Object.entries(obj).sort(([a], [b]) => a.localeCompare(b)));
   const path = join(DATA_DIR, `${lang}.json`);
   writeFileSync(path, `${JSON.stringify(sorted, null, 2)}\n`);
   console.log(`wrote ${path} (${Object.keys(sorted).length} entries)`);

@@ -6,14 +6,7 @@
  * Mirrors the realtime pattern in `store.tsx`: subscribe to the user's own
  * `community_members` rows and debounce-refetch the community list on any change.
  */
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { supabase, supabaseConfigured } from "./supabase";
 import { useAuth } from "./auth";
 import type { Community, CommunityItemHit, NearbyKitchen } from "./types";
@@ -35,7 +28,8 @@ interface CommunityValue {
 const CommunityContext = createContext<CommunityValue | null>(null);
 
 function errMessage(e: unknown): string {
-  if (e && typeof e === "object" && "message" in e) return String((e as { message: unknown }).message);
+  if (e && typeof e === "object" && "message" in e)
+    return String((e as { message: unknown }).message);
   return String(e);
 }
 

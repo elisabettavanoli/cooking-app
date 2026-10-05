@@ -113,9 +113,7 @@ export function RecipeDetailSheet({
               </div>
             );
           })}
-          {match.missing.length === 0 && (
-            <p className={s.empty}>{t("sheet.haveEverything")}</p>
-          )}
+          {match.missing.length === 0 && <p className={s.empty}>{t("sheet.haveEverything")}</p>}
         </Section>
 
         <Section title={t("sheet.instructions")}>
