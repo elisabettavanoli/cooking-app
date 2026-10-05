@@ -535,44 +535,13 @@ function RemoteCookingProvider({ children }: { children: React.ReactNode }) {
   const moveShoppingItemToInventory = useCallback(
     (id: string) => {
       if (!userId) return;
-      const item = shopRef.current.find((i) => i.id === id);
-      if (!item) return;
-      const concept = findConceptById(item.conceptId);
-      const category = concept?.category ?? item.category;
-      const existing = invRef.current.find(
-        (i) => i.conceptId === item.conceptId && i.unit === item.unit && i.status === "active",
-      );
-
-      setShoppingList((prev) => prev.map((i) => (i.id === id ? { ...i, purchased: true } : i)));
-
-      if (existing) {
-        const quantity = mergeQty(existing.quantity, item.quantity);
-        setInventory((prev) =>
-          prev.map((i) => (i.id === existing.id ? { ...i, quantity } : i)),
-        );
-        Promise.all([
-          remote.patchInventory(existing.id, { quantity }),
-          remote.patchShopping(id, { purchased: true }),
-        ]).catch(onWriteError);
-      } else {
-        const newItem: InventoryItem = {
-          id: makeId(),
-          conceptId: item.conceptId,
-          displayName: concept?.displayName ?? item.displayName,
-          quantity: item.quantity,
-          unit: item.unit,
-          category,
-          status: "active",
-          addedAt: new Date().toISOString(),
-        };
-        setInventory((prev) => [newItem, ...prev]);
-        Promise.all([
-          remote.insertInventory(userId, newItem),
-          remote.patchShopping(id, { purchased: true }),
-        ]).catch(onWriteError);
-      }
+      // The database owns this transaction; reload its committed result instead
+      // of duplicating merge and concurrency logic in optimistic state.
+      // TODO: surface a purchase-specific retry message; onWriteError currently
+      // logs the failure and restores authoritative state by reloading.
+      remote.purchaseShoppingItem(id).then(reload).catch(onWriteError);
     },
-    [userId, onWriteError],
+    [userId, onWriteError, reload],
   );
 
   const markShoppingItemPurchased = useCallback(

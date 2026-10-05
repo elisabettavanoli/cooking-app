@@ -210,6 +210,13 @@ export async function patchShopping(id: string, updates: Partial<ShoppingItem>) 
   if (error) throw error;
 }
 
+export async function purchaseShoppingItem(shoppingItemId: string): Promise<void> {
+  const { error } = await db().rpc("co_purchase_shopping_item", {
+    p_shopping_item_id: shoppingItemId,
+  });
+  if (error) throw error;
+}
+
 export async function deleteShopping(id: string) {
   const { error } = await db().from("shopping_items").delete().eq("id", id);
   if (error) throw error;
