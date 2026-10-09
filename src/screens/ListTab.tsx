@@ -24,8 +24,13 @@ function groupByCategory(items: ShoppingItem[]) {
 
 export function ListTab() {
   const { t, lang } = useI18n();
-  const { shoppingList, addShoppingItem, markShoppingItemPurchased, removeShoppingItem } =
-    useCooking();
+  const {
+    shoppingList,
+    addShoppingItem,
+    markShoppingItemPurchased,
+    readdPurchasedShoppingItem,
+    removeShoppingItem,
+  } = useCooking();
   const [search, setSearch] = useState("");
   const [draft, setDraft] = useState("");
   const [composerOpen, setComposerOpen] = useState(false);
@@ -48,14 +53,29 @@ export function ListTab() {
 
   const { active, purchased } = useMemo(() => {
     const q = search.trim().toLowerCase();
+
     const filtered = shoppingList.filter(
       (i) =>
         i.displayName.toLowerCase().includes(q) ||
         foodName(i.conceptId, lang, i.displayName).toLowerCase().includes(q),
     );
+
+    const active = filtered.filter((i) => !i.purchased);
+    const purchasedItems = filtered.filter((i) => i.purchased);
+
+    const purchasedByName = new Map<string, ShoppingItem>();
+
+    for (const item of purchasedItems) {
+      const key = foodName(item.conceptId, lang, item.displayName).trim().toLocaleLowerCase(lang);
+
+      if (!purchasedByName.has(key)) {
+        purchasedByName.set(key, item);
+      }
+    }
+
     return {
-      active: filtered.filter((i) => !i.purchased),
-      purchased: filtered.filter((i) => i.purchased),
+      active,
+      purchased: Array.from(purchasedByName.values()),
     };
   }, [shoppingList, search, lang]);
 
@@ -169,7 +189,7 @@ export function ListTab() {
                     className={s.iconBtn}
                     onClick={(e) => {
                       e.stopPropagation();
-                      markShoppingItemPurchased(item.id, false);
+                      readdPurchasedShoppingItem(item.id);
                     }}
                     aria-label={t("common.undo")}
                   >

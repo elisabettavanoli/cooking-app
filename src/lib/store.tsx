@@ -31,6 +31,7 @@ interface StoreActions {
   updateShoppingItem: (id: string, updates: Partial<ShoppingItem>) => void;
   removeShoppingItem: (id: string) => void;
   markShoppingItemPurchased: (id: string, purchased: boolean) => void;
+  readdPurchasedShoppingItem: (id: string) => void;
   moveShoppingItemToInventory: (id: string) => void;
   toggleSelectedConcept: (conceptId: string) => void;
   clearSelectedConcepts: () => void;
@@ -289,6 +290,35 @@ function LocalCookingProvider({ children }: { children: React.ReactNode }) {
     [setShoppingList, moveShoppingItemToInventory],
   );
 
+  const readdPurchasedShoppingItem = useCallback(
+    (id: string) => {
+      setShoppingList((prev) => {
+        const purchasedItem = prev.find((item) => item.id === id && item.purchased);
+
+        if (!purchasedItem) return prev;
+
+        const existing = prev.find(
+          (item) =>
+            !item.purchased && item.conceptId === purchasedItem.conceptId && item.unit === "piece",
+        );
+
+        if (existing) return prev;
+
+        const newItem: ShoppingItem = {
+          ...purchasedItem,
+          id: makeId(),
+          quantity: null,
+          unit: "piece",
+          purchased: false,
+          createdAt: new Date().toISOString(),
+        };
+
+        return [newItem, ...prev];
+      });
+    },
+    [setShoppingList],
+  );
+
   const toggleSelectedConcept = useCallback((conceptId: string) => {
     setState((prev) => {
       const selected = new Set(prev.selectedConcepts);
@@ -325,6 +355,7 @@ function LocalCookingProvider({ children }: { children: React.ReactNode }) {
     updateShoppingItem,
     removeShoppingItem,
     markShoppingItemPurchased,
+    readdPurchasedShoppingItem,
     moveShoppingItemToInventory,
     toggleSelectedConcept,
     clearSelectedConcepts,
@@ -550,6 +581,37 @@ function RemoteCookingProvider({ children }: { children: React.ReactNode }) {
     [moveShoppingItemToInventory, onWriteError],
   );
 
+  const readdPurchasedShoppingItem = useCallback(
+    (id: string) => {
+      if (!userId) return;
+
+      const purchasedItem = shopRef.current.find((item) => item.id === id && item.purchased);
+
+      if (!purchasedItem) return;
+
+      const existing = shopRef.current.find(
+        (item) =>
+          !item.purchased && item.conceptId === purchasedItem.conceptId && item.unit === "piece",
+      );
+
+      if (existing) return;
+
+      const newItem: ShoppingItem = {
+        ...purchasedItem,
+        id: makeId(),
+        quantity: null,
+        unit: "piece",
+        purchased: false,
+        createdAt: new Date().toISOString(),
+      };
+
+      setShoppingList((prev) => [newItem, ...prev]);
+
+      remote.insertShopping(userId, newItem).catch(onWriteError);
+    },
+    [userId, onWriteError],
+  );
+
   const toggleSelectedConcept = useCallback((conceptId: string) => {
     setSelectedConcepts((prev) =>
       prev.includes(conceptId) ? prev.filter((c) => c !== conceptId) : [...prev, conceptId],
@@ -594,6 +656,7 @@ function RemoteCookingProvider({ children }: { children: React.ReactNode }) {
     updateShoppingItem,
     removeShoppingItem,
     markShoppingItemPurchased,
+    readdPurchasedShoppingItem,
     moveShoppingItemToInventory,
     toggleSelectedConcept,
     clearSelectedConcepts,
