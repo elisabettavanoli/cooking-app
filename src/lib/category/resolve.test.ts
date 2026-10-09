@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { normalizeName } from "./normalize";
 import { resolveCategory } from "./resolve";
 import { __rebuildLexicon } from "./lexicon";
+import { findConceptByNameExact, findConceptByToken } from "../data";
 
 beforeEach(() => {
   __rebuildLexicon();
@@ -61,5 +62,41 @@ describe("resolveCategory", () => {
     const r = resolveCategory("Zibblewump Snarf");
     expect(r.category).toBeNull();
     expect(r.source).toBe("none");
+  });
+
+  it("classifies eggs as pantry in English and Italian", () => {
+    expect(resolveCategory("eggs", { lang: "en" }).category).toBe("pantry");
+    expect(resolveCategory("egg", { lang: "en" }).category).toBe("pantry");
+    expect(resolveCategory("uova", { lang: "it" }).category).toBe("pantry");
+    expect(resolveCategory("uovo", { lang: "it" }).category).toBe("pantry");
+  });
+
+  it("does not resolve an ambiguous concept alias", () => {
+    expect(findConceptByNameExact("pepper")).toBeUndefined();
+    expect(findConceptByToken(["pepper"])).toBeUndefined();
+  });
+
+  it("resolves unambiguous pepper variants", () => {
+    expect(resolveCategory("black pepper", { lang: "en" }).category).toBe("spices-herbs");
+    expect(resolveCategory("bell pepper", { lang: "en" }).category).toBe("vegetables");
+  });
+
+  it("resolves paprika according to the selected language", () => {
+    expect(resolveCategory("paprika", { lang: "en" }).category).toBe("spices-herbs");
+    expect(resolveCategory("paprika", { lang: "it" }).category).toBe("spices-herbs");
+    expect(resolveCategory("paprika", { lang: "de" }).category).toBe("vegetables");
+    expect(resolveCategory("paprika", { lang: "fr" }).category).toBe("spices-herbs");
+  });
+
+  it("resolves raisins according to the selected language", () => {
+    expect(resolveCategory("raisins", { lang: "en" }).category).toBe("pantry");
+    expect(resolveCategory("raisins", { lang: "fr" }).category).toBe("fruit");
+  });
+
+  it("preserves the curated concept when the exact categories agree", () => {
+    const result = resolveCategory("tomato", { lang: "en" });
+
+    expect(result.category).toBe("vegetables");
+    expect(result.source).toBe("concept");
   });
 });

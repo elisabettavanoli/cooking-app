@@ -2,16 +2,16 @@
  * Deterministic, offline category resolution.
  *
  * Resolution order:
- *   1. Concept catalog — exact name/alias match
- *   2. Multilingual lexicon — exact normalized term match
- *   3. Keyword rules — category-bearing stems and keywords
- *   4. Lexicon token vote — category inference from recognized tokens
- *   5. Concept catalog — fuzzy substring match (English only)
+ *   1. Curated concept catalog, unless a conflicting exact match exists
+ *      in the explicitly selected language
+ *   2. Multilingual lexicon exact match
+ *   3. Keyword rules
+ *   4. Lexicon token vote
  *
- * Returns `category: null` when no deterministic rule matches.
+ * Ambiguous exact matches are never resolved by an arbitrary fallback.
  */
 import type { Category } from "../types";
-import { findConceptByName, findConceptByNameExact } from "../data";
+import { findConceptByNameExact } from "../data";
 import { normalizeName } from "./normalize";
 import { getAppLang, type LangCode } from "./locales";
 import { lookupExact, lookupKeywords, lookupTokens } from "./lexicon";
@@ -19,13 +19,10 @@ import { lookupExact, lookupKeywords, lookupTokens } from "./lexicon";
 export type ResolutionSource = "concept" | "lexicon-exact" | "lexicon-token" | "keyword" | "none";
 
 export interface CategoryResolution {
-  /** Resolved category, or null if every deterministic step missed. */
   category: Category | null;
   confidence: number;
   source: ResolutionSource;
-  /** Language whose rules were applied (detected or supplied). */
   lang: LangCode;
-  /** Normalized lookup key. */
   key: string;
 }
 
@@ -33,34 +30,56 @@ export function resolveCategory(name: string, opts: { lang?: LangCode } = {}): C
   const n = normalizeName(name, opts.lang ?? undefined);
   const base = { lang: n.lang, key: n.key };
 
-  const hit = (c: { category: Category } | undefined) =>
-    c
-      ? {
-          ...base,
-          category: c.category,
-          confidence: 0.95,
-          source: "concept" as const,
-        }
-      : null;
+  const none = (): CategoryResolution => ({
+    ...base,
+    category: null,
+    confidence: 0,
+    source: "none",
+  });
 
-  // 1. Concept catalog: exact name or alias match.
-  const exactConcept = hit(findConceptByNameExact(name));
-  if (exactConcept) return exactConcept;
-
-  // 2. Exact match in the multilingual lexicon.
+  const concept = findConceptByNameExact(name);
   const exact = lookupExact(n);
-  if (exact) {
+
+  // Preserve curated concepts unless a unique exact match in the selected
+  // language explicitly disagrees with the concept's category.
+  if (concept) {
+    if (
+      exact?.status === "match" &&
+      exact.languageSpecific &&
+      exact.hit.category !== concept.category
+    ) {
+      return {
+        ...base,
+        category: exact.hit.category,
+        confidence: exact.hit.confidence,
+        source: "lexicon-exact",
+      };
+    }
+
     return {
       ...base,
-      category: exact.category,
-      confidence: exact.confidence,
+      category: concept.category,
+      confidence: 0.95,
+      source: "concept",
+    };
+  }
+
+  // Without a curated concept, an ambiguous exact match must stop resolution.
+  if (exact?.status === "ambiguous") {
+    return none();
+  }
+
+  if (exact?.status === "match") {
+    return {
+      ...base,
+      category: exact.hit.category,
+      confidence: exact.hit.confidence,
       source: "lexicon-exact",
     };
   }
 
-  // 3. Keyword rules run before token voting so a category-bearing keyword
-  // takes precedence over an incidental ingredient name.
   const keyword = lookupKeywords(n);
+
   if (keyword) {
     return {
       ...base,
@@ -70,8 +89,8 @@ export function resolveCategory(name: string, opts: { lang?: LangCode } = {}): C
     };
   }
 
-  // 4. Infer a category from recognized tokens.
   const tokens = lookupTokens(n);
+
   if (tokens) {
     return {
       ...base,
@@ -81,14 +100,7 @@ export function resolveCategory(name: string, opts: { lang?: LangCode } = {}): C
     };
   }
 
-  // 5. Fuzzy concept matching is restricted to English to reduce
-  // false positives across languages.
-  if (n.lang === "en") {
-    const fuzzy = hit(findConceptByName(name));
-    if (fuzzy) return fuzzy;
-  }
-
-  return { ...base, category: null, confidence: 0, source: "none" };
+  return none();
 }
 
 export { getAppLang };

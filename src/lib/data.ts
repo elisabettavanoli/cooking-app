@@ -102,7 +102,7 @@ export const concepts: IngredientConcept[] = [
   // Dairy
   c("milk", "Milk", "dairy", "milk", ["latte"]),
   c("butter", "Butter", "dairy", "butter", ["burro"]),
-  c("eggs", "Eggs", "dairy", "eggs", ["egg", "uovo", "uova"]),
+  c("eggs", "Eggs", "pantry", "eggs", ["egg", "uovo", "uova"]),
   c("yogurt", "Yogurt", "dairy", "yogurt", ["greek yogurt"]),
   c("cream", "Cream", "dairy", "cream", ["heavy cream", "whipping cream"]),
   c("cheese", "Cheese", "dairy", "cheese", ["cheddar", "gouda", "cheese block", "formaggio"]),
@@ -252,39 +252,63 @@ export function findConceptById(id: string): IngredientConcept | undefined {
   return conceptsById.get(id);
 }
 
-/** Exact match on display name or an alias — no substring fuzz. Safe in any language. */
+/** Exact match on display name or alias. Returns undefined when ambiguous. */
 export function findConceptByNameExact(name: string): IngredientConcept | undefined {
   const normalized = name.trim().toLowerCase();
-  return (
-    concepts.find((x) => x.displayName.toLowerCase() === normalized) ??
-    concepts.find((x) => x.aliases.includes(normalized))
+  if (!normalized) return undefined;
+  const displayNameMatches = concepts.filter(
+    (concept) => concept.displayName.trim().toLowerCase() === normalized,
   );
+  if (displayNameMatches.length === 1) return displayNameMatches[0];
+  if (displayNameMatches.length > 1) return undefined;
+  const aliasMatches = concepts.filter((concept) =>
+    concept.aliases.some((alias) => alias.trim().toLowerCase() === normalized),
+  );
+  return aliasMatches.length === 1 ? aliasMatches[0] : undefined;
 }
 
 export function findConceptByName(name: string): IngredientConcept | undefined {
   const normalized = name.trim().toLowerCase();
-  return (
-    findConceptByNameExact(name) ??
-    concepts.find((x) => x.aliases.some((a) => a.includes(normalized) || normalized.includes(a)))
-  );
+  if (!normalized) return undefined;
+  const exactMatch = findConceptByNameExact(normalized);
+  if (exactMatch) return exactMatch;
+  const matches = new Map<string, IngredientConcept>();
+  for (const concept of concepts) {
+    const aliases = [concept.displayName, ...concept.aliases];
+    for (const alias of aliases) {
+      const normalizedAlias = alias.trim().toLowerCase();
+      if (!normalizedAlias) continue;
+      if (
+        normalizedAlias.length >= 4 &&
+        (normalizedAlias.includes(normalized) || normalized.includes(normalizedAlias))
+      ) {
+        matches.set(concept.id, concept);
+      }
+    }
+  }
+
+  return matches.size === 1 ? [...matches.values()][0] : undefined;
 }
 
 /**
- * Exact match on a single normalized token against a concept's aliases —
- * multi-word aliases never equal a single token, so this stays as safe in
- * any language as `findConceptByNameExact`. Catches a curated ingredient
- * inside an otherwise-uncurated phrase ("pesce" in "bastoncini di pesce",
- * "pesce fritto") that the whole-string exact match misses. Returns
- * undefined when zero or more than one distinct concept matches — an
- * ambiguous phrase (e.g. "chicken and tomato soup") is left for the caller's
- * slug/category-only fallback rather than guessing.
+ * Finds a concept through exact token-to-alias matches.
+ * Returns undefined when multiple distinct concepts match.
  */
 export function findConceptByToken(tokens: string[]): IngredientConcept | undefined {
   const matches = new Map<string, IngredientConcept>();
   for (const token of tokens) {
-    const hit = concepts.find((x) => x.aliases.includes(token));
-    if (hit) matches.set(hit.id, hit);
+    const normalized = token.trim().toLowerCase();
+    if (!normalized) continue;
+    for (const concept of concepts) {
+      const matchesToken = concept.aliases.some(
+        (alias) => alias.trim().toLowerCase() === normalized,
+      );
+      if (matchesToken) {
+        matches.set(concept.id, concept);
+      }
+    }
   }
+
   return matches.size === 1 ? [...matches.values()][0] : undefined;
 }
 

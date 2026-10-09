@@ -1,4 +1,4 @@
-import { findConceptByName, findConceptByNameExact, findConceptByToken } from "./data";
+import { findConceptByNameExact, findConceptByToken } from "./data";
 import type { AICategorizationResult, Category } from "./types";
 import { resolveCategory, normalizeName, type LangCode } from "./category";
 
@@ -19,38 +19,36 @@ export function categorizeIngredient(
   const trimmed = name.trim();
   const resolution = resolveCategory(trimmed, opts);
 
+  // 1. Prefer an exact, unambiguous concept match.
+  const exactConcept = findConceptByNameExact(trimmed);
+
+  if (exactConcept) {
+    return {
+      conceptId: exactConcept.id,
+      displayName: exactConcept.displayName,
+      category: exactConcept.category,
+      iconKey: exactConcept.iconKey,
+      confidence: 0.95,
+    };
+  }
+
+  // 2. A token-based concept is safe only when its category agrees
+  // with the category independently resolved from the full ingredient.
   const tokenConcept = findConceptByToken(
     normalizeName(trimmed, opts.lang ?? resolution.lang).tokens,
   );
 
-  const safeConcept =
-    findConceptByNameExact(trimmed) ??
-    (tokenConcept && (resolution.category === null || tokenConcept.category === resolution.category)
-      ? tokenConcept
-      : undefined);
-
-  if (safeConcept) {
+  if (tokenConcept && resolution.category === tokenConcept.category) {
     return {
-      conceptId: safeConcept.id,
-      displayName: safeConcept.displayName,
-      category: safeConcept.category,
-      iconKey: safeConcept.iconKey,
+      conceptId: tokenConcept.id,
+      displayName: tokenConcept.displayName,
+      category: tokenConcept.category,
+      iconKey: tokenConcept.iconKey,
       confidence: 0.95,
     };
   }
 
-  const fuzzyConcept = resolution.lang === "en" ? findConceptByName(trimmed) : undefined;
-
-  if (fuzzyConcept && fuzzyConcept.category === resolution.category) {
-    return {
-      conceptId: fuzzyConcept.id,
-      displayName: fuzzyConcept.displayName,
-      category: fuzzyConcept.category,
-      iconKey: fuzzyConcept.iconKey,
-      confidence: 0.95,
-    };
-  }
-
+  // 3. Preserve the original ingredient when no safe concept is available.
   const slug = slugify(trimmed);
 
   return {
@@ -58,7 +56,7 @@ export function categorizeIngredient(
     displayName: trimmed || "Item",
     category: resolution.category ?? ("other" as Category),
     iconKey: slug || "other",
-    confidence: resolution.category ? resolution.confidence : 0.3,
+    confidence: resolution.category !== null ? resolution.confidence : 0.3,
   };
 }
 

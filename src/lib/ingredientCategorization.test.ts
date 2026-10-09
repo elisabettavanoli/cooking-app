@@ -67,4 +67,22 @@ describe("generateRecipe", () => {
 
     expect(score).toBeGreaterThan(0);
   });
+
+  it("does not assign an arbitrary concept to an ambiguous alias", () => {
+    const res = categorizeIngredient("pepper", { lang: "en" });
+
+    expect(res.conceptId).toBe("pepper");
+    expect(res.category).toBe("other");
+  });
+
+  it("preserves the correct concepts for unambiguous pepper variants", () => {
+    const blackPepper = categorizeIngredient("black pepper", { lang: "en" });
+    const bellPepper = categorizeIngredient("bell pepper", { lang: "en" });
+
+    expect(blackPepper.conceptId).toBe("black-pepper");
+    expect(blackPepper.category).toBe("spices-herbs");
+
+    expect(bellPepper.conceptId).toBe("bell-pepper");
+    expect(bellPepper.category).toBe("vegetables");
+  });
 });
