@@ -1,8 +1,8 @@
 # Co-oking 🍳
 
-**A smarter way to manage your kitchen, reduce food waste, and discover what you can cook with what you already have.**
+**Make the most of what you have, and find what you’re missing.**
 
-Co-oking started with a small, everyday problem: my university friends and I kept forgetting things when grocery shopping. What began as a simple shopping list grew into an app where purchased items move into your **Kitchen**, helping you keep track of what you already have at home. From there, the idea expanded: suggesting recipes based on available ingredients, exploring AI-powered cooking ideas, and making it easier for people in the same community to borrow or exchange things they are missing. Need an onion? Perhaps someone in your student residence has one to spare.
+Co-oking started with a problem my university friends and I knew all too well: planning the perfect meal, only to discover we were missing that one ingredient we’d forgotten to buy; and honestly, nobody wanted to go back to the supermarket just for an onion. What began as a simple shopping list grew into an app where purchased items move into your **Kitchen**, helping you keep track of what you already have at home. From there, the idea expanded: suggesting recipes based on available ingredients, exploring AI-powered cooking ideas, and making it easier for people in the same community to borrow or exchange things they are missing. Need an onion? Perhaps someone in your student residence has one to spare.
 
 The project is still a work in progress. Built with React, TypeScript, and Vite, Co-oking is a mobile-first, installable Progressive Web App (PWA).
 
