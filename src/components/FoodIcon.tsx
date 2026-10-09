@@ -351,14 +351,14 @@ const foodEmoji: Record<string, string> = {
 const categoryEmoji: Record<Category, string> = {
   fruit: "🍎",
   vegetables: "🥕",
-  dairy: "🥛",
+  dairy: "🧀",
   "meat-fish": "🍖",
   pantry: "🥫",
   "sauces-condiments": "🫙",
   "spices-herbs": "🌿",
   baking: "🧁",
   drinks: "🥤",
-  "breakfast-snacks": "🥐",
+  "breakfast-snacks": "🍪",
   snacks: "🍿",
   other: "🛒",
 };
