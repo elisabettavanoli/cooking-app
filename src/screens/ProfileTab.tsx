@@ -137,18 +137,6 @@ export function ProfileTab() {
             />
           </label>
           {locationDenied && <p className={s.denied}>{t("profile.locationDenied")}</p>}
-
-          <label className={s.switchRow}>
-            <span className={s.switchRowText}>
-              <span className={s.rowLabel}>{t("profile.requestsLabel")}</span>
-              <span className={s.rowHint}>{t("profile.requestsHint")}</span>
-            </span>
-            <Switch
-              value={profile.requestsEnabled}
-              onValueChange={(v) => updateProfile({ requestsEnabled: v })}
-              label={t("profile.requestsLabel")}
-            />
-          </label>
         </div>
 
         {configured && user ? (

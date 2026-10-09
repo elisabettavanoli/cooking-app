@@ -8,7 +8,7 @@
  * `co_nearby_public_kitchens`). See `supabase/schema.sql`.
  */
 import { supabase } from "./supabase";
-import type { Community, CommunityItemHit, NearbyKitchen } from "./types";
+import type { Community, CommunityItemHit, NearbyKitchen, ShareRequest } from "./types";
 
 function db() {
   if (!supabase) throw new Error("Supabase not configured");
@@ -101,6 +101,7 @@ interface ItemHitRow {
   category: CommunityItemHit["category"];
   quantity: number | string | null;
   unit: CommunityItemHit["unit"];
+  requests_enabled: boolean;
 }
 
 /** Search an ingredient across every community you're in. */
@@ -119,6 +120,7 @@ export async function searchSharedItem(query: string): Promise<CommunityItemHit[
     category: r.category,
     quantity: r.quantity == null ? null : Number(r.quantity),
     unit: r.unit,
+    requestsEnabled: r.requests_enabled,
   }));
 }
 
@@ -149,4 +151,89 @@ export async function fetchNearbyKitchens(
     longitude: r.longitude,
     itemCount: Number(r.item_count),
   }));
+}
+
+// ─────────────────────────── Share requests ───────────────────────────
+
+interface ShareRequestRow {
+  id: string;
+  requester_id: string;
+  owner_id: string;
+  community_id: string;
+  concept_id: string;
+  display_name: string;
+  status: ShareRequest["status"];
+  message: string | null;
+  created_at: string;
+}
+
+function toShareRequest(row: ShareRequestRow): ShareRequest {
+  return {
+    id: row.id,
+    requesterId: row.requester_id,
+    ownerId: row.owner_id,
+    communityId: row.community_id,
+    conceptId: row.concept_id,
+    displayName: row.display_name,
+    status: row.status,
+    message: row.message ?? undefined,
+    createdAt: row.created_at,
+  };
+}
+
+/**
+ * Fetch requests sent or received by a user.
+ * RLS ensures users can only read requests involving themselves.
+ */
+export async function fetchShareRequests(userId: string): Promise<ShareRequest[]> {
+  const { data, error } = await db()
+    .from("share_requests")
+    .select(
+      "id, community_id, requester_id, owner_id, concept_id, display_name, status, message, created_at",
+    )
+    .or(`requester_id.eq.${userId},owner_id.eq.${userId}`)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  return ((data ?? []) as ShareRequestRow[]).map(toShareRequest);
+}
+
+/**
+ * Create a sharing request through the validated database RPC.
+ */
+export async function createShareRequest(input: {
+  communityId: string;
+  ownerId: string;
+  conceptId: string;
+  message?: string;
+}): Promise<ShareRequest> {
+  const { data, error } = await db().rpc("co_create_share_request", {
+    p_community_id: input.communityId,
+    p_owner_id: input.ownerId,
+    p_concept_id: input.conceptId,
+    p_message: input.message?.trim() || null,
+  });
+
+  if (error) throw error;
+
+  return toShareRequest(data as ShareRequestRow);
+}
+
+/**
+ * Update a pending request through the validated database RPC.
+ * Acceptance records the decision; it does not transfer the ingredient.
+ */
+export async function updateShareRequest(
+  requestId: string,
+  action: "accept" | "decline" | "cancel",
+): Promise<ShareRequest> {
+  const { data, error } = await db().rpc("co_update_share_request", {
+    p_request_id: requestId,
+    p_action: action,
+  });
+
+  if (error) throw error;
+
+  return toShareRequest(data as ShareRequestRow);
 }

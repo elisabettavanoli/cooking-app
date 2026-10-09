@@ -9,7 +9,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { supabase, supabaseConfigured } from "./supabase";
 import { useAuth } from "./auth";
-import type { Community, CommunityItemHit, NearbyKitchen } from "./types";
+import type { Community, CommunityItemHit, NearbyKitchen, ShareRequest } from "./types";
 import * as api from "./community";
 
 interface CommunityValue {
@@ -23,6 +23,22 @@ interface CommunityValue {
   leave: (communityId: string) => Promise<void>;
   search: (query: string) => Promise<CommunityItemHit[]>;
   nearbyKitchens: (lat: number, lng: number, radiusKm?: number) => Promise<NearbyKitchen[]>;
+  /** Requests sent or received by the signed-in user. */
+  shareRequests: ShareRequest[];
+  /** Initial share-request load finished. */
+  requestsReady: boolean;
+
+  createShareRequest: (input: {
+    communityId: string;
+    ownerId: string;
+    conceptId: string;
+    message?: string;
+  }) => Promise<{ request: ShareRequest | null; error: string | null }>;
+
+  updateShareRequest: (
+    requestId: string,
+    action: "accept" | "decline" | "cancel",
+  ) => Promise<{ request: ShareRequest | null; error: string | null }>;
 }
 
 const CommunityContext = createContext<CommunityValue | null>(null);
@@ -41,6 +57,9 @@ export function CommunityProvider({ children }: { children: React.ReactNode }) {
   const [communities, setCommunities] = useState<Community[]>([]);
   const [ready, setReady] = useState(!enabled);
 
+  const [shareRequests, setShareRequests] = useState<ShareRequest[]>([]);
+  const [requestsReady, setRequestsReady] = useState(!enabled);
+
   const reload = useCallback(async () => {
     if (!enabled || !userId) return;
     try {
@@ -49,6 +68,18 @@ export function CommunityProvider({ children }: { children: React.ReactNode }) {
       console.error("[community] load failed", e);
     } finally {
       setReady(true);
+    }
+  }, [enabled, userId]);
+
+  const reloadRequests = useCallback(async () => {
+    if (!enabled || !userId) return;
+
+    try {
+      setShareRequests(await api.fetchShareRequests(userId));
+    } catch (e) {
+      console.error("[community] share requests load failed", e);
+    } finally {
+      setRequestsReady(true);
     }
   }, [enabled, userId]);
 
@@ -61,6 +92,17 @@ export function CommunityProvider({ children }: { children: React.ReactNode }) {
     setReady(false);
     void reload();
   }, [enabled, reload]);
+
+  useEffect(() => {
+    if (!enabled) {
+      setShareRequests([]);
+      setRequestsReady(true);
+      return;
+    }
+
+    setRequestsReady(false);
+    void reloadRequests();
+  }, [enabled, reloadRequests]);
 
   // realtime: my membership rows change → debounced refetch
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -89,6 +131,51 @@ export function CommunityProvider({ children }: { children: React.ReactNode }) {
       void client.removeChannel(channel);
     };
   }, [enabled, userId, reload]);
+
+  // realtime: changes to my share requests → debounced refetch
+  const requestsTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const client = supabase;
+    if (!enabled || !userId || !client) return;
+
+    const bumpRequests = () => {
+      if (requestsTimer.current) clearTimeout(requestsTimer.current);
+
+      requestsTimer.current = setTimeout(() => {
+        void reloadRequests();
+      }, 600);
+    };
+
+    const channel = client
+      .channel(`share-requests:${userId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "share_requests",
+          filter: `requester_id=eq.${userId}`,
+        },
+        bumpRequests,
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "share_requests",
+          filter: `owner_id=eq.${userId}`,
+        },
+        bumpRequests,
+      )
+      .subscribe();
+
+    return () => {
+      if (requestsTimer.current) clearTimeout(requestsTimer.current);
+      void client.removeChannel(channel);
+    };
+  }, [enabled, userId, reloadRequests]);
 
   const createCommunity = useCallback<CommunityValue["createCommunity"]>(
     async (name) => {
@@ -161,6 +248,44 @@ export function CommunityProvider({ children }: { children: React.ReactNode }) {
     [enabled],
   );
 
+  const createShareRequest = useCallback<CommunityValue["createShareRequest"]>(
+    async (input) => {
+      if (!enabled) {
+        return { request: null, error: "Community features are unavailable" };
+      }
+
+      try {
+        const request = await api.createShareRequest(input);
+
+        setShareRequests((prev) => [request, ...prev.filter((item) => item.id !== request.id)]);
+
+        return { request, error: null };
+      } catch (e) {
+        return { request: null, error: errMessage(e) };
+      }
+    },
+    [enabled],
+  );
+
+  const updateShareRequest = useCallback<CommunityValue["updateShareRequest"]>(
+    async (requestId, action) => {
+      if (!enabled) {
+        return { request: null, error: "Community features are unavailable" };
+      }
+
+      try {
+        const request = await api.updateShareRequest(requestId, action);
+
+        setShareRequests((prev) => prev.map((item) => (item.id === request.id ? request : item)));
+
+        return { request, error: null };
+      } catch (e) {
+        return { request: null, error: errMessage(e) };
+      }
+    },
+    [enabled],
+  );
+
   const value: CommunityValue = {
     enabled,
     ready,
@@ -170,6 +295,10 @@ export function CommunityProvider({ children }: { children: React.ReactNode }) {
     leave,
     search,
     nearbyKitchens,
+    shareRequests,
+    requestsReady,
+    createShareRequest,
+    updateShareRequest,
   };
 
   return <CommunityContext.Provider value={value}>{children}</CommunityContext.Provider>;

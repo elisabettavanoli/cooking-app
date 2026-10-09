@@ -102,6 +102,7 @@ export interface CommunityItemHit {
   category: Category;
   quantity: number | null;
   unit: Unit;
+  requestsEnabled: boolean;
 }
 
 /** A public kitchen shown as a pin on the nearby map. */
@@ -115,6 +116,7 @@ export interface NearbyKitchen {
 
 export interface ShareRequest {
   id: string;
+  communityId: string;
   requesterId: string;
   ownerId: string;
   conceptId: string;

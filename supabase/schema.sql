@@ -246,16 +246,15 @@ create policy shopping_own on public.shopping_items
   for all using (owner_id = auth.uid()) with check (owner_id = auth.uid());
 
 -- share_requests
-drop policy if exists requests_read   on public.share_requests;
+-- Clients can read requests involving themselves.
+-- All writes must go through the validated RPCs in the migrations.
+drop policy if exists requests_read on public.share_requests;
 drop policy if exists requests_insert on public.share_requests;
 drop policy if exists requests_update on public.share_requests;
+
 create policy requests_read on public.share_requests
-  for select using (requester_id = auth.uid() or owner_id = auth.uid());
-create policy requests_insert on public.share_requests
-  for insert with check (requester_id = auth.uid()
-                         and public.shares_community_with(owner_id));
-create policy requests_update on public.share_requests
-  for update using (requester_id = auth.uid() or owner_id = auth.uid());
+  for select
+  using (requester_id = auth.uid() or owner_id = auth.uid());
 
 -- ─────────────────────────── map: public kitchens ───────────────────────────
 -- `share_on_map` opts a profile into the open map. Its ACTIVE pantry items and
@@ -298,12 +297,13 @@ create or replace function public.co_search_shared_item(p_query text)
     owner_id uuid, owner_name text,
     community_id uuid, community_name text,
     concept_id text, display_name text, category text,
-    quantity numeric, unit text
+    quantity numeric, unit text,
+    requests_enabled boolean
   )
   language sql security definer set search_path = '' stable as $$
   select distinct on (pi.owner_id, c.id, pi.concept_id)
          pi.owner_id, pr.display_name, c.id, c.name,
-         pi.concept_id, pi.display_name, pi.category, pi.quantity, pi.unit
+         pi.concept_id, pi.display_name, pi.category, pi.quantity, pi.unit, pr.share_with_communities
   from public.community_members me
   join public.community_members them on them.community_id = me.community_id
   join public.communities c   on c.id = me.community_id
