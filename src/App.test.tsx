@@ -25,8 +25,9 @@ describe("App smoke", () => {
     await waitFor(() => screen.getByText(/my kitchen/i));
 
     await user.click(screen.getByRole("button", { name: "Cook" }));
-    expect(screen.getByText(/what can i cook\?/i)).toBeDefined();
-    expect(screen.getByText(/0 items in your kitchen/i)).toBeDefined();
+
+    expect(await screen.findByText(/what can i cook\?/i)).toBeDefined();
+    expect(await screen.findByText(/0 items in your kitchen/i)).toBeDefined();
   });
 
   it("shows the Profile tab with a language picker and no logout in local mode", async () => {
@@ -35,8 +36,9 @@ describe("App smoke", () => {
     await waitFor(() => screen.getByText(/my kitchen/i));
 
     await user.click(screen.getByRole("button", { name: "Profile" }));
-    expect(screen.getByRole("heading", { name: /profile/i })).toBeDefined();
-    expect(screen.getByRole("combobox", { name: /language/i })).toBeDefined();
+
+    expect(await screen.findByRole("heading", { name: /profile/i })).toBeDefined();
+    expect(await screen.findByRole("combobox", { name: /language/i })).toBeDefined();
     expect(screen.queryByRole("button", { name: /log out/i })).toBeNull();
   });
 
@@ -46,7 +48,8 @@ describe("App smoke", () => {
     await waitFor(() => screen.getByText(/my kitchen/i));
 
     await user.click(screen.getByRole("button", { name: "Nearby" }));
-    expect(screen.getByText(/sign in to discover communities/i)).toBeDefined();
+
+    expect(await screen.findByText(/sign in to discover communities/i)).toBeDefined();
     expect(screen.queryByText(/your communities/i)).toBeNull();
     expect(document.querySelector(".leaflet-container")).toBeNull();
   });

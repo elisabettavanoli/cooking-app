@@ -1,15 +1,40 @@
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { ChefHat, Home, ListTodo, User, Users } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { colors } from "./lib/theme";
 import { useI18n } from "./lib/i18n";
 import { useCooking } from "./lib/store";
-import { KitchenTab } from "./screens/KitchenTab";
-import { CookTab } from "./screens/CookTab";
-import { ListTab } from "./screens/ListTab";
-import { NearbyTab } from "./screens/NearbyTab";
-import { ProfileTab } from "./screens/ProfileTab";
 import styles from "./MobileShell.module.css";
+
+const KitchenTab = lazy(() =>
+  import("./screens/KitchenTab").then((module) => ({
+    default: module.KitchenTab,
+  })),
+);
+
+const CookTab = lazy(() =>
+  import("./screens/CookTab").then((module) => ({
+    default: module.CookTab,
+  })),
+);
+
+const ListTab = lazy(() =>
+  import("./screens/ListTab").then((module) => ({
+    default: module.ListTab,
+  })),
+);
+
+const NearbyTab = lazy(() =>
+  import("./screens/NearbyTab").then((module) => ({
+    default: module.NearbyTab,
+  })),
+);
+
+const ProfileTab = lazy(() =>
+  import("./screens/ProfileTab").then((module) => ({
+    default: module.ProfileTab,
+  })),
+);
 
 type TabId = "kitchen" | "cook" | "list" | "nearby" | "profile";
 
@@ -34,13 +59,19 @@ export function MobileShell() {
             <p className={styles.loadingText}>{t("common.loadingKitchen")}</p>
           </div>
         ) : (
-          <>
+          <Suspense
+            fallback={
+              <div className={styles.loading}>
+                <p className={styles.loadingText}>{t("common.loadingKitchen")}</p>
+              </div>
+            }
+          >
             {activeTab === "kitchen" && <KitchenTab onSwitchToCook={() => setActiveTab("cook")} />}
             {activeTab === "cook" && <CookTab />}
             {activeTab === "list" && <ListTab />}
             {activeTab === "nearby" && <NearbyTab />}
             {activeTab === "profile" && <ProfileTab />}
-          </>
+          </Suspense>
         )}
       </div>
 
@@ -50,6 +81,7 @@ export function MobileShell() {
           const active = activeTab === tab.id;
           const tint = active ? colors.primary : colors.mutedForeground;
           const label = t(tab.labelKey);
+
           return (
             <button
               key={tab.id}

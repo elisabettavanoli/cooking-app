@@ -2,6 +2,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
+import { visualizer } from "rollup-plugin-visualizer";
 
 // PWA icons live in public/ and are (re)generated from assets/icon.svg with:
 //   npx pwa-assets-generator            (config in pwa-assets.config.ts)
@@ -9,6 +10,13 @@ import { VitePWA } from "vite-plugin-pwa";
 //    and copy assets/icon.svg to public/favicon.svg)
 export default defineConfig({
   plugins: [
+    visualizer({
+      filename: "dist/bundle-analysis.html",
+      template: "treemap",
+      gzipSize: true,
+      brotliSize: true,
+      open: false,
+    }),
     react(),
     VitePWA({
       strategies: "generateSW",

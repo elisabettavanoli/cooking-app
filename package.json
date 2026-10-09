@@ -43,6 +43,7 @@
     "fake-indexeddb": "^6.2.5",
     "jsdom": "^26.0.0",
     "prettier": "^3.9.9",
+    "rollup-plugin-visualizer": "^6.0.11",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.71.1",
     "vite": "^8.2.0",
