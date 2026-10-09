@@ -6,7 +6,7 @@ import { useI18n } from "../lib/i18n";
 import { categories, units } from "../lib/data";
 import { unitLabel } from "../lib/units";
 import { useCooking } from "../lib/store";
-import { categorizeIngredientAsync } from "../lib/ai";
+import { categorizeIngredientAsync } from "../lib/ingredientCategorization";
 import type { Category, Unit } from "../lib/types";
 import s from "./AddItemSheet.module.css";
 

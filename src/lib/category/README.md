@@ -1,24 +1,30 @@
 # Product → category resolution
 
-Deterministic, offline-first mapping from a free-text product name to one of the
-12 `Category` values (`src/lib/types.ts`), so an AI/API call is only needed for
-genuinely unknown items. Multilingual by design.
+Deterministic, offline mapping from a free-text product name to one of the
+12 `Category` values (`src/lib/types.ts`). The resolver combines a curated
+concept catalog, multilingual lexicons and keyword rules to categorize products
+without requiring a backend. Multilingual by design.
 
-## Pipeline (cheapest first)
+## Resolution pipeline
 
-| Step                                      | Source                                | Confidence | Notes                                                         |
-| ----------------------------------------- | ------------------------------------- | ---------- | ------------------------------------------------------------- |
-| 1. concept catalog — **exact** name/alias | `src/lib/data.ts`                     | 0.95       | curated, also yields an icon; safe in any language            |
-| 2. learned cache                          | IndexedDB `cooking-category-cache-v1` | 0.90       | past AI answers, peeked sync                                  |
-| 3. lexicon exact                          | `data/<lang>.json`                    | 0.82–0.90  | normalized term match                                         |
-| 4. keyword stems                          | `data/keywords.json`                  | 0.45–0.50  | `cookie`, `succo`, `olio`, `pesce`, … — before the token vote |
-| 5. lexicon token vote                     | `data/<lang>.json`                    | 0.60       | multi-word names, own-language votes first                    |
-| 6. concept catalog — **fuzzy** substring  | `src/lib/data.ts`                     | 0.95       | English only; catches "roma tomatoes", loanwords              |
-| 7. AI fallback                            | `aiCategorize()` in `../ai.ts`        | from API   | **only** if 1–6 miss; result cached                           |
+| Step | Source | Confidence | Notes |
+| --- | --- | --- | --- |
+| 1. Concept catalog — **exact** name/alias | `src/lib/data.ts` | 0.95 | Curated, also yields an icon; safe in any language |
+| 2. Lexicon exact | `data/<lang>.json` | 0.82–0.90 | Normalized term match |
+| 3. Keyword stems | `data/keywords.json` | 0.45–0.50 | `cookie`, `succo`, `olio`, `pesce`, … — before the token vote |
+| 4. Lexicon token vote | `data/<lang>.json` | 0.60 | Multi-word names, own-language votes first |
+| 5. Concept catalog — **fuzzy** substring | `src/lib/data.ts` | 0.95 | English only; catches "roma tomatoes", loanwords |
 
-`resolveCategory(name, { lang? })` runs the synchronous steps and returns
-`{ category, confidence, source, lang, key }` (or `category: null`).
-`categorizeIngredientAsync()` in `../ai.ts` adds the cache and AI steps.
+`resolveCategory(name, { lang? })` runs the deterministic steps and returns
+`{ category, confidence, source, lang, key }`. If no rule matches, `category`
+is `null`.
+
+`categorizeIngredient()` in `src/lib/ingredientCategorization.ts` uses the
+resolver and curated concept catalog to return an `AICategorizationResult`.
+When no category can be resolved, it falls back to the `other` category with
+a confidence of `0.3`. The asynchronous wrapper,
+`categorizeIngredientAsync()`, currently uses the same local deterministic
+logic and does not call an external service.
 
 Two things learned the hard way:
 
@@ -49,8 +55,8 @@ just affects stopword stripping.
 - **From datasets:** `npm run build:lexicon` — see `scripts/sources/README.md`.
   `en.json` carries a ~1650-term slice derived from the Instacart grocery dataset
   (aisle → category, all 134 aisles mapped in the build script) on top of the
-  hand seed. it/de/fr/es stay hand-curated — the Open Food Facts flat export was
-  too noisy for the fruit/vegetables split and its broad
+  hand seed. `it/de/fr/es` stay hand-curated — the Open Food Facts flat export
+  was too noisy for the fruit/vegetables split and its broad
   `plant-based-foods-and-beverages` tag mislabels ~1/3 of rows.
 
 ## Adding a category
@@ -66,16 +72,4 @@ the tests. If a Supabase schema pins the category list, migrate it too.
 1. Extend `LangCode` + `LOCALE_RULES` in `locales.ts`.
 2. Add `data/<lang>.json` and import it in `lexicon.ts` (`RAW`).
 3. Add a `data/keywords.json` section.
-4. Update `SUPPORTED_LANGS` is automatic (derived from `LOCALE_RULES`).
-
-## Wiring the real AI call
-
-Replace the body of `aiCategorize()` in `../ai.ts` with a call to a classifier
-constrained to the `Category` union (a Supabase edge function is the natural home
-given `src/lib/supabase.ts`). Keep the signature; the caching and fallback logic
-around it stays as-is. Every answer is written to the learned cache, so a given
-product costs at most one call ever.
-
-Once a backend exists, consider also persisting the learned cache server-side
-(per household) instead of only in local IndexedDB, so the deterministic hit rate
-is shared across devices and users.
+4. `SUPPORTED_LANGS` is derived automatically from `LOCALE_RULES`.

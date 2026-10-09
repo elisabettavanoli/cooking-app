@@ -1,11 +1,9 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { normalizeName } from "./normalize";
 import { resolveCategory } from "./resolve";
-import { rememberCategory, cacheKey, primeCache, __resetCache } from "./cache";
 import { __rebuildLexicon } from "./lexicon";
 
 beforeEach(() => {
-  __resetCache();
   __rebuildLexicon();
 });
 
@@ -63,14 +61,5 @@ describe("resolveCategory", () => {
     const r = resolveCategory("Zibblewump Snarf");
     expect(r.category).toBeNull();
     expect(r.source).toBe("none");
-  });
-
-  it("prefers a learned cache entry over the lexicon", async () => {
-    const { lang, key } = normalizeName("acqua tonica", "it");
-    await rememberCategory(cacheKey(lang, key), "other");
-    await primeCache();
-    const r = resolveCategory("acqua tonica", { lang: "it" });
-    expect(r.category).toBe("other");
-    expect(r.source).toBe("cache");
   });
 });

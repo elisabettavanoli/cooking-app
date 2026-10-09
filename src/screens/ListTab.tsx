@@ -6,7 +6,7 @@ import { PageInfo } from "../components/PageInfo";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
 import { foodName } from "../lib/foodNames";
-import { categorizeIngredientAsync } from "../lib/ai";
+import { categorizeIngredientAsync } from "../lib/ingredientCategorization";
 import { useCooking } from "../lib/store";
 import type { Category, ShoppingItem } from "../lib/types";
 import { unitLabel } from "../lib/units";

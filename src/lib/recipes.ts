@@ -54,3 +54,21 @@ export function recipeMatches(
     return a.recipe.name.localeCompare(b.recipe.name);
   });
 }
+
+export function generateRecipe(conceptIds: string[]): Recipe {
+  let best: Recipe = recipeCatalog[0];
+  let bestScore = -1;
+
+  for (const recipe of recipeCatalog) {
+    const recipeConceptIds = new Set(recipe.ingredients.map((ingredient) => ingredient.conceptId));
+
+    const score = conceptIds.filter((id) => recipeConceptIds.has(id)).length;
+
+    if (score > bestScore) {
+      bestScore = score;
+      best = recipe;
+    }
+  }
+
+  return best;
+}

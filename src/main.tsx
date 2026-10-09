@@ -14,11 +14,6 @@ import "./styles/tokens.css";
 import "./styles/global.css";
 
 import { App } from "./App";
-import { primeCache } from "./lib/category";
-
-// Load the learned product→category cache so the Add sheet can fill the category
-// synchronously on the first keystroke.
-void primeCache();
 
 // App feel: iOS Safari still honours pinch-zoom gestures even with
 // `user-scalable=no` / `touch-action`. Cancel the gesture events it fires so the

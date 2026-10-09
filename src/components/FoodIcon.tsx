@@ -7,7 +7,7 @@ import type { Category } from "../lib/types";
 
 /**
  * Emoji glyph for a food, keyed by the same `iconKey` slugs used across the
- * app (English concept ids and their common plurals/synonyms — see `ai.ts`
+ * app (English concept ids and their common plurals/synonyms — see `ingredientCategorization.ts`
  * and the concept catalog in `data.ts`). A non-English item name is resolved
  * to its concept id via that catalog's `aliases` before it gets here, so this
  * map only needs a handful of standalone non-English entries for words with

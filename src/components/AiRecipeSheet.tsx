@@ -4,7 +4,7 @@ import { BottomSheet, Button, Field } from "./ui";
 import { colors } from "../lib/theme";
 import { useI18n } from "../lib/i18n";
 import { useActiveInventory, useCooking } from "../lib/store";
-import { generateRecipe } from "../lib/ai";
+import { generateRecipe } from "../lib/recipes";
 import type { Recipe } from "../lib/types";
 import s from "./AiRecipeSheet.module.css";
 
